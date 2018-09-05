@@ -5,6 +5,8 @@
 #include <fstream>
 #include <armadillo>
 #include <array>
+#include <time.h>
+#include <ctime>
 
 using namespace std;
 ofstream outfile;
@@ -37,6 +39,8 @@ int main(int argc, char *argv[]){
         double*ft = new double [n+2]; // f tilde (RHS of equation)
         double*fprime = new double [n+2]; // our function f multiplied by h²
 
+        clock_t start, finish;
+        start = clock();
         //loop to update
         for(int i = 0; i < n+2; i++) {
                 x[i] = double(i)*h;
@@ -53,7 +57,7 @@ int main(int argc, char *argv[]){
         bt[0] = 2.0;  // Diagonal values
         bt[1] = 2.0;  // Diagonal values
 
-        for(int i = 2; i < n+2; i++) { //n+1 eller n???
+        for(int i = 2; i < n+2; i++) {
                 bt[i] = 2.0 - 1.0/bt[i-1];
                 k[i-1] = ft[i-1]/bt[i-1];
                 ft[i] = fprime[i] + k[i-1];
@@ -61,7 +65,8 @@ int main(int argc, char *argv[]){
         for(int i = n; i > 0; i--) {
                 u[i] = k[i] + u[i+1]/bt[i];
         }
-
+        finish = clock();
+        cout << 1.0*(finish - start)/CLOCKS_PER_SEC << endl;
         // Writing to file
         outfile.open(filename);
         //outfile << "  x:        approx:          exact:       relative error:" << endl;

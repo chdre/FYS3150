@@ -51,7 +51,8 @@ int main(int argc, char *argv[]){
         double*ft = new double [n+2]; // f tilde (RHS of equation)
         double*fprime = new double [n+2];
 
-
+        clock_t start, finish;
+        start = clock();
         //loop to update
         for(int i = 0; i < n+2; i++) {
                 x[i] = double(i)*h;
@@ -72,6 +73,8 @@ int main(int argc, char *argv[]){
                 bt[i] = b[i] - a[i-1]*c[i-1]/bt[i-1];
                 ft[i] = fprime[i] - ft[i-1]*a[i-1]/bt[i-1];
         }
+        finish = clock();
+        cout << 1.0*(finish - start)/CLOCKS_PER_SEC << endl;
         outfile.open(filename);
         //outfile << "  x:        approx:          exact:       relative error:" << endl;
         for(int i = n; i > 0; i--) {
