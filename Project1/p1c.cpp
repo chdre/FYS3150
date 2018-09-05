@@ -58,12 +58,12 @@ int main(int argc, char *argv[]){
         bt[1] = 2.0;  // Diagonal values
 
         for(int i = 2; i < n+2; i++) {
-                bt[i] = 2.0 - 1.0/bt[i-1];
-                k[i-1] = ft[i-1]/bt[i-1];
-                ft[i] = fprime[i] + k[i-1];
+                double bt_temp = 1.0/bt[i-1];
+                bt[i] = 2.0 - bt_temp;
+                ft[i] = fprime[i] + ft[i-1]*bt_temp;
         }
         for(int i = n; i > 0; i--) {
-                u[i] = k[i] + u[i+1]/bt[i];
+                u[i] = (fprime[i] + u[i+1])/bt[i];
         }
         finish = clock();
         cout << 1.0*(finish - start)/CLOCKS_PER_SEC << endl;

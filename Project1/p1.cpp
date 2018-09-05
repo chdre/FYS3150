@@ -36,15 +36,6 @@ int main(int argc, char *argv[]){
         double*b = new double [n+2];
         double*c = new double [n+1];
 
-        for(int i = 0; i < n+2; i++) {
-                b[i] = 2.0;
-        }
-        for(int i = 0; i < n+1; i++) {
-                a[i] = -1.0;
-                c[i] = -1.0;
-        }
-
-
         // Vectors for calculations
         double*u = new double [n+2];
         double*bt = new double [n+2]; // b tilde, diagonal elements (NOT RHS of equation)
@@ -53,6 +44,14 @@ int main(int argc, char *argv[]){
 
         clock_t start, finish;
         start = clock();
+
+        for(int i = 0; i < n+2; i++) {
+                b[i] = 2.0;
+        }
+        for(int i = 0; i < n+1; i++) {
+                a[i] = -1.0;
+                c[i] = -1.0;
+        }
         //loop to update
         for(int i = 0; i < n+2; i++) {
                 x[i] = double(i)*h;
