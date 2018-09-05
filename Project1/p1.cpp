@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <fstream>
 #include <armadillo>
+#include <array>
 
 using namespace std;
 ofstream outfile;
@@ -26,7 +27,7 @@ int main(int argc, char *argv[]){
                 filename = argv[1];
                 n = atoi(argv[2]);
         }
-        double h = 1.0/(n+1.0); // Step size
+        double h = 1.0/(n+1); // Step size
 
         double*x = new double [n+2]; // x_i's
 
@@ -35,36 +36,49 @@ int main(int argc, char *argv[]){
         double*b = new double [n+2];
         double*c = new double [n+1];
 
-        fill_n(a,n+1,-1.0);
-        fill_n(b,n+2,2.0);
-        fill_n(c,n+1,-1.0);
+        for(int i = 0; i < n+2; i++) {
+                b[i] = 2.0;
+        }
+        for(int i = 0; i < n+1; i++) {
+                a[i] = -1.0;
+                c[i] = -1.0;
+        }
+
 
         // Vectors for calculations
         double*u = new double [n+2];
         double*bt = new double [n+2]; // b tilde, diagonal elements (NOT RHS of equation)
         double*ft = new double [n+2]; // f tilde (RHS of equation)
+        double*fprime = new double [n+2];
 
-        // Boundary conditions
-        u[0] = u[n+1] = 0;
-        ft[0] = f(x[0],h);
-        ft[1] = f(x[1],h);
-        bt[0] = b[0];
-        bt[1] = b[1];
 
         //loop to update
-        for(int i = 0; i <= n+2; i++) {
-                x[i] = double(i)/(n);
+        for(int i = 0; i < n+2; i++) {
+                x[i] = double(i)*h;
+                cout << x[i] << endl;
         }
-        for(int i = 2; i <= n; i++) {
+        for(int i = 0; i < n+2; i++) {
+                fprime[i] = f(x[i],h);
+        }
+
+        // Boundary conditions
+        u[0] = 0;
+        u[n+1] = 0;
+        ft[0] = fprime[0];
+        ft[1] = fprime[1];
+        bt[0] = b[0];
+        bt[1] = b[0];
+
+        for(int i = 2; i < n+2; i++) { //n+1 eller n???
                 bt[i] = b[i] - a[i-1]*c[i-1]/bt[i-1];
-                ft[i] = f(x[i],h) - ft[i-1]*a[i-1]/bt[i-1];
+                ft[i] = fprime[i] - ft[i-1]*a[i-1]/bt[i-1];
         }
         outfile.open(filename);
         //outfile << "  x:        approx:          exact:       relative error:" << endl;
-        for(int i = n-1; i > 0; i--) {
+        for(int i = n; i > 0; i--) {
                 u[i] = (ft[i] - c[i]*u[i+1])/bt[i];
         }
-        for(int i=0; i < n+1; i++) {
+        for(int i=0; i < n+2; i++) {
                 outfile << x[i];
                 outfile << " " << u[i];
                 outfile << " " << closed_form(x[i]) << endl;
