@@ -1,12 +1,6 @@
 #include <iostream>
 #include <cmath>
-#include <string>
-#include <iomanip>
-#include <fstream>
 #include <armadillo>
-#include <array>
-#include <time.h>
-#include <ctime>
 
 using namespace std;
 using namespace arma;
@@ -38,6 +32,8 @@ int main(int argc, char*argv[]) {
         A.diag() += 2;
         A.diag(1) -= 1;
         A.diag(-1) -= 1;
+
+
 
         return 0;
 
