@@ -19,7 +19,7 @@ inline double closed_form(double x) {
 }
 
 int main(int argc, char *argv[]){
-        int n;  // Defining exponent as an integer variable
+        int n;  // Defining number of points as an integer variable
         string filename;  // String filename for outputfile
         if(argc <= 1) {
                 cout << "Missing arguments:" << argv[0] << " specify output filename and value of n" << endl;
