@@ -63,7 +63,7 @@ int main(int argc, char *argv[]){
                 ft[i] = fprime[i] + ft[i-1]*bt_temp;
         }
         for(int i = n; i > 0; i--) {
-                u[i] = (fprime[i] + u[i+1])/bt[i];
+                u[i] = (ft[i] + u[i+1])/bt[i];
         }
         finish = clock();
         cout << 1.0*(finish - start)/CLOCKS_PER_SEC << endl;
@@ -71,6 +71,7 @@ int main(int argc, char *argv[]){
         outfile.open(filename);
         //outfile << "  x:        approx:          exact:       relative error:" << endl;
         for(int i=0; i < n+2; i++) {
+                cout << u[i] << " " << bt[i] << " " << ft[i] << endl;
                 outfile << x[i];
                 outfile << " " << u[i];
                 outfile << " " << closed_form(x[i]) << endl;

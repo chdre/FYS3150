@@ -3,7 +3,6 @@
 #include <string>
 #include <iomanip>
 #include <fstream>
-#include <armadillo>
 #include <array>
 #include <time.h>
 #include <ctime>
@@ -19,63 +18,72 @@ inline double closed_form(double x) {
 }
 
 int main(int argc, char *argv[]){
-        int n;  // Defining exponent as an integer variable
-        string filename;  // String filename for outputfile
+        string filename; // String filename for outputfile
+        int j_max;
         if(argc <= 1) {
-                cout << "Missing arguments:" << argv[0] << " specify output filename and value of n" << endl;
+                cout << "Missing arguments:" << argv[0] << " specify output filename and max exponent of n" << endl;
                 exit(1);
         }
         else{
                 filename = argv[1];
-                n = atoi(argv[2]);
+                j_max = atoi(argv[2]);
         }
-        double h = 1.0/(n+1); // Step size
+        double*eps_max_arr = new double [j_max];
+        double*log10h = new double [j_max];
 
-        // Vectors for calculations
-        double*x = new double [n+2];      // x_i's
-        double*k = new double [n+2];      // (f tilde)/(b tilde)
-        double*u = new double [n+2];
-        double*bt = new double [n+2];     // b tilde, diagonal elements (NOT RHS of equation)
-        double*ft = new double [n+2];     // f tilde (RHS of equation)
-        double*fprime = new double [n+2]; // our function f multiplied by h²
-        double*eps = new double [n];      // relative error
+        // Loop to calculate maximum value of relative error.
+        for(int j = 1; j < j_max+1; j++) {
+                int n = pow(10,j);
+                double h = 1.0/(n+1); // Step size
+                log10h[j-1] = log10(h);
+                // Vectors for calculations
+                double*x = new double [n+2];     // x_i's
+                double*k = new double [n+2]; // (f tilde)/(b tilde)
+                double*u = new double [n+2];
+                double*bt = new double [n+2]; // b tilde, diagonal elements (NOT RHS of equation)
+                double*ft = new double [n+2]; // f tilde (RHS of equation)
+                double*fprime = new double [n+2]; // our function f multiplied by h²
 
-        //loop to update
-        for(int i = 0; i < n+2; i++) {
-                x[i] = double(i)*h;
-        }
-        for(int i = 0; i < n+2; i++) {
-                fprime[i] = f(x[i],h);
-        }
+                //loop to update
+                for(int i = 0; i < n+2; i++) {
+                        x[i] = double(i)*h;
+                }
+                for(int i = 0; i < n+2; i++) {
+                        fprime[i] = f(x[i],h);
+                }
 
-        // Boundary conditions
-        u[0] = 0;
-        u[n+1] = 0;
-        ft[0] = fprime[0];
-        ft[1] = fprime[1];
-        bt[0] = 2.0;  // Diagonal values
-        bt[1] = 2.0;  // Diagonal values
+                // Boundary conditions
+                u[0] = 0;
+                u[n+1] = 0;
+                ft[0] = fprime[0];
+                ft[1] = fprime[1];
+                bt[0] = 2.0; // Diagonal values
+                bt[1] = 2.0; // Diagonal values
 
-        for(int i = 2; i < n+2; i++) {
-                double bt_temp = 1.0/bt[i-1];
-                bt[i] = 2.0 - bt_temp;
-                ft[i] = fprime[i] + ft[i-1]*bt_temp;
-        }
-        for(int i = n; i > 0; i--) {
-                u[i] = (fprime[i] + u[i+1])/bt[i];
-        }
-        for(int i = 1; i < n+1; i++) {
-                eps[i] = log10(abs((u[i] - ft[i])/ft[i]))
+                for(int i = 2; i < n+2; i++) {
+                        double bt_temp = 1.0/bt[i-1];
+                        bt[i] = 2.0 - bt_temp;
+                        ft[i] = fprime[i] + ft[i-1]*bt_temp;
+                }
+                for(int i = n; i > 0; i--) {
+                        u[i] = (ft[i] + u[i+1])/bt[i];
+                }
+                double eps_max = log10(abs((u[n/10] - closed_form(x[n/10]))/closed_form(x[n/10])));
+                for(int i = n/10+1; i < (9*n/10)+1; i++) {
+                        double eps = log10(abs((u[i] - closed_form(x[i]))/closed_form(x[i])));
+                        if(eps > eps_max) {
+                                eps_max = eps;
+                        }
+                }
+                eps_max_arr[j-1] = eps_max;
         }
         // Writing to file
         outfile.open(filename);
         //outfile << "  x:        approx:          exact:       relative error:" << endl;
-        for(int i=0; i < n+2; i++) {
-                outfile << x[i];
-                outfile << " " << u[i];
-                outfile << " " << closed_form(x[i]);
-                outfile << " " << eps[i] << endl;
+        for(int i=0; i < j_max; i++) {
+                outfile << eps_max_arr[i];
+                outfile << " " << log10h[i] << endl;
         }
         outfile.close();
         return 0;
-};
+}
