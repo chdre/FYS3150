@@ -13,7 +13,7 @@ int main(int argc, char*argv[]) {
         int n; // number of points
 
         mat A(n,n,fill::eye);
-
+        mat A*
 
 
 
