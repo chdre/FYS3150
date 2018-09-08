@@ -12,23 +12,26 @@
 
 \title{A spectacular title}
 
-\author{Ola D. Nordmann}
+\author{Stig-Nicolai Foyn, Christer Dreierstad}
 
-\email{ola.d.nordmann@astro.uio.no}
+\email{stignicf@student.matnat.uio.no, chrisdre@student.matnat.uio.no}
 
-\altaffiltext{1}{Institute of Theoretical Astrophysics, University of
+\altaffiltext{1}{Institute of physics, University of
   Oslo, P.O.\ Box 1029 Blindern, N-0315 Oslo, Norway}
 
 
 %\date{Received - / Accepted -}
 
 \begin{abstract}
-  State problem. Briefly describe method and data. Summarize main results.
+Comparing general and tailored methods for solving second order differential equations this study will present that producing a specialized method reduces the run time of a numerical solver without losing numerical accuracy. Reducing the floating point operations (FLOPS) will be proven efficient for large scale calculations.
+  %State problem. Briefly describe method and data. Summarize main results.
 \end{abstract}
-\keywords{cosmic microwave background --- cosmology: observations --- methods: statistical}
+\keywords{computational science --- numerical methods: error estimation, run time --- methods: numerical, Triadiagonal marices}
 
 \section{Introduction}
 \label{sec:introduction}
+This study on numerical algorithms, generalized and tailored for specific problems,  will solve a differential equation numerically. Analyzing the results, comparing the run time and observing the numerical error of the different methods.
+
 
 Discuss background, physical importance and possibly some history of
 the problem that is being studied in this paper.
@@ -38,13 +41,19 @@ the problem that is being studied in this paper.
 \label{sec:method}
 
 
+
+\subsection{Generalized tridiagonal matrix}
+
+\subsection{Specific algorithm}
+
+\subsection{Armadillo}
+
+
 Describe method. Define data model and likelihood. Outline how the
 likelihood was computed (grid or MCMC).
 
 Define the power law model in terms of $Q$ and $n$. 
 
-\section{Data}
-\label{sec:data}
 
 Summarize properties of data. Which data are used (experiment,
 frequencies etc.)? Pixel resolution ($N_{\textrm{side}}$),
@@ -58,7 +67,7 @@ well.
 
 \section{Results}
 \label{sec:results}
-
+\subsection{}
 
 Show the 2D likelihood contours. Summarize constraints on $Q$ and
 $n$. 
