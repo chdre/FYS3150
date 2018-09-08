@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
         start = clock();
         //loop to update
         for(int i = 0; i < n+2; i++) {
-                x[i] = double(i)*h;
+                x[i] = i*h;
                 fprime[i] = f(x[i],h);
         }
 

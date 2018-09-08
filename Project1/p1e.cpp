@@ -5,8 +5,13 @@
 using namespace std;
 using namespace arma;
 
+ofstream outfile;
+
 inline double f(double x, double h) {
         return pow(h,2)*100.0*exp(-10*x);
+}
+inline double closed_form(double x) {
+        return 1.0 - (1.0 - exp(-10.0))*x - exp(-10.0*x);
 }
 
 
@@ -27,17 +32,17 @@ int main(int argc, char*argv[]){
         // Matrices and Vectors
         mat fmat = zeros<vec>(n+2);            // matrix of f
         mat A = zeros<mat>(n+2,n+2);
-        double x = new double [n+2];
+        double*x = new double [n+2];
 
         for(int i = 1; i < n+2; i++) {
-                double x = i*h;
-                fmat[i] = f(x,h);
+                x[i] = i*h;
+                fmat[i] = f(x[i],h);
         }
 
         // Changing diagonal elements of A
-        A.diag() += 2.0;
-        A.diag(1) -= 1.0;
-        A.diag(-1) -= 1.0;
+        A.diag() += double(2.0);
+        A.diag(1) -= double(1.0);
+        A.diag(-1) -= double(1.0);
 
         vec u = zeros<vec>(n+2);
         u = solve(A,fmat);
@@ -46,7 +51,8 @@ int main(int argc, char*argv[]){
         //outfile << "  x:        approx:          exact:       relative error:" << endl;
         for(int i=0; i < n+2; i++) {
                 outfile << x[i];
-                outfile << " " << u[i] << endl;
+                outfile << " " << u[i];
+                outfile << " " << closed_form(x[i]) << endl;
         }
         outfile.close();
 

@@ -5,15 +5,18 @@ infile = sys.argv[1]
 
 x = []
 u = []
+cf = []
 
 for lines in open(infile, "r"):
     col = lines.split()
     x.append(float(col[0]))
     u.append(float(col[1]))
+    cf.append(float(col[2]))
 
 plt.figure()
 plt.plot(x,u)
+plt.plot(x,cf)
 plt.title("LU decomposed u")
 plt.xlabel('$x$');plt.ylabel('$u$')
-plt.legend(['$u$'])
+plt.legend(['$numerical LU$', '$analytical$'])
 plt.show()
