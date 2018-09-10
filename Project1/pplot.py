@@ -14,8 +14,10 @@ for lines in open(infile, "r"):
     cf.append(float(col[2]))
 
 plt.figure()
+plt.title('Numerical and analytical solution of u(x)',size=18)
 plt.plot(x,u)
 plt.plot(x,cf)
-plt.legend(['u','cf'])
-
+plt.xlabel('x',size=18)
+plt.ylabel('u',size=18)
+plt.legend(['Numerical','Analytical'],prop={'size': 18})
 plt.show()

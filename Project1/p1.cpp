@@ -66,7 +66,7 @@ int main(int argc, char *argv[]){
         bt[0] = b[0];
         bt[1] = b[0];
 
-        for(int i = 2; i < n+2; i++) { //n+1 eller n???
+        for(int i = 2; i < n+2; i++) {
                 bt[i] = b[i] - a[i-1]*c[i-1]/bt[i-1];
                 ft[i] = fprime[i] - ft[i-1]*a[i-1]/bt[i-1];
         }
