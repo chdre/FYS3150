@@ -11,7 +11,7 @@ using namespace std;
 ofstream outfile;
 //Functions used.
 inline double f(double x, double h) {
-        // The solution for f, including the step length f squared
+        // The solution for f, including the step length h squared
         return pow(h,2)*100.0*exp(-10*x);
 }
 inline double closed_form(double x) {
