@@ -8,6 +8,7 @@
 \usepackage{fourier}
 \usepackage{listings}
 \newcommand{\R}{\mathbb{R}}
+\usepackage{subfig}
 
 \lstset{language=python,
     showspaces=false,
@@ -77,7 +78,7 @@ For the study we consider a solution for the source term $f(x)$ to be
 which has a closed form solution 
 %
 \begin{gather}\label{eq:u(x)}
-u(x) = 1-(1-e^{10})x-e^{-10x},
+u_{cf}(x) = 1-(1-e^{10})x-e^{-10x},
 \end{gather}
 %
 which yields $-f(x)$ when taking the second derivative. 
@@ -91,6 +92,8 @@ We consider the one dimensional Poisson equation to uphold Dirichlet boundary co
 where h is the step size. 
 
 \subsection{Numerical representation}
+When creating matrices and vectors in C++ they are created as dynamic arrays, so that the length of the array is decided based upon the problem. This is done to reduce the memory usage.
+
 By approximating equation \eqref{eq:du/dx} and discretizing over x we get
 %
 \begin{gather*}
@@ -249,34 +252,70 @@ In general and applied to $\boldsymbol{A} \boldsymbol{u} = \boldsymbol{f'}$ the 
 \end{gather}
 %
 
+Following is pseudo code for the solution of the general algorithm.
+%
 \begin{lstlisting}
-%Allocate dynamic memory for variables
+//Allocate dynamic memory for variables
 double *a = new double[n+1]
-%similar for other variables b, c, f-tilde, u and x (an array of step sizes)
+//similar for other variables b, c, f-tilde, u and x (an array of step sizes)
 
-%Define the step size as h and make an array of steps from 0 to n+2
+//Define the step size as h and make an array of steps from 0 to n+2
 for i = 0; i < n+2; i++{
     x[i] = h*double(i)
 }
 
-%Updating b-tilde and f-tilde using the equations we found using forward substitution
+//Updating b-tilde and f-tilde using the equations we found using forward substitution
 for i = 2; i < n+2; i++{
     btilde[i] = update
     ftilde[i] = update
 }
 
-%Updating u using the equations we found using backward substitution
+//Updating u using the equations we found using backward substitution
 for i = n; i > 0; i--{
     u[i] = update
 }
-%write the results to a file
+//write the results to a file
 
 \end{lstlisting}
 %
 
 
 \subsection{Specific algorithm}
+Further the goal is to improve upon the general algorithm by reducing the FLOPS and making sure there are only one calculation for each FLOP.
 
+Since $a_i$, $b_i$ and $c_i$ are constant for all $i$ the value can be inserted into equations \eqref{eq:b_i}, \eqref{eq:f_i} and \eqref{eq:u_i}:
+%
+\begin{gather*}
+    \tilde{b}_i = b_i - \frac{a_{i-1}c_{i-1}}{\tilde{b}_{i-1}} = 2 - \frac{1}{\tilde{b}_{i-1}}, \\
+    \tilde{f}_i = f'_i - \frac{\tilde{f}_{i-1} a_{i-1} }{\tilde{b}_{i-1}} = f'_i + \frac{\tilde{f}_{i-1}}{\tilde{b}_{i-1}}, \\
+    u_i = \frac{\tilde{f}_i - c_i u_{i+1}}{\tilde{b}_i} = \frac{\tilde{f}_i + u_{i+1}}{\tilde{b}_i}.
+\end{gather*}
+%
+In the above equations $1/\tilde{b}_{i-1}$ is calculated twice, which results in unnecessary calculations. Introducing a temporary variable $b'_i = 1/\tilde{b}_{i-1}$ changes the above equations for $\tilde{b}_i$ and $\tilde{f}_i$ to
+%
+\begin{gather*}
+    \tilde{b}_i = 2 - b'_{i-1}, \\
+    \tilde{f}_i = f'_i + b'_{i-1}\tilde{f}_{i-1}.
+\end{gather*}
+%
+
+Having reduced the FLOPS to minimize the CPU time the calculations are timed to compare with the general algorithm. Timing is done with a built in function within C++ and only ran over the calculations of $\boldsymbol{A}\boldsymbol{u} = \tilde{f}$.
+
+\subsection{Relative error}
+The relative error is calculated by
+%
+\begin{gather}
+    \epsilon_i = \log_{10}\left(\left|\frac{u_i - u_{cf,i}}{u_{cf,i}}\right|\right).
+\end{gather}
+%
+When computing the relative error the indices are reduced such that division by zero is avoided, that is when $u_{cf,i} \rightarrow 0$. Following is pseudo code:
+\begin{lstlisting}
+eps_max //calculating the initial value, assuming this is largest
+for i=n/10+1:(9*n/10)+1 //ignoring end points
+    calculate epsilon
+    if epsilon > eps_max
+        eps_max = epsilon
+\end{lstlisting}
 
 %\begin{bmatrix}
 %\Tilde{f}_1 \\
@@ -292,12 +331,12 @@ for i = n; i > 0; i--{
 
 %
 \begin{lstlisting}
-%Allocate dynamic memory for variables, but a, b and c now have specific values
+//Allocate dynamic memory for variables, but a, b and c now have specific values
 double a = -1; double b = 2; double c = -1
 \end{lstlisting}
 
 \begin{lstlisting}
-%Updating b and f-tilde using the equations we found using forward substitution
+//Updating b and f-tilde using the equations we found using forward substitution
 for i = 2; i < n+2; i++{
     btilde[i] = update (a and c are now constants)
     ftilde[i] = update (a and c are now constants)
@@ -307,6 +346,7 @@ for i = 2; i < n+2; i++{
 %
 
 \subsection{LU-decomposition}
+Comparing the results with a completely general method we solve $\boldsymbol{A}\boldsymbol{u} = \boldsymbol{f}$ with by LU decomposition with armadillo using a solve function. 
 
 For a non-singular matrix $\boldsymbol{A} \in \R ^{nxn}$ we can also preform LU-decomposition, given by:
 %
@@ -334,36 +374,42 @@ u_{11}     & u_{12}            & \dots         & \dots       & u_{1n} \\
 %Summarize properties of data. Which data are used (experiment,frequencies etc.)? Pixel resolution ($N_{\textrm{side}}$),$\ell_{\textrm{max}}$ -- everything necessary to repeat the analysis for other researchers.
 
 \section{Results}
+
+%  6.61149997e-02   8.16507165e-04   8.31668016e-06   8.33105497e-08  1.43558860e-09   8.39730640e-07   2.74865353e-06]
+
 \label{sec:results}
 \subsection{Numerical error}
 
 \begin{figure}[H]
-\mbox{\epsfig{figure=filename.eps,width=\linewidth,clip=}}
-\caption{The solution of the differential equation using a generalized algorithm, the three different plots show the $nxn$ matrix with $n=10$, $n=100$, $n=1000$}
-\label{fig:figure_label}
+\subfloat[The resolution of our step size is low and as a result there is a visible deviation from the analytical solution.]{{\includegraphics[scale=0.37]{plot1b_n10.png}}}
+\qquad
+\subfloat[Lowering the step size renders the deviation from the analytical solution invisible in the plot.]{{\includegraphics[scale=0.37]{plot1b_n100.png}}}\qquad
+\subfloat[Further lowering the step size the only visible difference is in the resolution of the curve in our plot.]{{\includegraphics[scale=0.37]{plot1b_n1000.png}}}
+\caption{The solution of the differential equation using a generalized algorithm at matrix sizes (a): $n = 10$, (b): $n = 100$ and (c): $n = 1000$.}
+\label{fig:fig1}
 \end{figure}
 
 \begin{figure}[t]
 \mbox{\epsfig{figure=plot1d.png,width=\linewidth,clip=}}
-\caption{Vi burde plotte til 10^{-7}}
+\caption{Logarithmic plot of the error as function of the step size, to illustrate the $\mathcal{O}(h^{2})$ dependency we have plotted $log_{10}(h^{2})=2log_{10}(h)$, which in the plot doubles as $y = 2x$, the expected value of our error.}
 \label{fig:1d}
 \end{figure}
 %
-\begin{deluxetable}{lc}[h]
+\begin{deluxetable}{lcc}[H]
 %\tablewidth{0pt}
 \tablecaption{\label{tab:results}}
-\tablecomments{Table of log10 of the error, for stepsizes down to $10^{-7}$}
+\tablecomments{Table of the error, for stepsizes down to $h = 10^{-7}$. The table reveals that the numerical error starts increasing after $h = 10^{-5}$, and before reaching that point we the the $\mathcal{O}(h^{2})$.}
 \tablecolumns{4}
-\tablehead{Step size & Error}
+\tablehead{ Step size & Error &}
 \startdata
  \\
-$10^{-1}$ & $10^{-1}$ \\
-$10^{-2}$ & $10^{-1}$ \\
-$10^{-3}$ & $10^{-1}$ \\
-$10^{-4}$ & $10^{-1}$ \\
-$10^{-5}$ & $10^{-1}$ \\
-$10^{-6}$ & $10^{-1}$ \\
-$10^{-7}$ & $10^{-1}$ \\
+ $10^{-1}$ & $6.6114*10^{-2}$ &\\
+ $10^{-2}$ & $8.1651*10^{-4}$ &\\
+ $10^{-3}$ & $8.3167*10^{-6}$ &\\
+ $10^{-4}$ & $8.3311*10^{-8}$ &\\
+ $10^{-5}$ & $1.4356*10^{-9}$ &\\
+ $10^{-6}$ & $8.3973*10^{-7}$ &\\
+ $10^{-7}$ & $2.7487*10^{-6}$ &\\
 \enddata
 \end{deluxetable}
 
@@ -373,10 +419,10 @@ $10^{-7}$ & $10^{-1}$ \\
 Testing the time we ran the three different programs 10 times for different sizes $n$, listing longest, shortest and average CPU times.
 In [TABLE ] the results we have listed for timing our programs with $n = 1000$. Comparably for larger matrices $n=10^{6}$ the programs yield the timings presented in [TABLE ].
 %
-\begin{deluxetable}{lccc}[h]
+\begin{deluxetable}{lccc}[H]
 %\tablewidth{0pt}
 \tablecaption{\label{tab:results}}
-\tablecomments{This table contains highest, lowest and average measured CPU times for the different algorithms used at n = 1000}
+\tablecomments{This table contains highest, lowest and average measured CPU times for the different algorithms used at n = 1000, armadillo being overall, while our general and tailored algorithm timings both withing the same order of magnitude.}
 \tablecolumns{4}
 \tablehead{ & General & Tailored & Armadillo}
 \startdata
@@ -390,7 +436,7 @@ Average & 7.8*10^{-5}s & 5.5*10^{-5}s & 0.010166s
 \begin{deluxetable}{lccc}[h]
 %\tablewidth{0pt}
 \tablecaption{\label{tab:results}}
-\tablecomments{This table contains highest, lowest and average measured CPU times for the different algorithms used at n = 10^{6}}
+\tablecomments{This table contains highest, lowest and average measured CPU times for the different algorithms used at $n = 10^{6}$, armadillo runs out of memory, while the general and tailored algorithms staying within the same order of magnitude.}
 \tablecolumns{4}
 \tablehead{ & General & Tailored & Armadillo}
 \startdata
@@ -401,7 +447,7 @@ Average & 0.027544s & 0.027602s & Out of memory
 \end{deluxetable}
 %
 
-Note that the LU-decomposition runs out of memory at $n = 10^{5}$ meaning that we will not be able to test the Armadillo made algorithm for larger matrices.
+Note that the LU-decomposition runs out of memory at $n = 10^{5}$ meaning that we will not be able to test the Armadillo made algorithm for larger matrices. While the tailored and general algorithms are of same order of magnitude and even similar in size (on average) for $n = 10^{7}$, we see a clear difference for the smaller $n = 1000$. Our general algorithm runs at $8n$ FLOPS, while our specialized algorithm only runs at $6n$ FLOPS.
 
 \section{Conclusions}
 \label{sec:conclusions}
