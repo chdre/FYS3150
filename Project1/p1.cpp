@@ -32,7 +32,6 @@ int main(int argc, char *argv[]){
         }
         double h = 1.0/(n+1); // Step size
 
-        double*x = new double [n+2]; // x_i's
 
         // Dynamic arrays forming the tridiagonal matrix. The upper and lower diagonal are n+1 long
         double*a = new double [n+1];
@@ -40,18 +39,21 @@ int main(int argc, char *argv[]){
         double*c = new double [n+1];
 
         // Dynamical arrays for calculations
+        double*x = new double [n+2];            // x_i's
         double*u = new double [n+2];
-        double*bt = new double [n+2]; // b tilde, diagonal elements (NOT RHS of equation)
-        double*ft = new double [n+2]; // f tilde (RHS of equation)
+        double*bt = new double [n+2];           // b tilde, diagonal elements (NOT RHS of equation)
+        double*ft = new double [n+2];           // f tilde (RHS of equation)
         double*fprime = new double [n+2];       // the function h^2*f = f'
 
         clock_t start, finish;
         start = clock();
 
         for(int i = 0; i < n+2; i++) {
+                // setting all b_i = 2
                 b[i] = 2.0;
         }
         for(int i = 0; i < n+1; i++) {
+                // setting all a_i, c_i = -1
                 a[i] = -1.0;
                 c[i] = -1.0;
         }
@@ -68,7 +70,7 @@ int main(int argc, char *argv[]){
         ft[0] = fprime[0];      // ftilde_0 not included in calculations
         ft[1] = fprime[1];      // ftilde_1 = h^2*f by the general equation
         bt[0] = b[0];   // btilde_0 not included in calculations
-        bt[1] = b[0];   // btilde_1 = -2 by the general equation
+        bt[1] = b[0];   // btilde_1 = 2 by the general equation
 
         for(int i = 2; i < n+2; i++) {
                 // updating btilde and ftilde
@@ -83,7 +85,7 @@ int main(int argc, char *argv[]){
         finish = clock();
         cout << 1.0*(finish - start)/CLOCKS_PER_SEC << endl;
         
-        // printing to file
+        // writing to file
         outfile.open(filename);
         for(int i=0; i < n+2; i++) {
                 outfile << x[i];
