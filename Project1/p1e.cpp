@@ -1,3 +1,5 @@
+// program must be run with the following addition terminal, after the commands to compile via terminal "-DARMA_DONT_USE_WRAPPER -lblas -llapack"
+
 #include <iostream>
 #include <cmath>
 #include <armadillo>
