@@ -43,6 +43,7 @@
 \begin{abstract}
 Comparing methods for solving second order differential equations this study will present that producing a specialized method reduces the run time of a numerical solver. When solving a second order differential equation we find that tailoring a method to the problem at hand will result in a shorter CPU time compared to a general method similar to the specialized. Further comparison proves that even slightly tailoring the algorithm (by the general method) will prove to be faster than a standard LU decomposition. For large scale calculations the LU decomposition is found to use more memory than the computer has available, while the general and specialized methods produces results, the latter being faster. The specialized method will focus on reducing the floating point operations (FLOPS) by tailoring the equations prior to the numerical calculations. 
 
+
   %State problem. Briefly describe method and data. Summarize main results.
 \end{abstract}
 \keywords{computational science --- numerical methods: error estimation, LU decomposition, forward/backward substitution --- methods: analytical, numerical, statistical}
@@ -346,29 +347,27 @@ for i=n/10+1:(9*n/10)+1 //ignoring end points
 
 
 \subsection{LU-decomposition}
-Using a package from
+Lastly we compare the previous results to a solution of the matrix equation $\boldsymbol{Au} = \boldsymbol{f}$ by an LU decomposition. We decompose the matrix such that $\boldsymbol{A} = \boldsymbol{L u}$, where $\boldsymbol{L}$ is a lower triangular matrix and $\boldsymbol{u}$ is an upper triangular matrix:
 %
-\[ \boldsymbol{A} = \boldsymbol{Lu} =
+\[ \boldsymbol{Lu} =
 \begin{array}{c}
 \begin{bmatrix}\label{eq:A = Lu}
-l_{11}     & 0           & \dots         & 0       & 0 \\
-l_{21}     & l_{22}           & 0       & \dots      & 0       \\
-\dots       & \dots           & \dots       & \dots      & \dots    \\
-\dots       & \dots           & \dots       & \dots      & 0    \\
- l_{n1} &  l_{n2}            & \dots        & l_{nn-1}      & l_{nn}     \\
+l_{11}     & 0                 &\dots       & 0 \\
+l_{21}     & l_{22}              & \dots      & \dots       \\
+\dots       & \dots              & \dots      & 0    \\
+ l_{n1} &  l_{n2}                   & \dots      & l_{nn}     \\
 \end{bmatrix}
 \begin{bmatrix}
-u_{11}     & u_{12}            & \dots         & \dots       & u_{1n} \\
-0     & u_{22}           & \dots       & \dots      & u_{2n}       \\
-\dots       & \dots           & \dots       & \dots      & \dots    \\
-0       & \dots           & \dots       & \dots      & u_{(n-1)n}    \\
- 0 &  0            & \dots        & 0      & u_{nn}     \\
+u_{11}     & u_{12}                  & \dots       & u_{1n} \\
+0     & u_{22}                & \dots      & u_{2n}       \\
+\dots       & \dots             & \dots      & \dots    \\
+ 0 &  \dots                 & 0      & u_{nn}     \\
 \end{bmatrix}
-
 \end{array}.
 \]
 %
 
+For the LU decomposition a function "solve" from the C++ package Armadillo is used.
 
 \section{Results}
 
@@ -389,13 +388,13 @@ u_{11}     & u_{12}            & \dots         & \dots       & u_{1n} \\
 \begin{figure}[t]
 \mbox{\epsfig{figure=plot1d.png,width=\linewidth,clip=}}
 \caption{Logarithmic plot of the error as function of the step size, to illustrate the $\mathcal{O}(h^{2})$ dependency we have plotted $log_{10}(h^{2})=2log_{10}(h)$, which in the plot doubles as $y = 2x$, the expected value of our error.}
-\label{fig:1d}
+\label{fig:fig2}
 \end{figure}
 %
 \begin{deluxetable}{lcc}[H]
 %\tablewidth{0pt}
 \tablecaption{\label{tab:results}}
-\tablecomments{Table of the error, for stepsizes down to $h = 10^{-7}$. The table reveals that the numerical error starts increasing after $h = 10^{-5}$, and before reaching that point we the the $\mathcal{O}(h^{2})$.}
+\tablecomments{Table of the error, for $n \in [10^1,10^{7}]$ . The table reveals that the numerical error increases when $n > 10^{5}$, while the error for $n \leq 10^{5}$ follow the expected value $\mathcal{O}(h^{2})$.}
 \tablecolumns{4}
 \tablehead{ n & Error &}
 \startdata
@@ -414,11 +413,11 @@ u_{11}     & u_{12}            & \dots         & \dots       & u_{1n} \\
 \subsection{Program CPU time}
 
 Testing the time we ran the three different programs 10 times for different sizes $n$, listing longest, shortest and average CPU times.
-In [TABLE ] the results we have listed for timing our programs with $n = 1000$. Comparably for larger matrices $n=10^{6}$ the programs yield the timings presented in [TABLE ].
-%
+In Table \ref{tab:n1000} the results we have listed for timing our programs with $n = 1000$. Comparably for larger matrices $n=10^{6}$ the programs yield the timings presented in Table \ref{tab:n10^6}.
+
 \begin{deluxetable}{lccc}[H]
 %\tablewidth{0pt}
-\tablecaption{\label{tab:results}}
+\tablecaption{\label{tab:n1000}}
 \tablecomments{This table contains highest, lowest and average measured CPU times for the different algorithms used at n = 1000, armadillo being overall, while our general and specialized algorithm timings both withing the same order of magnitude.}
 \tablecolumns{4}
 \tablehead{ & General & Specialized & Armadillo}
@@ -429,10 +428,10 @@ Average & 0.000249s & 0.000167s & 0.015978s
 \enddata
 \end{deluxetable}
 %
-%
+
 \begin{deluxetable}{lccc}[h]
 %\tablewidth{0pt}
-\tablecaption{\label{tab:results}}
+\tablecaption{\label{tab:n10^6}}
 \tablecomments{This table contains highest, lowest and average measured CPU times for the different algorithms used at $n = 10^{6}$, armadillo runs out of memory, while the general and specialized algorithms staying within the same order of magnitude.}
 \tablecolumns{4}
 \tablehead{ & General & Specialized & Armadillo}
@@ -448,12 +447,19 @@ Note that the LU-decomposition runs out of memory at $n = 10^{5}$ meaning that w
 
 \section{Conclusions}
 \label{sec:conclusions}
+\subsection{Error}
+Reviewing the plots from Fig. \ref{fig:fig1} we can see that the error is greater for $n = 10$ than it is for $n = 100$ points. Which is expected of our algorithm considering the error is of the order $h^2$, where $h$ is the step size. However between these step sizes we already reach the maximum resolution of a side by side comparison, and between $n = 100$ and $n = 1000$ the only visible change is in the resolution of the plot itself. Further we compute the relative error of the specialized algorithm compared to the closed form solution and plot it in a logarithmic scale as seen in Fig. \ref{fig:fig2}. By Fig. \ref{fig:fig2} we can see that the error goes as expected until $log_{10}(h) = -5$ and the error increases. This is the point where our numerical model becomes unstable due to the step size being too small, called loss of numerical accuracy, which is a direct result from n being too large.
 
-Reviewing the plots from [FIG:1], there is an eye catching difference in error made between $n = 10$ and $n = 100$ points. Which is expected of our algorithm considering the quadratic dependency of the error with respect to step size $h^{2}$. However between these step sizes we already reach the maximum resolution of a side by side comparison, and between $n = 100$ and $n = 1000$ the only visible change is in the resolution of the plot itself. aiding our understanding of the results further by computing the relative error and plotting it in a logarithmic scale we can see that our error indeed has a quadratic dependency. For larger step sizes however the computer starts introducing its own error
+\subsection{CPU time}
+While CPU time of the specialized and the general algorithms are of same order of magnitude, there is a clear difference for $n = 1000$. Analyzing the number of FLOPS in the different algorithms, it becomes clear that the specialized algorithm should be $8n/6n = 3/2$ times faster. Comparing average CPU times we see that this is highly accurate for $n=1000$, in which case its $0.000249/0.000167 = 1.49$times faster. However for $n = 10^{6}$ this does not seem to be the case entirely, as we find it to be $0.079288/0.067805 = 1.17$ times faster. This can partially be attributed to the small sample size and the imprecise method when performing the calculations. The testing environment for calculating was a laptop, we expect that for large n the calculations take more time and there is a higher load on the CPU. This load results in a higher temperature which on a standard laptop could cause the performance to drop.
 
-While the specialized and general algorithms are of same order of magnitude and though still not similar in size (on average) for $n = 10^{6}$, we see a clear difference for the smaller $n = 1000$. Analyzing the number of FLOPS in the different algorithms, it becomes clear that the specialized algorithm should be $8n/6n = 3/2$ times faster. Comparing average CPU times we see that this is highly accurate for $n=1000$, in which case its $0.000249/0.000167 = 1.49$times faster. However for $n = 10^{6}$ this does not seem to be the case entirely $0.079288/0.067805 = 1.17$times faster. This can partially be attributed to the small sample size of ten
+\subsection{LU decomposition}
+The LU decomposition is as expected a slower and more demanding algorithm. Since the algorithm stores the variables as matrices instead of vectors, the computer runs out of memory for larger n i.e $n > 10^{5}$. The reason that the LU decomposition runs out of memory is that it saves every value of the matrix, including the zeros on the lower diagonal $\boldsymbol{L}$ and the upper diagonal of $u$ which takes up a lot of memory when storing the $n\times n$ matrices.
+The number of FLOPS using LU decomposition is proportional to $n^{2}$ since we are dealing with $nxn$ matrices. This has a considerable effect and even for smaller n, we get a slower CPU time, due to the large number of FLOPS required in our calculations.
 
-%Summarize results. Discuss their importance, referring to the discovery to the initial seeds for structure formation. Mention that these results are in good agreement with expectations from inflationary theory.
+\subsection{Comments}
+We both found this project to be great as an introduction to FYS3150 Computational Physics and as a way to start learning C++. We did not have many critiques, other than the fact that in section 1b the variables written in the matrix and the ones in the vector $b$ and $\tilde{b}$ was a bit unclear at first glance, and it is suggested that $\tilde{b}$ in the matrix $\boldsymbol{A}$ is renamed to $\tilde{f}$.
+
 
 
 
