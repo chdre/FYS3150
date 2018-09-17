@@ -23,3 +23,6 @@ plt.plot(log10h,y(log10h))
 plt.xlabel('$\\log_{10}(h)$', size=18);plt.ylabel('$\\epsilon_i$',size=18)
 plt.legend(['$log_{10}(\\epsilon_i)$', '$2log_{10}(h)$'],prop={'size': 18})
 plt.show()
+
+eps = 10**(np.array(eps))
+print(eps)
