@@ -34,7 +34,8 @@ main(int argc, char *argv[]) {
   while (max(pow(a[i, j]), 2) > eps) {
   }
 
-  double for (int i = 1; i < n; i++) {
+  double; //?
+  for (int i = 1; i < n; i++) {
     for (int j = 1; j < n; j++) {
       if (pow(A[i, j], 2) > eps) {
       }
