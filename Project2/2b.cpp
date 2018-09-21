@@ -9,7 +9,7 @@ using namespace std;
 using namespace arma;
 
 main(int argc, char *argv[]) {
-  int N; // size of matrix
+  int n; // size of matrix
 
   if (argc <= 1) {
     cout << "Missing arguments:" << argv[0] << " specify size of matrix N"
@@ -31,13 +31,23 @@ main(int argc, char *argv[]) {
 
   // creating a while loop that checks whether the off diagonal elements are
   // larger than eps
-  while (max(pow(a[i, j]), 2) > eps) {
+  while (maxelm > eps) {
   }
 
-  double; //?
-  for (int i = 1; i < n; i++) {
-    for (int j = 1; j < n; j++) {
-      if (pow(A[i, j], 2) > eps) {
+  double max_offdiag_test(double *maxelm, int *k, int *l) {
+    // function to find the maximum value of
+    mat A_temp = A.diag() *= 0.0;         // diagonal = 0
+    uword max_index = A_temp.index_max(); // finding index of max element
+    *maxelm = A_temp(max_index);          // max element
+  }
+
+  double max_offdiag(double *maxelm, ) {
+    *maxelm = A[1, 1];
+    for (int i = 1; i < n; i++) {
+      for (int j = 1; j < n; j++) {
+        if (abs(A[i, j]) > maxelm) { // checking whether
+          *maxelm = abs(A[i, j]);
+        }
       }
     }
   }
