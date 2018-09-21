@@ -5,7 +5,10 @@
 #include <iostream>
 #include <string>
 
-int main(int argc, char *argv[]) {
+using namespace std;
+using namespace arma;
+
+main(int argc, char *argv[]) {
   int N; // size of matrix
 
   if (argc <= 1) {
@@ -14,8 +17,28 @@ int main(int argc, char *argv[]) {
     exit(1);
   } else {
     // reading value of N
-    N = atoi(argv[1]) // N from acsi
+    n = atoi(argv[1]); // N from asci
   }
 
-  double h = 1.0 / (N + 1);
+  double h = 1.0 / (n + 1); // step length
+  double eps = 1.0e-8;      // tolerance
+
+  // Creating tridiagonal matrix
+  mat A = zeros<mat>(n + 2, n + 2);      // matrix for A
+  A.diag() += double(2.0) / pow(h, 2);   // center diagonal
+  A.diag(1) -= double(1.0) / pow(h, 2);  // upper diagonal
+  A.diag(-1) -= double(1.0) / pow(h, 2); // lower diagonal
+
+  // creating a while loop that checks whether the off diagonal elements are
+  // larger than eps
+  while (max(pow(a[i, j]), 2) > eps) {
+  }
+
+  double for (int i = 1; i < n; i++) {
+    for (int j = 1; j < n; j++) {
+      if (pow(A[i, j], 2) > eps) {
+      }
+    }
+  }
+  return 0;
 }
