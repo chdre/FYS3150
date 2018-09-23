@@ -28,6 +28,32 @@ void jacobi(mat &A, mat &R, int n, double h) {
   return;
 }
 
+double max_offdiag(mat &A, int n, double h, int *l, int *k) {
+  /* function to find the maximum value of the array A. The diagonal is set to
+   0. The index of the maximum value is found, since the function returns a
+   single number we must transform this to indices for the matrix.*/
+  double maxelm = 0.0;
+  mat A_temp = abs(A); // absolute value of all elements in array
+  A_temp -= eye(size(A)) * (double(2.0) / pow(h, 2)); // setting diagonal = 0
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (A(i, j) > maxelm) {
+        maxelm = A(i, j);
+        *l = i;
+        *k = j;
+      }
+    }
+  }
+
+  /*THROWING THIS SOLUTION uword max_index = A_temp.index_max(); // finding
+  index of max element double maxelm = max_element(A_temp,A_temp+n); int
+  max_index = distance(A_temp, max_element(A_temp,A_temp+n)) *l = max_index / n;
+  // find correct index for column *k = max_index - (n * l); // find correct
+  index for row
+  //maxelm = A_temp(max_index);   // max element*/
+  return maxelm;
+}
+
 void rotate(mat &A, mat &R, int k, int l, int n) {
   // rotating the matrix A, saving eigenvalues in vector R
   double c, s, tau, t;
@@ -64,32 +90,6 @@ void rotate(mat &A, mat &R, int k, int l, int n) {
     R(i, l) = c * R(i, l) + s * R(i, k);
   }
   return;
-}
-
-double max_offdiag(mat &A, int n, double h, int *l, int *k) {
-  /* function to find the maximum value of the array A. The diagonal is set to
-   0. The index of the maximum value is found, since the function returns a
-   single number we must transform this to indices for the matrix.*/
-  double maxelm = 0.0;
-  mat A_temp = abs(A); // absolute value of all elements in array
-  A_temp -= eye(size(A)) * (double(2.0) / pow(h, 2)); // setting diagonal = 0
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < n; j++) {
-      if (A(i, j) > maxelm) {
-        maxelm = A(i, j);
-        *l = i;
-        *k = j;
-      }
-    }
-  }
-
-  /*THROWING THIS SOLUTION uword max_index = A_temp.index_max(); // finding
-  index of max element double maxelm = max_element(A_temp,A_temp+n); int
-  max_index = distance(A_temp, max_element(A_temp,A_temp+n)) *l = max_index / n;
-  // find correct index for column *k = max_index - (n * l); // find correct
-  index for row
-  //maxelm = A_temp(max_index);   // max element*/
-  return maxelm;
 }
 
 main(int argc, char *argv[]) {
