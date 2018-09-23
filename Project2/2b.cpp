@@ -29,6 +29,10 @@ void jacobi(double ** A){
  }
 }
 
+void rotate(double ** A, double ** R, int k, int l, int n) {
+  
+}
+
 
 main(int argc, char *argv[]) {
   int n; // size of matrix
