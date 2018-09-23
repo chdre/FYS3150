@@ -21,7 +21,7 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   *l = int(max_index) / n; // find correct index for column
   cout << typeid(l) << endl;
   *k = int(max_index) - (n * l); // find correct index for row
-  maxelm = A_temp[k,l];         // max element
+  maxelm = A_temp(k,l)         // max element
   return maxelm;
 }
 
@@ -45,7 +45,7 @@ void rotate(mat &A, mat &R, int k, int l, int n) {
   // rotating the matrix A, saving eigenvalues in vector R
   double c, s, tau, t;
 
-  tau = (A[l,l] - A[k,k]) / (2 * A[k,l]); // tau = cot2\theta
+  tau = (A(l,l)- A(k,k) / (2 * A(k,l); // tau = cot2\theta
   if (A[k,l] !=
       0.0) { // making sure we do not divide by 0 (orthognal rotation)
     if (tau > 0) {
@@ -60,17 +60,17 @@ void rotate(mat &A, mat &R, int k, int l, int n) {
   }
 
   // changing matrix elements
-  A[k,k] = pow(c, 2) * A[k,k] - 2.0 * c * s * A[k,l] + pow(s, 2) * A[l,l];
-  A[l,l] = pow(s, 2) * A[k,k] + 2.0 * c * s * A[k,l] + pow(c, 2) * A[l,l];
-  A[k,l] = 0.0;
-  A[l,k] = 0.0;
+  A(k,k)= pow(c, 2) * A(k,k)- 2.0 * c * s * A(k,l)+ pow(s, 2) * A(l,l)
+  A(l,l)= pow(s, 2) * A(k,k)+ 2.0 * c * s * A(k,l)+ pow(c, 2) * A(l,l)
+  A(k,l)= 0.0;
+  A(l,k)= 0.0;
   // change remaining elements
   for (int i = 0; i < n; i++) {
     if (i != k && i != l) {
-      A[i, k] = c * A[i,k] - s * A[i,l];
-      A[k, i] = A[i,k];
-      A[i, l] = c * A[i, l] + s * A[i,k];
-      A[l, i] = A[i, l];
+      A(i, k) = c * A(i,k) - s * A(i,l);
+      A(k, i) = A(i,k);
+      A(i, l) = c * A(i, l) + s * A(i,k);
+      A(l, i] = A(i, l);
     }
     // compute eingenvectors
     R(i, k) = c * R(i, k) - s * R(i, l);
