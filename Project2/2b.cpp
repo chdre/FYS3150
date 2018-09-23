@@ -10,12 +10,12 @@ using namespace arma;
 
 void jacobi(double **A, int n) {
   double max_offdiagval = max_offdiag(A, n, h, &l, &k); // max offdiag element
-  int max_iter = pow(double(n),3); // max number of iterations
-  int iter = 0; // counter for iterations
+  int max_iter = pow(double(n), 3); // max number of iterations
+  int iter = 0;                     // counter for iterations
   // creating a while loop that checks whether the off diagonal elements are
   // larger than eps. Calling the function max_offdiag to find.
   while (max_offdiagval > eps) {
-    max_offdiagval = maxoffdiag(A, n, h &l, &k);
+    max_offdiagval = maxoffdiag(A, n, h & l, &k);
     iter++;
   }
 }
@@ -68,7 +68,7 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   uword max_index = A_temp.index_max(); // finding index of max element
   *l = int(max_index) / n;              // find correct index for column
   *k = int(max_index) - (n * l);        // find correct index for row
-  maxelm = A_temp(k, l);         // max element
+  maxelm = A_temp(k, l);                // max element
   return maxelm;
 }
 
@@ -85,7 +85,7 @@ main(int argc, char *argv[]) {
 
   double h = 1.0 / (n + 1); // step length
   double eps = 1.0e-8;      // tolerance
-  int k, l;   // indices for largest off diagonal element
+  int k, l;                 // indices for largest off diagonal element
 
   // Creating tridiagonal matrix
   mat *A = zeros<mat>(n, n);             // matrix for A
