@@ -20,7 +20,7 @@ void jacobi(mat &A, mat &R, int n, double h) {
   // creating a while loop that checks whether the off diagonal elements are
   // larger than eps. Calling the function max_offdiag to find.
   while (max_offdiagval > eps && iter < max_iter) {
-    max_offdiagval = max_offdiag(A, n, h, &l, &k);
+    max_offdiagval, l, k = max_offdiag(A, n, h, &l, &k);
     rotate(A, R, k, l, n);
     iter++;
   }
@@ -72,13 +72,12 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   mat A_temp = abs(A); // absolute value of all elements in array
   A_temp -= eye(size(A)) * (double(2.0) / pow(h, 2)); // setting diagonal = 0
   uword max_index = A_temp.index_max(); // finding index of max element
-  //cout << typeid(max_index) << endl;
-  int max_indexa = max_index;
-  *l = max_indexa / n; // find correct index for column
+  // cout << typeid(max_index) << endl;
+  l = max_index / n; // find correct index for column
   // cout << typeid(l) << endl;
-  *k = max_indexa - (n * l); // find correct index for row
-  maxelm = A_temp(k, l)     // max element
-      return maxelm;
+  k = max_index - (n * l); // find correct index for row
+  maxelm = A_temp(k, l);   // max element
+  return {maxelm, l, k};
 }
 
 main(int argc, char *argv[]) {
