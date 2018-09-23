@@ -8,6 +8,19 @@
 using namespace std;
 using namespace arma;
 
+
+void jacobi(double ** A){
+  // creating a while loop that checks whether the off diagonal elements are
+  // larger than eps. Calling the function max_offdiag to find.
+  while (max_offdiag > eps) {
+
+ }
+}
+
+void rotate(double ** A, double ** R, int k, int l, int n) {
+  // rotating the matrix A, saving eigenvalues in vector R
+}
+
 double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   /* function to find the maximum value of the array A. The diagonal is set to
    0. The index of the maximum value is found, since the function returns a
@@ -20,19 +33,6 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   double maxelm = A_temp(k, l);         // max element
   return maxelm;
 }
-
-void jacobi(double ** A){
-  // creating a while loop that checks whether the off diagonal elements are
-  // larger than eps. Calling the function max_offdiag to find.
-  while (max_offdiag > eps) {
-
- }
-}
-
-void rotate(double ** A, double ** R, int k, int l, int n) {
-  
-}
-
 
 main(int argc, char *argv[]) {
   int n; // size of matrix
@@ -53,5 +53,9 @@ main(int argc, char *argv[]) {
   A.diag() += double(2.0) / pow(h, 2);  // center diagonal
   A.diag(1) -= double(1.0) / pow(h, 2); // upper diagonal
   A.diag(-1) -= double(1.0) / pow(h, 2); // lower diagonal
+
+  mat * R = zeros<mat>(n,n);  // matrix for eigenvectors
+
+
   return 0;
 }
