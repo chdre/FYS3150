@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <armadillo>
 #include <cmath>
 #include <fstream>
@@ -5,7 +6,6 @@
 #include <iostream>
 #include <string>
 #include <typeinfo>
-#include <algorithm>
 
 using namespace std;
 using namespace arma;
@@ -25,6 +25,7 @@ void jacobi(mat &A, mat &R, int n, double h) {
     rotate(A, R, k, l, n);
     iter++;
   }
+  return;
 }
 
 void rotate(mat &A, mat &R, int k, int l, int n) {
@@ -72,21 +73,21 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   double maxelm = 0.0;
   mat A_temp = abs(A); // absolute value of all elements in array
   A_temp -= eye(size(A)) * (double(2.0) / pow(h, 2)); // setting diagonal = 0
-  for(int i = 0; i < n; i++){
-    for(int j = 0, j < n; j++){
-      if(A(i,j) > maxelm){
-        maxelm = A(i,j);
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (A(i, j) > maxelm) {
+        maxelm = A(i, j);
         *l = i;
         *k = j;
       }
     }
   }
 
-  /*THROWING THIS SOLUTION uword max_index = A_temp.index_max(); // finding index of max element
-  double maxelm = max_element(A_temp,A_temp+n);
-  int max_index = distance(A_temp, max_element(A_temp,A_temp+n))
-  *l = max_index / n; // find correct index for column
-  *k = max_index - (n * l); // find correct index for row
+  /*THROWING THIS SOLUTION uword max_index = A_temp.index_max(); // finding
+  index of max element double maxelm = max_element(A_temp,A_temp+n); int
+  max_index = distance(A_temp, max_element(A_temp,A_temp+n)) *l = max_index / n;
+  // find correct index for column *k = max_index - (n * l); // find correct
+  index for row
   //maxelm = A_temp(max_index);   // max element*/
   return maxelm;
 }
@@ -112,8 +113,6 @@ main(int argc, char *argv[]) {
 
   mat R = zeros<mat>(n, n); // eigenvector matrix
   R.diag() += double(1.0);
-
-  jacobi(A, R, n, h);
 
   return 0;
 }
