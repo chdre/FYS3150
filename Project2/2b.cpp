@@ -10,6 +10,11 @@ using namespace std;
 using namespace arma;
 
 void jacobi(double **A, int n) {
+  // declaring variables needed
+  double h = 1.0 / (n + 1); // step length
+  double eps = 1.0e-8;      // tolerance
+  int k, l;                 // indices for largest off diagonal element
+
   double max_offdiagval = max_offdiag(A, n, h, &l, &k); // max offdiag element
   int max_iter = pow(double(n), 3); // max number of iterations
   int iter = 0;                     // counter for iterations
@@ -85,10 +90,6 @@ main(int argc, char *argv[]) {
   } else {
     n = atoi(argv[1]); // N from as ci
   }
-
-  double h = 1.0 / (n + 1); // step length
-  double eps = 1.0e-8;      // tolerance
-  int k, l;                 // indices for largest off diagonal element
 
   // Creating tridiagonal matrix
   mat A = zeros<mat>(n, n);              // matrix for A
