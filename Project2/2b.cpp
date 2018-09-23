@@ -15,7 +15,7 @@ void jacobi(double **A, int n) {
   // creating a while loop that checks whether the off diagonal elements are
   // larger than eps. Calling the function max_offdiag to find.
   while (max_offdiagval > eps && iter <) {
-    max_offdiagval = maxoffdiag(A, n, h & l, &k);
+    max_offdiagval = maxoffdiag(A, n, h, &l, &k);
     iter++;
   }
 }
