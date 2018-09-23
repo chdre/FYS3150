@@ -73,8 +73,8 @@ void rotate(mat &A, mat &R, int k, int l, int n) {
       A[l, i] = A[i, l];
     }
     // compute eingenvectors
-    R[i, k] = c * R[i, k] - s * R[i, l];
-    R[i, l] = c * R[i, l] + s * R[i, k];
+    R(i, k) = c * R(i, k) - s * R(i, l);
+    R(i, l) = c * R(i, l) + s * R(i, k);
   }
   return;
 }
