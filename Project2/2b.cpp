@@ -45,7 +45,7 @@ void rotate(mat &A, mat &R, int k, int l, int n) {
   // rotating the matrix A, saving eigenvalues in vector R
   double c, s, tau, t;
 
-  tau = (A(l,l)- A(k,k) / (2 * A(k,l); // tau = cot2\theta
+  tau = (A(l,l)- A(k,k)) / (2 * A(k,l)); // tau = cot2\theta
   if (A(k,l) !=
       0.0) { // making sure we do not divide by 0 (orthognal rotation)
     if (tau > 0) {
@@ -60,8 +60,8 @@ void rotate(mat &A, mat &R, int k, int l, int n) {
   }
 
   // changing matrix elements
-  A(k,k)= pow(c, 2) * A(k,k)- 2.0 * c * s * A(k,l)+ pow(s, 2) * A(l,l)
-  A(l,l)= pow(s, 2) * A(k,k)+ 2.0 * c * s * A(k,l)+ pow(c, 2) * A(l,l)
+  A(k,k)= pow(c, 2) * A(k,k)- 2.0 * c * s * A(k,l)+ pow(s, 2) * A(l,l);
+  A(l,l)= pow(s, 2) * A(k,k)+ 2.0 * c * s * A(k,l)+ pow(c, 2) * A(l,l);
   A(k,l)= 0.0;
   A(l,k)= 0.0;
   // change remaining elements
