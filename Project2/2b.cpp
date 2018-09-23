@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <typeinfo>
+#include <algorithm>
 
 using namespace std;
 using namespace arma;
@@ -20,7 +21,7 @@ void jacobi(mat &A, mat &R, int n, double h) {
   // creating a while loop that checks whether the off diagonal elements are
   // larger than eps. Calling the function max_offdiag to find.
   while (max_offdiagval > eps && iter < max_iter) {
-    max_offdiagval, l, k = max_offdiag(A, n, h, &l, &k);
+    max_offdiagval = max_offdiag(A, n, h, &l, &k);
     rotate(A, R, k, l, n);
     iter++;
   }
@@ -71,13 +72,13 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   double maxelm = 0.0;
   mat A_temp = abs(A); // absolute value of all elements in array
   A_temp -= eye(size(A)) * (double(2.0) / pow(h, 2)); // setting diagonal = 0
-  uword max_index = A_temp.index_max(); // finding index of max element
-  // cout << typeid(max_index) << endl;
-  l = max_index / n; // find correct index for column
-  // cout << typeid(l) << endl;
-  k = max_index - (n * l); // find correct index for row
-  maxelm = A_temp(k, l);   // max element
-  return {maxelm, l, k};
+  //uword max_index = A_temp.index_max(); // finding index of max element
+  double maxelm = max_element(A_temp,A_temp+n);
+  int max_index = distance(A_temp, max_element(A_temp,A_temp+n))
+  *l = max_index / n; // find correct index for column
+  *k = max_index - (n * l); // find correct index for row
+  //maxelm = A_temp(max_index);   // max element
+  return maxelm;
 }
 
 main(int argc, char *argv[]) {
