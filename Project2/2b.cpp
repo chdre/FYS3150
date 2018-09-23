@@ -68,7 +68,7 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   uword max_index = A_temp.index_max(); // finding index of max element
   *l = int(max_index) / n;              // find correct index for column
   *k = int(max_index) - (n * l);        // find correct index for row
-  maxelm = A_temp[k][l];                // max element
+  maxelm = A_temp[k, l];                // max element
   return maxelm;
 }
 
