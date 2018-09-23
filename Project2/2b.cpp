@@ -66,6 +66,7 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   mat A_temp = abs(A); // absolute value of all elements in array
   A_temp -= eye(size(A)) * (double(2.0) / pow(h, 2)); // setting diagonal = 0
   uword max_index = A_temp.index_max(); // finding index of max element
+  max_index = int(max_index);
   *l = int(max_index) / n;              // find correct index for column
   *k = int(max_index) - (n * l);        // find correct index for row
   maxelm = A_temp[k, l];                // max element
