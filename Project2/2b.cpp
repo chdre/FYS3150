@@ -14,11 +14,11 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   /* function to find the maximum value of the array A. The diagonal is set to
    0. The index of the maximum value is found, since the function returns a
    single number we must transform this to indices for the matrix.*/
-  // double maxelm_temp = 0.0;
+  double maxelm = 0.0;
   mat A_temp = abs(A); // absolute value of all elements in array
   A_temp -= eye(size(A)) * (double(2.0) / pow(h, 2)); // setting diagonal = 0
 
-  /*for (int i = 0; i < n; i++) {
+  for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
       if (A(i, j) > maxelm) {
         maxelm = A(i, j);
@@ -26,18 +26,18 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
         *k = j;
       }
     }
-  }*/
+  }
 
   // THROWING THIS SOLUTION
-  //uword max_index_temp = A_temp.index_max(); // finding index of max element
-  double maxelm = max_element(A_temp, A_temp + n);
-  int max_index_temp = distance(A_temp, max_element(A_temp, A_temp + n));
-  int max_index = reverse_iterator(max_index_temp);
+  // uword max_index_temp = A_temp.index_max(); // finding index of max
+  // element
+  // double maxelm = max_element(A_temp, A_temp + n);
+  //  int max_index_temp = distance(A_temp, max_element(A_temp, A_temp + n));
   // cout << max_index_temp << endl;
-  // int max_index = *max_index_temp;
-  *l = max_index / n; // find correct index for column
-  *k = max_index - (n * l); // find correct  index for row
-  maxelm = A_temp(max_index);   // max element
+  // int max_index = reverse_iterator<iter_type> *l = max_index / n;
+  // find correct index for column
+  //*k = max_index - (n * l);   // find correct  index for row
+  // maxelm = A_temp(max_index); // max element
   return maxelm;
 }
 
