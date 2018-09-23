@@ -8,7 +8,7 @@
 using namespace std;
 using namespace arma;
 
-double max_offdiag(mat &A, int n, double h) {
+double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   /* function to find the maximum value of the array A. The diagonal is set to
    0. The index of the maximum value is found, since the function returns a
    single number we must transform this to indices for the matrix.*/
