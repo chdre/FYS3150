@@ -10,24 +10,6 @@
 using namespace std;
 using namespace arma;
 
-void jacobi(mat &A, mat &R, int n, double h) {
-  // declaring variables needed
-  double eps = 1.0e-8; // tolerance
-  int k, l;            // indices for largest off diagonal element
-
-  double max_offdiagval = max_offdiag(A, n, h, &l, &k); // max offdiag element
-  int max_iter = pow(double(n), 3); // max number of iterations
-  int iter = 0;                     // counter for iterations
-  // creating a while loop that checks whether the off diagonal elements are
-  // larger than eps. Calling the function max_offdiag to find.
-  while (max_offdiagval > eps && iter < max_iter) {
-    max_offdiagval = max_offdiag(A, n, h, &l, &k);
-    rotate(A, R, k, l, n);
-    iter++;
-  }
-  return;
-}
-
 double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   /* function to find the maximum value of the array A. The diagonal is set to
    0. The index of the maximum value is found, since the function returns a
@@ -52,6 +34,24 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   index for row
   //maxelm = A_temp(max_index);   // max element*/
   return maxelm;
+}
+
+void jacobi(mat &A, mat &R, int n, double h) {
+  // declaring variables needed
+  double eps = 1.0e-8; // tolerance
+  int k, l;            // indices for largest off diagonal element
+
+  double max_offdiagval = max_offdiag(A, n, h, &l, &k); // max offdiag element
+  int max_iter = pow(double(n), 3); // max number of iterations
+  int iter = 0;                     // counter for iterations
+  // creating a while loop that checks whether the off diagonal elements are
+  // larger than eps. Calling the function max_offdiag to find.
+  while (max_offdiagval > eps && iter < max_iter) {
+    max_offdiagval = max_offdiag(A, n, h, &l, &k);
+    rotate(A, R, k, l, n);
+    iter++;
+  }
+  return;
 }
 
 void rotate(mat &A, mat &R, int k, int l, int n) {
