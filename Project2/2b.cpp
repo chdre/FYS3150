@@ -10,7 +10,7 @@ using namespace arma;
 
 
 void jacobi(double ** A, int n){
-
+  double max_offdiagval = max_offdiag(A, n, h, &l, &k, )
   // creating a while loop that checks whether the off diagonal elements are
   // larger than eps. Calling the function max_offdiag to find.
   while (max_offdiag > eps) {
@@ -20,6 +20,13 @@ void jacobi(double ** A, int n){
 
 void rotate(double ** A, double ** R, int k, int l, int n) {
   // rotating the matrix A, saving eigenvalues in vector R
+double tau = (A[l,l] - A[k,k])/(2*A[k,l]); // tau = cot2\theta
+if(tau > 0){
+  double t = -tau + sqrt(1 + pow(tau,2));
+}
+else {
+  double t = tau + sqrt(1 +pow(tau,2));
+}
 }
 
 double max_offdiag(mat &A, int n, double h, int *l, int *k) {
@@ -29,8 +36,8 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   mat A_temp = abs(A);  // absolute value of all elements in array
   A_temp -= eye(size(A)) * (double(2.0) / pow(h, 2)); // setting diagonal = 0
   uword max_index = A_temp.index_max(); // finding index of max element
-  int l = int(max_index) / n;           // find correct index for column
-  int k = int(max_index) - (n * l);     // find correct index for row
+  *l = int(max_index) / n;           // find correct index for column
+  *k = int(max_index) - (n * l);     // find correct index for row
   double maxelm = A_temp(k, l);         // max element
   return maxelm;
 }
