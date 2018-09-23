@@ -29,16 +29,15 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   }*/
 
   // THROWING THIS SOLUTION
-  // uword max_index_temp = A_temp.index_max(); // finding index of max
-  // element
+  //uword max_index_temp = A_temp.index_max(); // finding index of max element
   double maxelm = max_element(A_temp, A_temp + n);
   int max_index_temp = distance(A_temp, max_element(A_temp, A_temp + n));
-  cout << max_index_temp << endl;
-  int max_index = *max_index_temp;
-  *l = max_index / n;
-  // find correct index for column
+  int max_index = reverse_iterator(max_index_temp);
+  // cout << max_index_temp << endl;
+  // int max_index = *max_index_temp;
+  *l = max_index / n; // find correct index for column
   *k = max_index - (n * l); // find correct  index for row
-  // maxelm = A_temp(max_index);   // max element
+  maxelm = A_temp(max_index);   // max element
   return maxelm;
 }
 
