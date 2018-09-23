@@ -72,10 +72,11 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   mat A_temp = abs(A); // absolute value of all elements in array
   A_temp -= eye(size(A)) * (double(2.0) / pow(h, 2)); // setting diagonal = 0
   uword max_index = A_temp.index_max(); // finding index of max element
-  cout << typeid(max_index) << endl;
-  *l = max_index / n; // find correct index for column
+  //cout << typeid(max_index) << endl;
+  int max_indexa = max_index;
+  *l = max_indexa / n; // find correct index for column
   // cout << typeid(l) << endl;
-  *k = max_index - (n * l); // find correct index for row
+  *k = max_indexa - (n * l); // find correct index for row
   maxelm = A_temp(k, l)     // max element
       return maxelm;
 }
@@ -100,7 +101,8 @@ main(int argc, char *argv[]) {
   A.diag(-1) -= double(1.0) / pow(h, 2); // lower diagonal
 
   mat R = zeros<mat>(n, n); // eigenvector matrix
-  R.diag() += double(1);
+  R.diag() += double(1.0);
+
   jacobi(A, R, n, h);
 
   return 0;
