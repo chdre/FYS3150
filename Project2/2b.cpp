@@ -46,7 +46,7 @@ void rotate(mat &A, mat &R, int k, int l, int n) {
   double c, s, tau, t;
 
   tau = (A(l,l)- A(k,k) / (2 * A(k,l); // tau = cot2\theta
-  if (A[k,l] !=
+  if (A(k,l) !=
       0.0) { // making sure we do not divide by 0 (orthognal rotation)
     if (tau > 0) {
       t = -tau + sqrt(1 + pow(tau, 2));
@@ -70,7 +70,7 @@ void rotate(mat &A, mat &R, int k, int l, int n) {
       A(i, k) = c * A(i,k) - s * A(i,l);
       A(k, i) = A(i,k);
       A(i, l) = c * A(i, l) + s * A(i,k);
-      A(l, i] = A(i, l);
+      A(l, i) = A(i, l);
     }
     // compute eingenvectors
     R(i, k) = c * R(i, k) - s * R(i, l);
