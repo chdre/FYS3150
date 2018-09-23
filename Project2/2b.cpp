@@ -17,6 +17,7 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
   double maxelm = 0.0;
   mat A_temp = abs(A); // absolute value of all elements in array
   A_temp -= eye(size(A)) * (double(2.0) / pow(h, 2)); // setting diagonal = 0
+
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
       if (A(i, j) > maxelm) {
@@ -27,31 +28,17 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
     }
   }
 
-  /*THROWING THIS SOLUTION uword max_index = A_temp.index_max(); // finding
-  index of max element double maxelm = max_element(A_temp,A_temp+n); int
-  max_index = distance(A_temp, max_element(A_temp,A_temp+n)) *l = max_index / n;
-  // find correct index for column *k = max_index - (n * l); // find correct
-  index for row
-  //maxelm = A_temp(max_index);   // max element*/
+  /* THROWING THIS SOLUTION
+  // uword max_index_temp = A_temp.index_max(); // finding index of max element
+  double maxelm = max_element(A_temp, A_temp + n);
+  int max_index = distance(A_temp, max_element(A_temp, A_temp + n));
+  int max_index = atoi(max_index_temp);
+
+  *l = max_index / n;
+  // find correct index for column
+  *k = max_index - (n * l); // find correct  index for row
+  // maxelm = A_temp(max_index);   // max element*/
   return maxelm;
-}
-
-void jacobi(mat &A, mat &R, int n, double h) {
-  // declaring variables needed
-  double eps = 1.0e-8; // tolerance
-  int k, l;            // indices for largest off diagonal element
-
-  double max_offdiagval = max_offdiag(A, n, h, &l, &k); // max offdiag element
-  int max_iter = pow(double(n), 3); // max number of iterations
-  int iter = 0;                     // counter for iterations
-  // creating a while loop that checks whether the off diagonal elements are
-  // larger than eps. Calling the function max_offdiag to find.
-  while (max_offdiagval > eps && iter < max_iter) {
-    max_offdiagval = max_offdiag(A, n, h, &l, &k);
-    rotate(A, R, k, l, n);
-    iter++;
-  }
-  return;
 }
 
 void rotate(mat &A, mat &R, int k, int l, int n) {
@@ -89,6 +76,25 @@ void rotate(mat &A, mat &R, int k, int l, int n) {
     R(i, k) = c * R(i, k) - s * R(i, l);
     R(i, l) = c * R(i, l) + s * R(i, k);
   }
+  cout << R << endl;
+  return;
+}
+
+void jacobi(mat &A, mat &R, int n, double h) {
+  // declaring variables needed
+  double eps = 1.0e-8; // tolerance
+  int k, l;            // indices for largest off diagonal element
+
+  double max_offdiagval = max_offdiag(A, n, h, &l, &k); // max offdiag element
+  int max_iter = pow(double(n), 3); // max number of iterations
+  int iter = 0;                     // counter for iterations
+  // creating a while loop that checks whether the off diagonal elements are
+  // larger than eps. Calling the function max_offdiag to find.
+  while (max_offdiagval > eps && iter < max_iter) {
+    max_offdiagval = max_offdiag(A, n, h, &l, &k);
+    rotate(A, R, k, l, n);
+    iter++;
+  }
   return;
 }
 
@@ -113,6 +119,10 @@ main(int argc, char *argv[]) {
 
   mat R = zeros<mat>(n, n); // eigenvector matrix
   R.diag() += double(1.0);
+
+  // vec eigvals = eig_sym(A);
+
+  // cout << eigvals << endl;
 
   return 0;
 }
