@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <typeinfo>
+//-DARMA_DONT_USE_WRAPPER -lblas -llapack
 
 using namespace std;
 using namespace arma;
@@ -120,9 +121,13 @@ main(int argc, char *argv[]) {
   mat R = zeros<mat>(n, n); // eigenvector matrix
   R.diag() += double(1.0);
 
-  // vec eigvals = eig_sym(A);
+  jacobi(A, R, n, h);
 
-  // cout << eigvals << endl;
+  cout << R << endl;
+
+  vec eigvals = eig_sym(A);
+
+  cout << eigvals << endl;
 
   return 0;
 }
