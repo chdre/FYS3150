@@ -9,7 +9,8 @@ using namespace std;
 using namespace arma;
 
 
-void jacobi(double ** A){
+void jacobi(double ** A, int n){
+
   // creating a while loop that checks whether the off diagonal elements are
   // larger than eps. Calling the function max_offdiag to find.
   while (max_offdiag > eps) {
@@ -47,6 +48,7 @@ main(int argc, char *argv[]) {
 
   double h = 1.0 / (n + 1); // step length
   double eps = 1.0e-8;      // tolerance
+  int k, l;
 
   // Creating tridiagonal matrix
   mat * A = zeros<mat>(n, n);             // matrix for A
@@ -54,8 +56,7 @@ main(int argc, char *argv[]) {
   A.diag(1) -= double(1.0) / pow(h, 2); // upper diagonal
   A.diag(-1) -= double(1.0) / pow(h, 2); // lower diagonal
 
-  mat * R = zeros<mat>(n,n);  // matrix for eigenvectors
-
+  mat * R = eye(n,n);  // eigenvector matrix
 
   return 0;
 }
