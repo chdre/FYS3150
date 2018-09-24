@@ -13,7 +13,7 @@ using namespace arma;
 
 ofstream outfile;
 
-double max_offdiag(mat &A, int n, double h, int *l, int *k) {
+double max_offdiag(mat &A, int n, int *l, int *k) {
   // function to find the maximum value of the array A
   double maxelm = 0.0;
 
@@ -21,7 +21,7 @@ double max_offdiag(mat &A, int n, double h, int *l, int *k) {
     for (int j = i + 1; j < n; j++) {
       if (abs(A(i, j)) > maxelm) {
         maxelm = abs(A(i, j));
-        *l = i;
+        *l = i; // saving indices of max element i,j
         *k = j;
       }
     }
@@ -42,7 +42,7 @@ void rotate(mat &A, mat &R, int &k, int &l, int n) {
     }
     c = 1.0 / sqrt(1 + pow(t, 2));
     s = t * c;
-  } else { // rotation is orthogonal
+  } else {
     c = 1.0;
     s = 0.0;
   }
@@ -55,6 +55,7 @@ void rotate(mat &A, mat &R, int &k, int &l, int n) {
   A(l, l) = pow(s, 2) * A_kk + 2.0 * c * s * A_kl + pow(c, 2) * A_ll;
   A(k, l) = 0.0;
   A(l, k) = 0.0;
+
   // change remaining elements
   for (int i = 0; i < n; i++) {
     if (i != k && i != l) {
@@ -83,13 +84,14 @@ void jacobi(mat &A, mat &R, int n, double h) {
   R = zeros<mat>(n, n); // eigenvector matrix
   R.diag() += double(1.0);
 
-  double max_offdiagval = max_offdiag(A, n, h, &l, &k); // max offdiag element
-  int max_iter = pow(double(n), 3); // max number of iterations
-  int iter = 0;                     // counter for iterations
+  double max_offdiagval = max_offdiag(A, n, &l, &k); // max offdiag element
+  double max_iter = pow(double(n), 3);               // max number of iterations
+  int iter = 0;                                      // counter for iterations
+
   // creating a while loop that checks whether the off diagonal elements are
   // larger than eps. Calling the function max_offdiag to find.
   while (abs(max_offdiagval) > eps && iter < max_iter) {
-    max_offdiagval = max_offdiag(A, n, h, &l, &k);
+    max_offdiagval = max_offdiag(A, n, &l, &k);
     rotate(A, R, k, l, n);
     iter++;
   }
@@ -110,7 +112,7 @@ main(int argc, char *argv[]) {
     n = atoi(argv[2]); // N from as ci
   }
 
-  double h = 1.0 / (n + 1); // step length
+  double h = 1.0 / (n - 1); // step length, preserving u(L) = 1
 
   // Creating tridiagonal matrix
   mat A = zeros<mat>(n, n);              // matrix for A
@@ -132,7 +134,7 @@ main(int argc, char *argv[]) {
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
       if (i == j) {
-        outfile << R(i, j);
+        outfile << A(i, j);
         outfile << " " << eigval[i] << endl;
       }
     }
