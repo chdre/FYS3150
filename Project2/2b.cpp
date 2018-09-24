@@ -112,7 +112,7 @@ main(int argc, char *argv[]) {
     n = atoi(argv[2]); // N from as ci
   }
 
-  double h = 1.0 / (n - 1); // step length, preserving u(L) = 1
+  double h = 1.0 / (n + 1); // step length, preserving u(L) = 1
 
   // Creating tridiagonal matrix
   mat A = zeros<mat>(n, n);              // matrix for A
