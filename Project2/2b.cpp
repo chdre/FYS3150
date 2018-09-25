@@ -1,15 +1,14 @@
 #include <armadillo>
 #include <cmath>
 #include <iostream>
+#include "eigvals.h"
 
 //-DARMA_DONT_USE_WRAPPER -lblas -llapack
 
 using namespace std;
 using namespace arma;
 
-ofstream outfile;
-
-ofstream outfile;
+//-DARMA_DONT_USE_WRAPPER -lblas -llapack
 
 double max_offdiag(mat &A, int n, int *l, int *k) {
         // function to find the maximum value of the array A
@@ -76,7 +75,7 @@ void rotate(mat &A, mat &R, int &k, int &l, int n) {
         return;
 }
 
-void jacobi(mat &A, mat &R, int n, double h) {
+mat jacobi(mat &A, mat &R, int n, double h) {
         int k, l;      // indices for largest off diagonal element
         double eps = 1.0e-8; // tolerance
 
@@ -95,38 +94,51 @@ void jacobi(mat &A, mat &R, int n, double h) {
                 iter++;
         }
         cout << "Number of iterations: " << iter << "\n";
-        return;
+        vec eigvals = sort(A.diag()); // eigenvalues are the diagonal of A
+        return eigvals;
 }
 
-vec eigvals_arma(mat A, int n) {
+vec eigvals_arma(int n, double h, double a, double d) {
         // returns eigenvalues of matrix A using Armadillo's "eig_sym"
+        mat A_copy = zeros<mat>(n, n);        // matrix for A
+        A.diag() += a; // center diagonal
+        A.diag(1) += d; // upper diagonal
+        A.diag(-1) += d; // lower diagonal
+
         vec eigval;
         mat eigvec;
 
-        eig_sym(eigval, eigvec, A);
+        eig_sym(eigval, eigvec, A_copy);
         return eigval;
 }
 
-vec eigvals_analytical(mat A, int n, double a, double d) {
+vec eigvals_analytical(int n, double a, double d) {
         // returns analytical eigenvalues of matrix A
         vec lambda(n);
         for(int j = 1; j < n+1; j++)
-                lambda[j-1] = d + 2.0*a*cos(j*M_PI/(n + 1));
+                lamb[j-1] = d + 2.0*a*cos(j*M_PI/(n + 1.0));
         return lambda;
 }
 
-main(int argc, char *argv[]) {
-        int n;     // size of matrix
-        string filename; // filename for output file
 
-        if (argc <= 1) {
-                cout << "Missing arguments:" << argv[0]
-                     << " specify filename for output and size n of matrices" << endl;
-                exit(1);
-        } else {
-                filename = argv[1];
-                n = atoi(argv[2]); // N from as ci
+void write_to_file(mat &A, mat &R, double a, double d, double h, int n){
+        vec eigvals_arma = eigvals_arma(n, h, a, d); // eigenvalues from Armadillo
+        vec eigvals_ana = eigvals_analytical(n, a, d); // analytical eigenvalues
+        vec eigvals_jacobi = jacobi(A, R, n, h);
+
+        // writing to file
+        ofstream outfile;
+        outfile.open("2b_results.txt");
+        for (int i = 0; i < n; i++) {
+                outfile << eigvals_jacobi[i];
+                outfile << " " << eigvals_arma[i];
+                outfile << " " << eigvals_ana[i] << endl;
         }
+        outfile.close();
+}
+
+main(int argc, char *argv[]) {
+        int n = atoi(argv[1]); // size of matrix
 
         double h = 1.0/(n + 1); // step length, preserving u(L) = 1
         double a = -1.0/pow(h,2);
@@ -134,30 +146,11 @@ main(int argc, char *argv[]) {
 
         // Creating tridiagonal matrix
         mat A = zeros<mat>(n, n);        // matrix for A
-        A.diag() += double(2.0)/pow(h,2); // center diagonal
-        A.diag(1) -= double(1.0)/pow(h,2); // upper diagonal
-        A.diag(-1) -= double(1.0)/pow(h,2); // lower diagonal
+        A.diag() += a; // center diagonal
+        A.diag(1) += d; // upper diagonal
+        A.diag(-1) += d; // lower diagonal
 
-        mat R;
-
-        vec eigvals = eigvals_arma(A, n);
-        eigvals = sort(eigvals);
-
-        vec eigvals_an = eigvals_analytical(A, n, a, d);
-
-        jacobi(A, R, n, h);
-
-        vec eigvals_jacobi = A.diag();
-        eigvals_jacobi = sort(eigvals_jacobi);
-
-        // writing to file
-        outfile.open(filename);
-        for (int i = 0; i < n; i++) {
-                outfile << eigvals_jacobi[i];
-                outfile << " " << eigvals[i];
-                outfile << " " << eigvals_an[i] << endl;
-        }
-        outfile.close();
+        mat R;  // matrix of eigenvectors
 
         return 0;
 }
