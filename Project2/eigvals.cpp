@@ -6,8 +6,8 @@ double max_offdiag(mat &A, int n, int *l, int *k) {
 
         for (int i = 0; i < n; i++) {
                 for (int j = i + 1; j < n; j++) {
-                        if (abs(A(i,j)) > maxelm) {
-                                maxelm = abs(A(i,j));
+                        if (fabs(A(i,j)) > maxelm) {
+                                maxelm = fabs(A(i,j));
                                 *l = i; // saving indices of max element i,j
                                 *k = j;
                         }
