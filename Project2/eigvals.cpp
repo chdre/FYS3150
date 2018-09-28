@@ -84,7 +84,8 @@ vec jacobi(mat &A, mat &R, int n, double h) {
                 iter++;
         }
         cout << "Number of iterations: " << iter << "\n";
-        vec eigvals = sort(A.diag()); // eigenvalues are the diagonal of A
+        vec eigvals = A.diag(); // eigenvalues are the diagonal of A
+        eigvals = sort(eigvals); // sorting eigenvalues
         return eigvals;
 }
 

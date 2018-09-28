@@ -14,7 +14,7 @@ void write_to_file(mat &A, mat &R, double a, double d, double h, int n){
 
         // writing to file
         ofstream outfile;
-        outfile.open("2b_results.txt");
+        outfile.open(filename);
         for (int i = 0; i < n; i++) {
                 outfile << eigvals_jac[i];
                 outfile << " " << eigvals_arm[i];
@@ -24,7 +24,17 @@ void write_to_file(mat &A, mat &R, double a, double d, double h, int n){
 }
 
 main(int argc, char *argv[]) {
-        int n = atoi(argv[1]); // size of matrix
+        string filename;
+        int n;
+        if(argc <= 1) {
+                cout << "Missing arguments:" << argv[0] << " specify output filename and value of n" << endl;
+                exit(1);
+        }
+        else{
+                // reading filename and value of n from command line
+                filename = argv[1];
+                n = atoi(argv[2]);      // setting n from ascii to integer
+        }
 
         double rho_0 = 0.0;
         double rho_n = 1.0;
@@ -39,6 +49,8 @@ main(int argc, char *argv[]) {
         A.diag(-1) += a; // lower diagonal
 
         mat R;  // matrix of eigenvectors
+
+        write_to_file(A,R,a,d,h,n);
 
         return 0;
 }
