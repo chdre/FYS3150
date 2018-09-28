@@ -1,6 +1,0 @@
-CPPflags = g++ -O3
-
-LIB = -DARMA_DONT_USE_WRAPPER -lblas -llapack
-
-2d: 2d.o eigvals.o
-		${CPPflags} -o test2d.x 2d.cpp eigvals.cpp ${LIB}
