@@ -33,15 +33,21 @@
 \subsection{Buckling beam}
 Considering a beam that is fastened in both ends which moves up and down when a force F is exerted on it can be described by a differential equation
 %
-\begin{gather}
-    \gamma \frac{d²u(x)}{dx²} = -Fu(x),
+\begin{gather}\label{eq:du2/dx2}
+    R \frac{d^2 u(x)}{dx^2} = -Fu(x),
 \end{gather}
 %
-where $u(x)$ is the displacement of the beam in the y-direction and $\gamma$ is a constant that is defined by the properties of the beam, such as the rigidity. Since the beam is fastened in both ends, the displacement $u(x) = 0$ and the sum outer forces on the beam is zero. 
+where $u(x)$ is the displacement of the beam in the y-direction and $R$ is a constant that is defined by the properties of the beam, such as the rigidity. Since the beam, with length L, is fastened in both ends, the displacement at the end points $u(0) = u(L) = 0$, so we have Dirichlet boundary condition as in the previous paper\ref{paper:P1}, and the sum of outer forces exerted on the beam is zero. Introducing the dimensionless variable $\rho = x/L \Rightarrow x = \rho L$. Introducing this into Eq. \eqref{eq:du2/dx2} gives
+%
+\begin{gather*}
+    \frac{R}{L}\frac{d^2 u(\rho)}{d\rho^2} = - FLu(\rho)
+    \Rightarrow \frac{d^2 u(\rho)}{d\rho^2} = -\frac{FL^2}{R}u(\rho).
+\end{gather*}
+%
+Substituting $\lambda = FL^2/R$ transforms the problem to an eigenvalue problem, with $\lambda$ as eigenvalues with corresponding eigenvectors. 
 
 
-\section{Data}
-\label{sec:data}
+
 
 
 \section{Results}
@@ -86,7 +92,7 @@ Item 1 & Item 2 & Item 3 & Item 4
 
 \begin{thebibliography}{}
 
-\bibitem[]{}
+\bibitem[]{}\label{paper:P1}
 
 \end{thebibliography}
 
