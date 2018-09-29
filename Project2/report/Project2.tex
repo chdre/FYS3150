@@ -5,6 +5,10 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{epsfig,floatflt}
+\setcitestyle{square}
+
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+\SetMathAlphabet{\mathcal}{bold}{OMS}{cmsy}{b}{n}
 
 
 \begin{document}
@@ -37,14 +41,58 @@ Considering a beam that is fastened in both ends which moves up and down when a 
     R \frac{d^2 u(x)}{dx^2} = -Fu(x),
 \end{gather}
 %
-where $u(x)$ is the displacement of the beam in the y-direction and $R$ is a constant that is defined by the properties of the beam, such as the rigidity. Since the beam, with length L, is fastened in both ends, the displacement at the end points $u(0) = u(L) = 0$, so we have Dirichlet boundary condition as in the previous paper\ref{paper:P1}, and the sum of outer forces exerted on the beam is zero. Introducing the dimensionless variable $\rho = x/L \Rightarrow x = \rho L$. Introducing this into Eq. \eqref{eq:du2/dx2} gives
+where $u(x)$ is the displacement of the beam in the y-direction and $R$ is a constant that is defined by the properties of the beam, such as the rigidity. Since the beam, with length L, is fastened in both ends, the displacement at the end points $u(0) = u(L) = 0$, so we have Dirichlet boundary condition as in the previous paper \cite{1}, and the sum of outer forces exerted on the beam is zero. Introducing the dimensionless variable $\rho = x/L \Rightarrow x = \rho L$, where $\rho \in [0,1]$. Introducing this into Eq. \eqref{eq:du2/dx2} gives
 %
 \begin{gather*}
     \frac{R}{L}\frac{d^2 u(\rho)}{d\rho^2} = - FLu(\rho)
     \Rightarrow \frac{d^2 u(\rho)}{d\rho^2} = -\frac{FL^2}{R}u(\rho).
 \end{gather*}
 %
-Substituting $\lambda = FL^2/R$ transforms the problem to an eigenvalue problem, with $\lambda$ as eigenvalues with corresponding eigenvectors. 
+Substituting $\lambda = FL^2/R$ transforms the problem to an eigenvalue problem, with discretized $\lambda$'s as eigenvalues with corresponding eigenvectors. The methods presented in the previous paper regarding the solution of a differential equation will be applied to this problem. The left hand size of the equation to solve,
+%
+\begin{gather}\label{eq:du/dx=lambda}
+    \frac{d^2 u(\rho)}{dx^2} = -\lambda u(\rho)
+\end{gather}
+%
+can be approximated as
+%
+\begin{gather*}
+    \frac{d^2 u(\rho)}{dx^2} = \frac{u(\rho + h) - 2u(\rho) + u(\rho - h)}{h^2} +  \mathcal{O}(h^2),
+\end{gather*}
+%
+where the step size $h = \left(\rho_{max} - \rho_{min}\right)/n$, which is the total length of the beam divided by the resolution of the calculations n. The maximum and minimum value of the dimensionless length variable $\rho$ is at the end points of the beam, such that $\rho_{max} = 1$ and $\rho_{min} = 0$. Following the method from the previous paper the discretized equation to solve is
+%
+\begin{gather*}
+    -\frac{u_{i+1} - 2u_i + u_{i-1}}{h^2} = \lambda u_i.
+\end{gather*}
+Which by the method of the previous paper can be transferred to a matrix eigenvalue problem;
+%
+\begin{equation*}
+    \begin{bmatrix} d& a & 0   & 0    & \dots  &0     & 0 \\
+                                a & d & a & 0    & \dots  &0     &0 \\
+                                0   & a & d & a  &0       &\dots & 0\\
+                                \dots  & \dots & \dots & \dots  &\dots      &\dots & \dots\\
+                                0   & \dots & \dots & \dots  &a  &d & a\\
+                                0   & \dots & \dots & \dots  &\dots       &a & d\end{bmatrix} 
+                                 \begin{bmatrix} u_1 \\ u_2 \\ u_3 \\ \dots \\ u_{N-2} \\ u_{N-1}\end{bmatrix} = \lambda \begin{bmatrix} u_1 \\ u_2 \\ u_3 \\ \dots \\ u_{N-2} \\ u_{N-1}\end{bmatrix} . 
+\label{eq:matrixse} 
+\end{equation*}
+%
+Where a and b are defined as $a = -1/h^2$ and $b = 2/h^2$. For this eigenvalue problem the analytical eigenvalues are
+%
+\begin{gather}\label{eq:eigenvals_analytical}
+    \lambda_j = d + 2a\cos\left(\frac{j\pi}{n+1}\right)
+\end{gather}
+for $j = 1,2,...,n-1$. 
+
+\subsubsection{Jacobi's method for solving the buckling beam problem}
+Solving the eigenvalue problem with Jacobi's method means solving an equation on the form
+%
+\begin{gather}
+    \boldsymbol{S}^T\boldsymbol{A}\boldsymbol{S} = \boldsymbol{R},
+\end{gather}
+%
+where $\boldsymbol{S}$ is an orthogonal matrix, so it has the property $\boldsymbol{S}^{-1} = \boldsymbol{S}^T$. The resulting matrix $\boldsymbol{R}$ will consist of the eigenvectors, which together with the eigenvalues makes up the eigenpairs of the buckling beam problem. The matrix $\boldsymbol{S}$ is such that the elements along the diagonal are 1, and zero elsewhere, except four elements that are decided by the largest element of the off diagonal of $\boldsymbol{A}$. The four elements mentioned rotates $\boldsymbol{A}$ an angle $\theta$ in the Euclidean n-dimensional space. The largest element of $\boldsymbol{A}$ is found at a position $(k,l)$, and these indices are used to define the position of the mentioned four elements of $\boldsymbol{}$
 
 
 
@@ -91,9 +139,11 @@ Item 1 & Item 2 & Item 3 & Item 4
 \end{acknowledgements}
 
 
-\begin{thebibliography}{}
+\begin{thebibliography}{9}
 
-\bibitem[]{}\label{paper:P1}
+\bibitem{1}
+Stig-Nicolai Foyn, Christer Dreierstad
+\textit{Project 1}
 
 \end{thebibliography}
 
