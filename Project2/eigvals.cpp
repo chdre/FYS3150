@@ -105,7 +105,7 @@ vec eigvals_arma(int n, double h, double a, double d) {
 
 vec eigvals_analytical(int n, double a, double d) {
         // returns analytical eigenvalues of matrix A
-        vec lambda(n);
+        vec lambda = zeros<vec>(n);
         for(int j = 1; j < n+1; j++)
                 lambda[j-1] = d + 2.0*a*cos(j*M_PI/(n + 1.0));
         return lambda;
