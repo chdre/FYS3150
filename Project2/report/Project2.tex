@@ -85,14 +85,26 @@ Where a and b are defined as $a = -1/h^2$ and $b = 2/h^2$. For this eigenvalue p
 \end{gather}
 for $j = 1,2,...,n-1$. 
 
-\subsubsection{Jacobi's method for solving the buckling beam problem}
+\subsubsection{Jacobi's method for solving an eigenvalue problem}
 Solving the eigenvalue problem with Jacobi's method means solving an equation on the form
 %
-\begin{gather}
+\begin{gather}\label{eq:B=SAS}
     \boldsymbol{S}^T\boldsymbol{A}\boldsymbol{S} = \boldsymbol{R},
 \end{gather}
 %
-where $\boldsymbol{S}$ is an orthogonal matrix, so it has the property $\boldsymbol{S}^{-1} = \boldsymbol{S}^T$. The resulting matrix $\boldsymbol{R}$ will consist of the eigenvectors, which together with the eigenvalues makes up the eigenpairs of the buckling beam problem. The matrix $\boldsymbol{S}$ is such that the elements along the diagonal are 1, and zero elsewhere, except four elements that are decided by the largest element of the off diagonal of $\boldsymbol{A}$. The four elements mentioned rotates $\boldsymbol{A}$ an angle $\theta$ in the Euclidean n-dimensional space. The largest element of $\boldsymbol{A}$ is found at a position $(k,l)$, and these indices are used to define the position of the mentioned four elements of $\boldsymbol{}$
+where $\boldsymbol{S}$ is an orthogonal matrix, so it has the property $\boldsymbol{S}^{-1} = \boldsymbol{S}^T$. The resulting matrix $\boldsymbol{R}$ will consist of the eigenvectors, which together with the eigenvalues makes up the eigenpairs of the buckling beam problem. The matrix $\boldsymbol{S}$ is such that the elements along the diagonal are 1, and zero elsewhere, except four elements that are decided by the largest element of the off diagonal of $\boldsymbol{A}$. The largest element of $\boldsymbol{A}$ is found at a position $(k,l)$, and these indices are used to define the position of the mentioned four elements of $\boldsymbol{S}$, which are such that $s_{kk} = s_{ll} = \cos\theta$ and $s_{kl} = -s_{lk} = -\sin\theta$. This is considered as a rotation of an angle $\theta$ in the n-dimensional Euclidean space. When solving \eqref{eq:B=SAS} the resulting equations to solve are
+%
+\begin{align*}
+    &r_{ii} = a_{ii}, i \neq k, i \neq l \\
+    &r_{ik} = a_{ik}\cos\theta - a_{il}\sin\theta, i\neq k, i\neq l \\
+    &r_{il} = a_{il}\cos\theta + a_{ik}\sin\theta, i \neq k, i\neq l \\
+    &r_{kk} = a_{kk} \cos^2\theta - 2a_{kl}\cos\theta\sin\theta+ a_{ll}\sin^2\theta \\
+    &r_{ll} = a_{ll} \cos^2\theta+ 2a_{kl}\cos\theta\sin\theta a_{kk}\sin^2\theta \\
+    &r_{kl} = \left(a_{kk} - a_{ll}\right)\cos\theta\sin\theta + a_{kl}\left(\cos^2\theta - \sin^2\theta\right),
+\end{align*}
+which makes up the $\boldsymbol{R}$, which consists of the eigenvectors of $\boldsymbol{A}$. 
+
+For the implimentation of Jacobi's method 
 
 
 
