@@ -86,7 +86,13 @@ Where a and b are defined as $a = -1/h^2$ and $b = 2/h^2$. For this eigenvalue p
 for $j = 1,2,...,n-1$. 
 
 \subsubsection{Jacobi's method for solving the buckling beam problem}
-
+Solving the eigenvalue problem with Jacobi's method means solving an equation on the form
+%
+\begin{gather}
+    \boldsymbol{S}^T\boldsymbol{A}\boldsymbol{S} = \boldsymbol{R},
+\end{gather}
+%
+where $\boldsymbol{S}$ is an orthogonal matrix, so it has the property $\boldsymbol{S}^{-1} = \boldsymbol{S}^T$. The resulting matrix $\boldsymbol{R}$ will consist of the eigenvectors, which together with the eigenvalues makes up the eigenpairs of the buckling beam problem. The matrix $\boldsymbol{S}$ is such that the elements 
 
 
 
