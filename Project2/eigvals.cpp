@@ -27,8 +27,8 @@ void rotate(mat &A, mat &R, int &k, int &l, int n) {
                 } else {
                         t = -1.0/(-tau + sqrt(1 + pow(tau,2))); // tau + sqrt(1 + pow(tau, 2));
                 }
-                c = 1.0 / sqrt(1 + pow(t, 2));
-                s = t * c;
+                c = 1.0/sqrt(1 + pow(t,2));
+                s = t*c;
         } else {
                 c = 1.0;
                 s = 0.0;
