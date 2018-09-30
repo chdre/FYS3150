@@ -13,7 +13,7 @@
 
 \begin{document}
 
-\title{A spectacular title}
+\title{Project 2}
 
 \author{Stig-Nicolai Foyn, Christer Dreierstad}
 
@@ -25,7 +25,7 @@
 
 \begin{abstract}
 \end{abstract}
-\keywords{cosmic microwave background --- cosmology: observations --- methods: statistical}
+\keywords{buckling beam --- quantum dots --- harmonic oscillator- and Coulomb potentials --- methods: scaling of differential equations, Jacobi's method}
 
 \section{Introduction}
 \label{sec:introduction}
@@ -153,20 +153,64 @@ Where a and b are defined as $a = -1/h^2$ and $b = 2/h^2$. For this specific eig
 for $j = 1,2,...,n-1$. 
 
 \subsection{Quantum dots, one electron}
-The method derived in the section for the buckling beam is general, and can be extended to a quantum mechanical problem. 
-
-
-
-
+The method derived in the section for the buckling beam is general for a problem that can be described by a differential equation on the form of \eqref{eq:du/dx=lambda}. The method can be extended to a quantum mechanical problem, if the problem can be transformed into a differential equation as mentioned. The radial part of the Schr$\ddot{\mathrm{o}}$dinger equation with the orbital angular momentum number $l = 0$ is
+%
+\begin{equation*}
+    -\frac{\hbar^2}{2m}\left(\frac{1}{r^2}\frac{d}{dr}r^2\frac{d}{dr}\right)R(r) + V(r)R(r) = ER(r),
+\end{equation*}
+%
+where $r \in [0,\infty)$, the potential $V(r)$ is the harmonic oscillator potential $V(r) = (1/2)kr^2$, where $k = mw^2$ and $\omega$ is the oscillator frequency. The allowed energies are 
+%
+\begin{equation*}
+    E_{n0} = \left(2n + \frac{3}{2}\right),
+\end{equation*}
+%
+for  n = 0, 1, 2,.... Substituting $R(r) = u(r)/r$:
+%
+\begin{equation*}
+    -\frac{\hbar^2}{2m}\frac{1}{r^2}\frac{d}{dr}r^2 \frac{d}{dr}\frac{u(r)}{r} + V(r)\frac{u(r)}{r} = E\frac{u(r)}{r}.
+\end{equation*}
+%
+Evaluating the derivatives in the above equation:
+%
+\begin{align*}
+    \frac{1}{r^2}\frac{d}{dr}r^2\frac{d}{dr}\frac{u(r)}{r} &=  \frac{1}{r^2}\frac{d}{dr}r^2\left(\frac{\frac{du}{dr}r - u}{r^2}\right) \\
+    &= \frac{1}{r^2}\frac{d}{dr}\left(\frac{du}{dr}r - u\right) \\
+    &= \frac{1}{r^2}\left(\frac{d^2u}{dr^2}r + \frac{du}{dr} - \frac{du}{dr}\right) \\
+    &= \frac{1}{r}\frac{d^2u}{dr^2},
+\end{align*}
+%
+Inserting the above and multiplying by r yields
+%
+\begin{equation*}
+    -\frac{\hbar^2}{2m}\frac{d^2u}{dr^2} + V(r)u(r) = Eu(r).
+\end{equation*}
+%
+where the boundary conditions of $u$ are $u(0) = u(\infty) = 0$. Defining a dimensionless variable $\rho = r/\alpha$ transforms the potential to $V(\rho) = (1/2)k\alpha^2\rho^2$, and the Schr$\ddot{\mathrm{o}}$dinger's equation becomes
+%
+\begin{equation*}
+    -\frac{\hbar}{2m\alpha^2}\frac{d^2u(\rho)}{d\rho^2} + \frac{1}{2}k\alpha^2\rho^2u(\rho) = Eu(\rho).
+\end{equation*}
+%
+Multiplying the above equation by $2m\alpha^2 / \hbar^2$
+%
+\begin{equation*}
+    -\frac{d^2u(\rho)}{d\rho^2} + \frac{mk}{\hbar^2}\alpha^2 \rho^2u(\rho) = \frac{2m\alpha^2}{\hbar^2}
+\end{equation*}
 
 \section{Results}
 \label{sec:results}
 
+\subsection{Jacobi's method}
 
+\subsection{Quantum dots, single electron}
+
+\subsection{Quantum dots, two electrons}
 
 \section{Conclusions}
 \label{sec:conclusions}
 
+%We have managed to reduce a 3 dimentional two body problem to a analytically solvable problem by changing coordinate system from euclidian to radial, and analyizing CM-system(?)
 
 
 
