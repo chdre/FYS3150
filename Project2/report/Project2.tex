@@ -217,7 +217,14 @@ The rewritten expression for the Schr$\ddot{\mathrm{o}}$dinger equation is then
     -\frac{d^2}{d\rho^2}u(\rho) + \rho^2u(\rho) = \lambda u(\rho),
 \end{equation*}
 %
-which has known analytical eigenvalues for the ground state (with $l=0)$ $\lambda_{n=0} = 3$ and for the two first excited states $\lambda_1 = 7, \lambda_2 = 11$.
+which has known analytical eigenvalues for the ground state (with $l=0)$ $\lambda_{n=0} = 3$ and for the two first excited states $\lambda_1 = 7, \lambda_2 = 11$. 
+
+By the same method as for the buckling beam we can discretize the Schr$\ddot{\mathrm{o}}$dinger equation:
+%
+\begin{equation*}
+    -\frac{u_{i+1} - 2u_i + u_{i-1}}{h^2} + \rho_i^2u_i = \lambda u_i
+\end{equation*}
+
 
 
 \section{Results}
@@ -242,7 +249,7 @@ which has known analytical eigenvalues for the ground state (with $l=0)$ $\lambd
 \subsection{Quantum dots, two electrons}
 
 \begin{figure}[t]
-\mbox{\epsfig{figure=ProbfuncperRhons16.pdf,width=\linewidth,clip=}}
+\mbox{\epsfig{figure=ProbfuncperRhons15.pdf,width=\linewidth,clip=}}
 \caption{Logarithmic plot of }
 \label{fig:fig3}
 \end{figure}
