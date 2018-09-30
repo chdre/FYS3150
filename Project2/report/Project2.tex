@@ -153,7 +153,7 @@ Where a and b are defined as $a = -1/h^2$ and $b = 2/h^2$. For this specific eig
 for $j = 1,2,...,n-1$. 
 
 \subsection{Quantum dots, one electron}
-The method derived in the section for the buckling beam is general for a problem that can be described by a differential equation on the form of \eqref{eq:du/dx=lambda}. The method can be extended to a quantum mechanical problem, if the problem can be transformed into a differential equation as mentioned. The radial part of the Schr$\ddot{\mathrm{o}}$dinger equation with the orbital angular momentum number $l = 0$ is
+The method derived in the section for the buckling beam is general for a problem that can be described by a differential equation on the form of Eq. \eqref{eq:du/dx=lambda}. The method can be extended to a quantum mechanical problem, if the problem can be transformed into a differential equation as mentioned. The radial part of the Schr$\ddot{\mathrm{o}}$dinger equation with the orbital angular momentum number $l = 0$ is
 %
 \begin{equation*}
     -\frac{\hbar^2}{2m}\left(\frac{1}{r^2}\frac{d}{dr}r^2\frac{d}{dr}\right)R(r) + V(r)R(r) = ER(r),
@@ -198,12 +198,27 @@ Multiplying the above equation by $2m\alpha^2 / \hbar^2$
     -\frac{d^2u(\rho)}{d\rho^2} + \frac{mk}{\hbar^2}\alpha^4 \rho^2u(\rho) = \frac{2m\alpha^2}{\hbar^2}Eu(\rho).
 \end{equation*}
 %
-To transform the equation to a form such that it can be solved as an eigenvalue problem $\alpha$ is fixed such that
+Where the factor in front of $u(\rho$ on the right hand side is defined as
 %
 \begin{equation*}
-    
+    \lambda = \frac{2m\alpha^2}{\hbar^2}E,
 \end{equation*}
 %
+which corresponds to the eigenvalues of the problem. To transform the equation to a form such that it can be solved as an eigenvalue problem, $\alpha$ is fixed such that
+%
+\begin{equation*}
+    \frac{mk}{\hbar^2}\alpha^4 = 1
+    \Rightarrow \alpha = \left(\frac{\hbar^2}{mk}\right)^{1/4}.
+\end{equation*}
+%
+The rewritten expression for the Schr$\ddot{\mathrm{o}}$dinger equation is then
+%
+\begin{equation*}
+    -\frac{d^2}{d\rho^2}u(\rho) + \rho^2u(\rho) = \lambda u(\rho),
+\end{equation*}
+%
+which has known analytical eigenvalues for the ground state (with $l=0)$ $\lambda_{n=0} = 3$ and for the two first excited states $\lambda_1 = 7, \lambda_2 = 11$.
+
 
 \section{Results}
 \label{sec:results}
