@@ -95,7 +95,6 @@ and c can be expressed as
     c &= \cos\theta = \frac{\cos\theta}{\sqrt{\cos^2\theta + \sin^2\theta}} = \frac{1}{\sqrt{1 + \tan^2\theta}}  = \frac{1}{\sqrt{1 + t^2}}.
 \end{align*}
 
-
  
 \subsubsection{Numerical implementation}
 When implementing Jacobi's method numerically, $\bold{B}$ is not explicitly created, instead the elements of $\bold{A}$ are changed during each iteration. This allows the program to run with large matrices (large n), without taking up more memory thasn needed. This means the left hand side of the six previous equations are changed so that they are valid for the elements of $\bold{A}$ instead of $\bold{B}$, meaning $b_{ii} \rightarrow a_{ii}$, $b_{ik} \rightarrow a_{ik}$ and so forth.
@@ -146,15 +145,15 @@ Which by the method of the previous paper can be transferred to a matrix eigenva
 \label{eq:matrixse} 
 \end{equation*}
 %
-Where a and b are defined as $a = -1/h^2$ and $b = 2/h^2$. For this eigenvalue problem the analytical eigenvalues are
+Where a and b are defined as $a = -1/h^2$ and $b = 2/h^2$. For this specific eigenvalue problem the analytical eigenvalues are
 %
 \begin{gather}\label{eq:eigenvals_analytical}
     \lambda_j = d + 2a\cos\left(\frac{j\pi}{n+1}\right)
 \end{gather}
 for $j = 1,2,...,n-1$. 
 
-
-
+\subsection{Quantum dots, one electron}
+The method derived in the section for the buckling beam is general, and can be extended to a quantum mechanical problem. 
 
 
 
