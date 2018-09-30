@@ -71,14 +71,30 @@ Defining $\tau = \left(a_{ll} - a_{kk}\right)/2a_{kl}$ and $\tan\theta = t = s/c
     t^2 + 2\tau t - 1 = 0,
 \end{gather*}
 %
-which is used to define the best fit $\theta$ to reduce the off-diagonal elements of $\bold{A}$. The solution to the quadratic equation is $t = -\tau \pm \sqrt{1 + \tau^2}$. If $\tau$ becomes large, the numerical accuracy will drop, as $t \approx -\tau \pm \tau$. By the following multiplication
+which is used to define the best fit $\theta$ to reduce the off-diagonal elements of $\bold{A}$. The solution to the quadratic equation is $t = -\tau \pm \sqrt{1 + \tau^2}$. If $\tau$ becomes large, the numerical accuracy will drop and $t \approx -\tau \pm \tau$. By the following transformation
 %
 \begin{align*}
     t_{\pm} &= -\tau \pm \sqrt{1+\tau^2}\left(\frac{\tau \pm \sqrt{1+\tau^2}}{\tau \pm \sqrt{1+\tau^2}}\right) \\
     &= \frac{-\tau^2 + \left(1 + \tau^2\right)}{\tau \pm \sqrt{1 + \tau^2}} = \frac{1}{\tau \pm \sqrt{1+\tau^2}}.
 \end{align*}
 %
-the issue of numerical accuracy is avoided by splitting the equation such that when $\tau < 0$ we choose the negative sign in front of the square root.
+and by splitting the equation such that when $\tau < 0$ we choose the negative sign in front of the square root the aforementioned issue is avoided. The final equations for t are
+%
+\begin{align*}
+    t_+ = \frac{1}{\tau + \sqrt{1 + \tau^2}}, \tau \geq 0 \\
+    t_- = \frac{1}{\tau - \sqrt{1 + \tau^2}}, \tau < 0
+\end{align*}
+%
+From the definition of $t = \tan\theta$, s can be expressed as
+%
+\begin{align*}
+    s = \sin\theta = \tan\theta \cos\theta = tc,
+\end{align*}
+and c can be expressed as
+\begin{align*}
+    c &= \cos\theta = \frac{\cos\theta}{\sqrt{\cos^2\theta + \sin^2\theta}} = \frac{1}{\sqrt{1 + \tan^2\theta}}  = \frac{1}{\sqrt{1 + t^2}}.
+\end{align*}
+
 
  
 \subsubsection{Numerical implementation}
