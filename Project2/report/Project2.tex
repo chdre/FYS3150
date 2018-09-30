@@ -217,14 +217,35 @@ The rewritten expression for the Schr$\ddot{\mathrm{o}}$dinger equation is then
     -\frac{d^2}{d\rho^2}u(\rho) + \rho^2u(\rho) = \lambda u(\rho),
 \end{equation*}
 %
-which has known analytical eigenvalues for the ground state (with $l=0)$ $\lambda_{n=0} = 3$ and for the two first excited states $\lambda_1 = 7, \lambda_2 = 11$. 
+which has known analytical eigenvalues for the ground state (with $l=0)$ $\lambda_{n=0} = 3$ and for the two first excited states $\lambda_1 = 7, \lambda_2 = 11, \lambda_3 = 15$. 
 
 By the same method as for the buckling beam we can discretize the Schr$\ddot{\mathrm{o}}$dinger equation:
 %
 \begin{equation*}
-    -\frac{u_{i+1} - 2u_i + u_{i-1}}{h^2} + \rho_i^2u_i = \lambda u_i
+    -\frac{u_{i+1} - 2u_i + u_{i-1}}{h^2} + \rho_i^2u_i = \lambda u_i,
 \end{equation*}
+%
+where the second term on the left comes from the $\rho_i^2 = V_i$, the harmonic oscillator potential. The step length is as previous $h = \left(\rho_n - \rho_0\right)/n$, where $\rho_n = \rho_{max} \rightarrow \infty$. In the calculations $\rho_n$ is approximated by a value that is large enough such that the wave function is zero at that point, and the physics are of no further interest. Evaluating the equation as a tridiagonal matrix the diagonal elements are defined as
+%
+\begin{equation*}
+    d_i = \frac{2}{h^2} + V_i,
+\end{equation*}
+%
+and the upper and lower diagonal elements as
+%
+\begin{equation*}
+    a_i = -\frac{1}{h^2},
+\end{equation*}
+%
+and the final discretized Schr$\ddot{\mathrm{o}}$dinger equation is
+%
+\begin{equation*}
+    d_iu_i + e_{i-1}u_{i-1} + e_{i+1}u_{i+1} = \lambda u_i,
+\end{equation*}
+%
+which is on the same form as the equation for the buckling beam, and the problem can be solved by the established Jacobi's method.
 
+\subsection{Quantum dots, two electrons}
 
 
 \section{Results}
@@ -234,7 +255,7 @@ By the same method as for the buckling beam we can discretize the Schr$\ddot{\ma
 
 \begin{figure}[t]
 \mbox{\epsfig{figure=iterationspersize15.pdf,width=\linewidth,clip=}}
-\caption{Logarithmic plot of }
+\caption{Logarithmic plot of the number of iteration needed as function of the matrix dimentionality n, to illustrate the quadratic dependency we have plotted $y = 2log_{10}(n)$, which in the plot is seen as the dotted $y=2x$ line.}
 \label{fig:fig1}
 \end{figure}
 
@@ -242,7 +263,7 @@ By the same method as for the buckling beam we can discretize the Schr$\ddot{\ma
 
 \begin{figure}[t]
 \mbox{\epsfig{figure=GSEperOMGr15.pdf,width=\linewidth,clip=}}
-\caption{}
+\caption{Plot of the ground state energy as function of $\omega_{r}$, it seemingly increases linearly with slope $a = 3.4369$, with error $da = 0.0511$}
 \label{fig:fig2}
 \end{figure}
 
@@ -250,7 +271,7 @@ By the same method as for the buckling beam we can discretize the Schr$\ddot{\ma
 
 \begin{figure}[t]
 \mbox{\epsfig{figure=ProbfuncperRhons15.pdf,width=\linewidth,clip=}}
-\caption{Logarithmic plot of }
+\caption{Plot of different probability distribution of two electrons in a harmonic oscillator potential, with and without Coulomb interaction, for different $\omega_{r}$, as function of our approximation of infinity $\rho_{n}$}
 \label{fig:fig3}
 \end{figure}
 
