@@ -145,7 +145,7 @@ Which by the method of the previous paper can be transferred to a matrix eigenva
 \label{eq:matrixse} 
 \end{equation*}
 %
-Where a and b are defined as $a = -1/h^2$ and $b = 2/h^2$. For this specific eigenvalue problem the analytical eigenvalues are
+Where a and b are defined as $a = -1/h^2$ and $b = 2/h^2$. For this specific eigenvalue problem the analytical eigenvalues are, as stated in \cite{2}
 %
 \begin{gather}\label{eq:eigenvals_analytical}
     \lambda_j = d + 2a\cos\left(\frac{j\pi}{n+1}\right)
@@ -246,6 +246,25 @@ and the final discretized Schr$\ddot{\mathrm{o}}$dinger equation is
 which is on the same form as the equation for the buckling beam, and the problem can be solved by the established Jacobi's method.
 
 \subsection{Quantum dots, two electrons}
+Consider now two electrons in a harmonic oscillator potential. The electrons will interact through a repulsive Coulomb intereaction. For two non-interacting particles, the radial part of the Schr$\ddot{\mathrm{o}}$dinger equation is
+%
+\begin{equation*}
+    \left[\frac{-\hbar^2}{2m}\left[\frac{d^2}{dr_1^2} - \frac{d^2}{dr_2^2}\right] + \frac{k\left(r_1^2 + r_2^2\right)}{2}\right]u(r_1,r_2) = E^{(2)}u(r_1,r_2),
+\end{equation*}
+%
+where $r_1, r_2$ denotes the radii from the center of the harmonic oscillator potential to electron 1 and 2 respectively. The superscript of the energy corresponds to the energy of the two electrons, such that the energy of the single electron previously discussed would be denoted as $E^{(1)}$. Consider a relative coordinate $\bold{r} = \bold{r_1} - \bold{r_2}$ and a center of mass coordinate $\bold{R} = \left(\bold{r_1} + \bold{r_2}\right)/2$, which transforms the Schr$\ddot{\mathrm{o}}$dinger equation to
+%
+\begin{equation*}
+    \left[\frac{-\hbar^2}{m}\left[\frac{d^2}{dr^2} - \frac{1}{4}\frac{d^2}{dR^2}\right] + \frac{kr^2}{4} + kR^2\right]u(r,R) = E^{(2)}u(r,R)
+\end{equation*}
+%
+where the energy is now $E^{(2)} = E_r + E_R$.  Adding the Coulomb repulsion corresponds to adding a potential term
+%
+\begin{equation*}
+    V(r_1,r_2) = \frac{e^2}{4\pi \epsilon_0 |\bold{r_1} - \bold{r_2}|} = \frac{\beta e^2}{r}
+\end{equation*}
+%
+where $\epsilon_0$ is the permittivity of vacuum, and $\beta e^2 = 1.44$ eVnm.
 
 
 \section{Results}
@@ -258,7 +277,7 @@ Comparing the results from Jacobi's method and the analytic results from the pro
 \begin{deluxetable}{lcc}
 %\tablewidth{0pt}
 \tablecaption{\label{tab:results}}
-\tablecomments{Table comparing CPU-time between Armadillo's built in function (eigsym) and Jacobi's method, as visible from this data Jacobi's method increases in time spent considerably faster than that of Armadillo's function.}
+\tablecomments{Table comparing CPU-time between Armadillo's built in function \textbf{eigsym} and Jacobi's method, as visible from this data Jacobi's method increases in time spent considerably faster than that of Armadillo's function.}
 \tablecolumns{4}
 \tablehead{Size n  & Armadillo & Jacobi's method}
 \startdata
@@ -279,7 +298,7 @@ Comparing the results from Jacobi's method and the analytic results from the pro
 \end{figure}
 %
 \subsection{Quantum dots, single electron}
-Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, and how many integration points is needed to achieve four digit accuracy in the eigenvalues as a result from using Jacobi's method on a Toepliz matrix with quantum harmonic oscillator potential term. For $\rho_{n} = 5$, the size n required to achieve four leading digits is $n = 380$, which returns the value $E_{00} = 2.99995$ .
+Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, and how many integration points is needed to achieve four digit accuracy in the eigenvalues as a result from using Jacobi's method on a Toepliz matrix with quantum harmonic oscillator potential term. For $\rho_{n} = 5$, the size n required to achieve four leading digits is $n = 380$, which returns the value $E_{00} = 2.99995$, where the analytic eigenvalue is $\lambda = 3$.
 
 %
 CONSIDERING ADDING PLOTS OF INTEGRATION POINTS AND ENDPOINT ANALYSIS.
@@ -355,6 +374,12 @@ Item 1 & Item 2 & Item 3 & Item 4
 \bibitem{1}
 Stig-Nicolai Foyn, Christer Dreierstad
 \textit{Project 1}
+
+\bibitem{2}
+Morten Hjorth Jensen
+\textit{Project 2}
+\url{http://compphysics.github.io/ComputationalPhysics/doc/Projects/2018/
+Project2/pdf/Project2.pdf} (01.10.18)
 
 \end{thebibliography}
 
