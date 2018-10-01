@@ -6,6 +6,8 @@
 \usepackage{amsmath}
 \usepackage{epsfig,floatflt}
 \setcitestyle{square}
+\usepackage{subfig}
+
 
 \DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
 \SetMathAlphabet{\mathcal}{bold}{OMS}{cmsy}{b}{n}
@@ -26,17 +28,16 @@
 \begin{abstract}
 
 \end{abstract}
-\keywords{buckling beam --- quantum dots --- harmonic oscillator- and Coulomb potentials --- methods: scaling of differential equations, Jacobi's method}
+\keywords{classical physics --- quantum mechanics --- electromagnetism --- methods: numerical, scaling of equations, Jacobi's method}
 
 \section{Introduction}
 \label{sec:introduction}
-
-
+In this paper we will show how to transform problems such that it can be solved as an eigenvalue problem by Jacobi's method. We will start by considering a beam fastened in both ends while a force F acts on it, and further apply the method to a quantum mechanical system of an electron in a harmonic oscillator potential. Lastly we will be extending the method to a two electron system in a harmonic oscillator potential that interacts via Coulomb repulsion. By scaling the differential equation that describes the systems above, we obtain an equation that can be solved as an eigenvalue problem. The equation found is then discretized so that we transform the equation to matrix form, as discussed in our previous paper\cite{1}, which then allows us to apply the problem to Jacobi's method. 
 
 
 \section{Method}
 \label{sec:method}
-The method presented will show how to solve an eigenvalue problem using Jacobi's method. The first problem is a classical one involving a beam fastened in both ends. Further the method is transformed to a quantum mechanical three dimensional quantum dot problem, starting with one electron and moving over to two electrons.
+The method presented will show how to solve an eigenvalue problem using Jacobi's method and that by scaling the equations for a given problem, one can transform the problem to an eigenvalue problem on a matrix form with known analytical eigenpairs. The first problem is a classical one involving a beam fastened in both ends. Further the method is transformed to a quantum mechanical three dimensional quantum dot problem, starting with one electron and moving over to a problem with two electrons.
 
 \subsection{Jacobi's method for solving an eigenvalue problem}
 Solving the eigenvalue problem with Jacobi's method means solving an equation on the form
@@ -313,7 +314,7 @@ the equation then becomes
     -\frac{d^2}{d\rho^2}\psi(\rho) + \left(\omega_r^2\rho^2 + \frac{1}{\rho}\right)\psi(\rho) = \lambda \psi(\rho),
 \end{equation*}
 %
-where the sum in the brackets corresponds to the potential of the two electrons interacting via the Coulomb repulsion in a harmonic oscillator potential.
+where the sum in the brackets corresponds to the potential of the two electrons interacting via the Coulomb repulsion in a harmonic oscillator potential. When implementing 
 
 \section{Results}
 \label{sec:results}
@@ -325,7 +326,7 @@ Comparing the results from Jacobi's method and the analytic results from the pro
 \begin{deluxetable}{lcc}
 %\tablewidth{0pt}
 \tablecaption{\label{tab:results}}
-\tablecomments{Table comparing CPU-time between Armadillo's built in function \textbf{eigsym} and Jacobi's method, as visible from this data Jacobi's method increases in time spent considerably faster than that of Armadillo's function.}
+\tablecomments{Table comparing CPU-time between Armadillo's built in function \textbf{eig_sym} and Jacobi's method, as shown from these data Jacobi's method increases in CPU time faster than that of Armadillo's function.}
 \tablecolumns{4}
 \tablehead{Size n  & Armadillo & Jacobi's method}
 \startdata
@@ -337,31 +338,41 @@ Comparing the results from Jacobi's method and the analytic results from the pro
 400  & 0.085901s & 30.4565s
 \enddata
 \end{deluxetable}
+%|
+Note here that Armadillo finished in less than a second of CPU-time even for $n = 400$, meanwhile CPU-time on Jacobi's method is already at 30 seconds.
 %
-%
-\begin{figure}[t]
+\begin{figure}[H]
 \mbox{\epsfig{figure=iterationspersize15.pdf,width=\linewidth,clip=}}
-\caption{Logarithmic plot of the number of iteration needed as function of the matrix dimentionality n, to illustrate the quadratic dependency we have plotted $y = 2log_{10}(n)$, which in the plot is seen as the dotted $y=2x$ line.}
+\caption{Logarithmic plot of the number of iteration needed as function of the matrix dimensionality n, to illustrate the quadratic dependency we have plotted $y = 2log_{10}(n)$, which in the plot is seen as the dotted $y=2x$ line.}
 \label{fig:fig1}
 \end{figure}
-%
+
 \subsection{Quantum dots, single electron}
-Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, and how many integration points is needed to achieve four digit accuracy in the eigenvalues as a result from using Jacobi's method on a Toepliz matrix with quantum harmonic oscillator potential term. For $\rho_{n} = 5$, the size n required to achieve four leading digits is $n = 380$, which returns the value $E_{00} = 2.99995$, where the analytic eigenvalue is $\lambda = 3$.
+Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, and how many integration points is needed to achieve four digit accuracy in the eigenvalues as a result from using Jacobi's method on a tridiagonal matrix with quantum harmonic oscillator potential term. For $\rho_{n} = 5$, the size n required to achieve four leading digits is $n = 380$, which returns the value $E_{00} = 2.99995$, where the analytic eigenvalue is $\lambda = 3$.
 
 %
 \begin{figure}[H]
-\subfloat[At this matrix size $n = 80$ and interval size $\rho_{n} = 5$ the number of points per interval results in an acceptable resolution.]{{\includegraphics[scale=0.37]{Resolution1_15.pfd}}}
-\qquad
-\subfloat[Increasing the interval $\rho_{n} = 20$ while letting our matrix size stay the same significantly lowers the resolution of the plot because the number of points per interval decreases.]{{\includegraphics[scale=0.37]{Resolution2_15.png}}}\qquad
-\caption{Jacobi's method on a single quantum dot for matrix size $n = 80$ and two different intervals $\rho_n = {5}$ and $\rho_{n} = 20$}
+\subfloat[At this matrix size $n = 80$ and interval size $\rho_{n} = 5$ the number of points per interval results in an acceptable resolution.]{{\includegraphics[scale=0.53]{Resolution1_15.pdf}}
+}\qquad
+\subfloat[Increasing the interval $\rho_{n} = 20$ significantly lowers the resolution of the plot because the number of points per interval decreases.]{{\includegraphics[scale=0.53]{Resolution2_15.pdf}}
+}\qquad
+\caption{Jacobi's method on a single quantum dot for matrix size $n = 80$ and two different intervals $\rho_n = {5}$ and $\rho_{n} = 20$.}
 \label{fig:fig1}
 \end{figure}
 
+%\begin{figure}[H]
+%\subfloat[tekst.]{{\includegraphics[scale=0.37]{plot1b_n10.png}}%}
+%\qquad
+%\subfloat[tekst.]{{\includegraphics[scale=0.37]{plot1b_n100.png}%}}\qquad
+%\subfloat[tekst.]{{\includegraphics[scale=0.37]{plot1b_n1000.png%}}}
+%\caption{tekst.}
+%\label{fig:fig1}
+%\end{figure}
 %
 
 \subsection{Quantum dots, two electrons}
 
-\begin{figure}[t]
+\begin{figure}[H]
 \mbox{\epsfig{figure=GSEperOMGr15.pdf,width=\linewidth,clip=}}
 \caption{Plot of the ground state energy as function of $\omega_{r}$, it seemingly increases linearly with slope $a = 3.4369$, with error $da = 0.0511$}
 \label{fig:fig2}
@@ -379,7 +390,7 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 \enddata
 \end{deluxetable}
 %
-\begin{figure}[t]
+\begin{figure}[H]
 \mbox{\epsfig{figure=ProbfuncperRhons15.pdf,width=\linewidth,clip=}}
 \caption{Plot of probability distribution of the two electron quantum dot in a harmonic oscillator potential for different $\omega_{r}$, as well as for no Coulomb interaction. The probability is plotted as a function of the dimensionless relative particle position $\rho = \rho_n - \rho_0$. The maximum value of the $\rho_n$ is an approximation of an infinite value, and is selected as the value where the wave function has vanished}
 \label{fig:fig3}
@@ -387,8 +398,25 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 
 
 
+
+
 \section{Conclusions}
 \label{sec:conclusions}
+
+\subsection{Jacobi's method}
+Utilizing Jacobi's method on scaled differential equations have proven to be a powerful tool for classical and quantum mechanics problems alike. When reviewing numerical accuracy of the method  compared to the analytic results given in \cite{2}, it gives results accurate down to at least 8 significant figures. This result is unique for Toepliz matrices, meaning for other tridiagonal matrices like the ones in the quantum mechanis part of this paper the numerical precision is no longer as high compared to analytical results. However in comparison to other methods it is quite demanding as the number of iterations increases along a quadratic dependency of $n$, the size of the matrix. In addition the method increases quite fast in CPU-time meaning that the method will not be very versatile if one would need a large $n$. Already at $n = 400$ the CPU time passes $30$ seconds, where Armadillo's method for solving an eigenvalue problem has a CPU time of less than a second.
+
+\subsection{Quantum dots, one electron}
+
+
+\subsection{Quantum dots, two electrons}
+
+\begin{figure}[H]
+\mbox{\epsfig{figure=Omg_r.pdf,width=\linewidth,clip=}}
+\caption{Plot of a quadratic potential scaled by $\omega_{r}$ like our harmonic oscillator potential, it is apparent that as $omega_{r}$ increases the potential becomes increasingly confined}
+\label{fig:fig6}
+\end{figure}
+
 
 %We have managed to reduce a 3 dimentional two body problem to a analytically solvable problem by changing coordinate system from euclidian to radial, and analyizing CM-system(?)
 
@@ -406,16 +434,16 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 
 
 
-\begin{deluxetable}{lccc}
+%\begin{deluxetable}{lccc}
 %\tablewidth{0pt}
-\tablecaption{\label{tab:results}}
-\tablecomments{Summary of main results.}
-\tablecolumns{4}
-\tablehead{Column 1  & Column 2 & Column 3 & Column 4}
-\startdata
-Item 1 & Item 2 & Item 3 & Item 4
-\enddata
-\end{deluxetable}
+%\tablecaption{\label{tab:results}}
+%\tablecomments{Summary of main results.}
+%\tablecolumns{4}
+%\tablehead{Column 1  & Column 2 & Column 3 & Column 4}
+%\startdata
+%Item 1 & Item 2 & Item 3 & Item 4
+%\enddata
+%\end{deluxetable}
 
 
 
@@ -427,14 +455,19 @@ Item 1 & Item 2 & Item 3 & Item 4
 \begin{thebibliography}{9}
 
 \bibitem{1}
-Stig-Nicolai Foyn, Christer Dreierstad
+ Stig-Nicolai Foyn, Christer Dreierstad
 \textit{Project 1}
 
 \bibitem{2}
-Morten Hjorth Jensen
+ Morten Hjorth Jensen
 \textit{Project 2}
 \url{http://compphysics.github.io/ComputationalPhysics/doc/Projects/2018/
 Project2/pdf/Project2.pdf} (01.10.18)
+
+\bibitem{3}
+ M. Taut
+\textit{Two electrons in an external oscillator potential: Particular analytic solutions of a Coulomb correlation problem}
+\url{https://journals.aps.org/pra/abstract/10.1103/PhysRevA.48.3561} (01.10.18)
 
 \end{thebibliography}
 
