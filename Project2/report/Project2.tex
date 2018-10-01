@@ -32,12 +32,12 @@
 
 \section{Introduction}
 \label{sec:introduction}
-In this paper we will show how to transform problems such that it can be solved as an eigenvalue problem by Jacobi's method. We will start by considering a beam fastened in both ends while a force F acts on it, and further apply the method to a quantum mechanical system of an electron in a harmonic oscillator potential. Lastly we will be extending the method to a two electron system in a harmonic oscillator potential that interacts via Coulomb repulsion. By scaling the differential equation that describes the systems above, we obtain an equation that can be solved as an eigenvalue problem. The equation found is then discretized so that we transform the equation to matrix form, as discussed in our previous paper\cite{1}, which then allows us to apply the problem to Jacobi's method. 
+In this paper we will show how to transform problems such that it can be solved as an eigenvalue problem by Jacobi's method. We will start by considering a beam fastened in both ends with a force F acting on it, and further apply the method to a quantum mechanical system of an electron in a harmonic oscillator potential. Lastly we will be extending the method to a two electron system in a harmonic oscillator potential where the electrons interact via Coulomb repulsion. By scaling the differential equation that describes the systems above, we obtain an equation that can be solved as an eigenvalue problem. The scaled equation is then discretized and set up as a matrix, which method  was discussed in our previous paper\cite{1}, which allows us to apply Jacobi's method to solve the problem. We will be comparing the CPU time of Jacobi's method to Armadillo's method for solving an eigenvalue problem. Also comparing the calculated eigenvalues of Jacobi's method with Armadillo's function and the analytically calculated eigenvalues. When we extend the problem to a quantum mechanical one, the matrix no longer has identical values along the diagonal (i.e. no longer a Toeplitz matrix) as the harmonic osillator potential, and the Coulomb repulsion, is not constant as the electrons move in the system. 
 
 
 \section{Method}
 \label{sec:method}
-The method presented will show how to solve an eigenvalue problem using Jacobi's method and that by scaling the equations for a given problem, one can transform the problem to an eigenvalue problem on a matrix form with known analytical eigenpairs. The first problem is a classical one involving a beam fastened in both ends. Further the method is transformed to a quantum mechanical three dimensional quantum dot problem, starting with one electron and moving over to a problem with two electrons.
+The method presented will show how to solve an eigenvalue problem using Jacobi's method and that by scaling the equations for a given problem, one can transform the problem to an eigenvalue problem on a matrix form with known analytical eigenpairs. The first problem is a classical one involving a beam fastened in both ends. Further the method is applied to a quantum mechanical three dimensional quantum dot problem, starting with one electron and moving over to a problem with two electrons.
 
 \subsection{Jacobi's method for solving an eigenvalue problem}
 Solving the eigenvalue problem with Jacobi's method means solving an equation on the form
@@ -321,13 +321,13 @@ where the sum in the brackets corresponds to the potential of the two electrons 
 
 \subsection{Jacobi's method}
 
-Comparing the results from Jacobi's method and the analytic results from the provided in [SOURCE:Poject 2], we achieve sufficient numerical precision even for variyng sizes between $n = 5$ and $n = 400$.
+Comparing the results from Jacobi's method and the analytic results from the provided in \cite{2}, we achieve sufficient numerical precision even for variyng sizes between $n = 5$ and $n = 400$.
 %
 \begin{deluxetable}{lcc}
 %\tablewidth{0pt}
-\tablecaption{\label{tab:results}}
-\tablecomments{Table comparing CPU-time between Armadillo's built in function \textbf{eig_sym} and Jacobi's method, as shown from these data Jacobi's method increases in CPU time faster than that of Armadillo's function.}
-\tablecolumns{4}
+\tablecaption{\label{tab:results1}}
+\tablecomments{Table comparing CPU-time between Armadillo's built in function for solving an eigenvalue problem and Jacobi's method, as shown from these data Jacobi's method increases in CPU time faster than that of Armadillo's function.}
+\tablecolumns{3}
 \tablehead{Size n  & Armadillo & Jacobi's method}
 \startdata
 10 & 0.000262s & 0.000155s \\
@@ -350,6 +350,20 @@ Note here that Armadillo finished in less than a second of CPU-time even for $n 
 \subsection{Quantum dots, single electron}
 Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, and how many integration points is needed to achieve four digit accuracy in the eigenvalues as a result from using Jacobi's method on a tridiagonal matrix with quantum harmonic oscillator potential term. For $\rho_{n} = 5$, the size n required to achieve four leading digits is $n = 380$, which returns the value $E_{00} = 2.99995$, where the analytic eigenvalue is $\lambda = 3$.
 
+\begin{deluxetable}{lcc}
+%\tablewidth{0pt}
+\tablecaption{\label{tab:results2}}
+\tablecomments{Analytical energy eigenvalues provided in \cite{2} and the numerical ones found by Jacobi's method for $n=400$.}
+\tablecolumns{4}
+\tablehead{& Analytical energies & Numerical energies}
+\startdata
+& 3 & 2.99995 \\
+& 7 & 6.99976 \\
+& 11 & 10.9996 \\
+& 15 & 15.0043
+\enddata
+\end{deluxetable}
+
 %
 \begin{figure}[H]
 \subfloat[At this matrix size $n = 80$ and interval size $\rho_{n} = 5$ the number of points per interval results in an acceptable resolution.]{{\includegraphics[scale=0.53]{Resolution1_15.pdf}}
@@ -357,7 +371,7 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 \subfloat[Increasing the interval $\rho_{n} = 20$ significantly lowers the resolution of the plot because the number of points per interval decreases.]{{\includegraphics[scale=0.53]{Resolution2_15.pdf}}
 }\qquad
 \caption{Jacobi's method on a single quantum dot for matrix size $n = 80$ and two different intervals $\rho_n = {5}$ and $\rho_{n} = 20$.}
-\label{fig:fig1}
+\label{fig:fig2}
 \end{figure}
 
 %\begin{figure}[H]
@@ -375,13 +389,13 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 \begin{figure}[H]
 \mbox{\epsfig{figure=GSEperOMGr15.pdf,width=\linewidth,clip=}}
 \caption{Plot of the ground state energy as function of $\omega_{r}$, it seemingly increases linearly with slope $a = 3.4369$, with error $da = 0.0511$}
-\label{fig:fig2}
+\label{fig:fig3}
 \end{figure}
 %
 \begin{deluxetable}{lcc}
 %\tablewidth{0pt}
-\tablecaption{\label{tab:results}}
-\tablecomments{Table comparing ground stat analytic energy eigenvalues found in [SOURCE:] and numerical energy eigenvalues, the analytic eigenvalues displayed in the table of the source are halved, $\epsilon ' = 0.6250$, for $\omega_{r} = 0.25$ and $\epsilon ' = 0.1750$ for $\omega_{r} = 0.05$.}
+\tablecaption{\label{tab:results3}}
+\tablecomments{Table comparing ground stat analytic energy eigenvalues found in \cite{3} and numerical energy eigenvalues, the analytic eigenvalues displayed in the table of the source are halved, $\epsilon ' = 0.6250$, for $\omega_{r} = 0.25$ and $\epsilon ' = 0.1750$ for $\omega_{r} = 0.05$.}
 \tablecolumns{4}
 \tablehead{$\omega_{r}$ & Analytic $2\epsilon '$ & Numerical $E_{00}$}
 \startdata
@@ -393,7 +407,7 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 \begin{figure}[H]
 \mbox{\epsfig{figure=ProbfuncperRhons15.pdf,width=\linewidth,clip=}}
 \caption{Plot of probability distribution of the two electron quantum dot in a harmonic oscillator potential for different $\omega_{r}$, as well as for no Coulomb interaction. The probability is plotted as a function of the dimensionless relative particle position $\rho = \rho_n - \rho_0$. The maximum value of the $\rho_n$ is an approximation of an infinite value, and is selected as the value where the wave function has vanished}
-\label{fig:fig3}
+\label{fig:fig4}
 \end{figure}
 
 
@@ -404,7 +418,7 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 \label{sec:conclusions}
 
 \subsection{Jacobi's method}
-Utilizing Jacobi's method on scaled differential equations have proven to be a powerful tool for classical and quantum mechanics problems alike. When reviewing numerical accuracy of the method  compared to the analytic results given in \cite{2}, it gives results accurate down to at least 8 significant figures. This result is unique for Toepliz matrices, meaning for other tridiagonal matrices like the ones in the quantum mechanis part of this paper the numerical precision is no longer as high compared to analytical results. However in comparison to other methods it is quite demanding as the number of iterations increases along a quadratic dependency of $n$, the size of the matrix. In addition the method increases quite fast in CPU-time meaning that the method will not be very versatile if one would need a large $n$. Already at $n = 400$ the CPU time passes $30$ seconds, where Armadillo's method for solving an eigenvalue problem has a CPU time of less than a second.
+Utilizing Jacobi's method on scaled differential equations have proven to be a powerful tool for classical and quantum mechanics problems alike. When reviewing numerical accuracy of the method  compared to the analytic results given in \cite{2}, it gives results accurate down to at least 8 significant figures. This result is unique for Toepliz matrices, meaning for other tridiagonal matrices like the ones in the quantum mechanis part of this paper the numerical precision is no longer as high compared to analytical results. However in comparison to other methods it is quite demanding as the number of iterations increases along a quadratic dependency of $n$ [fig: \ref{fig:fig1}], the size of the matrix. In addition the method increases quite fast in CPU-time meaning that the method will not be very versatile if one would need a large $n$. Already at $n = 400$ the CPU time passes $30$ seconds, where Armadillo's method for solving an eigenvalue problem has a CPU time of less than a second.
 
 \subsection{Quantum dots, one electron}
 
@@ -414,7 +428,7 @@ Utilizing Jacobi's method on scaled differential equations have proven to be a p
 \begin{figure}[H]
 \mbox{\epsfig{figure=Omg_r.pdf,width=\linewidth,clip=}}
 \caption{Plot of a quadratic potential scaled by $\omega_{r}$ like our harmonic oscillator potential, it is apparent that as $omega_{r}$ increases the potential becomes increasingly confined}
-\label{fig:fig6}
+\label{fig:fig5}
 \end{figure}
 
 
