@@ -24,11 +24,13 @@
 
 
 \begin{abstract}
+
 \end{abstract}
 \keywords{buckling beam --- quantum dots --- harmonic oscillator- and Coulomb potentials --- methods: scaling of differential equations, Jacobi's method}
 
 \section{Introduction}
 \label{sec:introduction}
+
 
 
 
@@ -252,20 +254,66 @@ Consider now two electrons in a harmonic oscillator potential. The electrons wil
     \left[\frac{-\hbar^2}{2m}\left[\frac{d^2}{dr_1^2} - \frac{d^2}{dr_2^2}\right] + \frac{k\left(r_1^2 + r_2^2\right)}{2}\right]u(r_1,r_2) = E^{(2)}u(r_1,r_2),
 \end{equation*}
 %
-where $r_1, r_2$ denotes the radii from the center of the harmonic oscillator potential to electron 1 and 2 respectively. The superscript of the energy corresponds to the energy of the two electrons, such that the energy of the single electron previously discussed would be denoted as $E^{(1)}$. Consider a relative coordinate $\bold{r} = \bold{r_1} - \bold{r_2}$ and a center of mass coordinate $\bold{R} = \left(\bold{r_1} + \bold{r_2}\right)/2$, which transforms the Schr$\ddot{\mathrm{o}}$dinger equation to
+where $r_1, r_2$ denotes the radii from the center of the harmonic oscillator potential to electron 1 and 2 respectively, and k is still $k = m\omega^2$. The superscript of the energy corresponds to the energy of the two electrons, such that the energy of the single electron previously discussed would be denoted as $E^{(1)}$. Consider a relative coordinate $\bold{r} = \bold{r_1} - \bold{r_2}$ and a center of mass coordinate $\bold{R} = \left(\bold{r_1} + \bold{r_2}\right)/2$, which transforms the Schr$\ddot{\mathrm{o}}$dinger equation to
 %
 \begin{equation*}
     \left[\frac{-\hbar^2}{m}\left[\frac{d^2}{dr^2} - \frac{1}{4}\frac{d^2}{dR^2}\right] + \frac{kr^2}{4} + kR^2\right]u(r,R) = E^{(2)}u(r,R)
 \end{equation*}
 %
-where the energy is now $E^{(2)} = E_r + E_R$.  Adding the Coulomb repulsion corresponds to adding a potential term
+where the energy is now $E^{(2)} = E_r + E_R$. By separation of variables $u(r,R)$ can be written as $\psi(r)\phi(R)$. Adding the Coulomb repulsion corresponds to adding a potential term
 %
 \begin{equation*}
     V(r_1,r_2) = \frac{e^2}{4\pi \epsilon_0 |\bold{r_1} - \bold{r_2}|} = \frac{\beta e^2}{r}
 \end{equation*}
 %
-where $\epsilon_0$ is the permittivity of vacuum, and $\beta e^2 = 1.44$ eVnm.
-
+where $\epsilon_0$ is the permittivity of vacuum, and $\beta e^2 = 1.44$ eVnm. With the Coulomb potential the r-dependant part of the Schr$\ddot{\mathrm{o}}$dinger equation is given as
+%
+\begin{equation*}
+    \left[-\frac{\hbar^2}{m}\frac{d^2}{dr^2} + \frac{1}{4}kr^2 + \frac{\beta e^2}{r}\right]\psi(r) = E_r \psi(r).
+\end{equation*}
+%
+Introducing dimensionless variable for the position $\rho = r/\alpha$ as previous gives
+%
+\begin{equation*}
+    \left[-\frac{\hbar^2}{m\alpha^2}\frac{d^2}{d\rho^2} + \frac{1}{4}k\alpha^2\rho^2 + \frac{\beta e^2}{\alpha\rho}\right]\psi(\rho) = E_r\psi(\rho),
+\end{equation*}
+%
+multiplying by $m\alpha^2/\hbar^2$ yields
+%
+\begin{equation*}
+    \left[-\frac{d^2}{d\rho^2} + \frac{mk\alpha^4}{4\hbar^2}\rho^2 + \frac{m\alpha\beta e^2}{\rho\hbar^2} \right]\psi(\rho) = \frac{m\alpha^2}{\hbar^2} E_r\psi(\rho).
+\end{equation*}
+%
+Introducing variable $\omega_r$
+%
+\begin{equation*}
+    \omega_r^2 = \frac{1}{4}\frac{mk}{\hbar^2}\alpha^4,
+\end{equation*}
+and require the last term in the bracket is such that
+%
+\begin{equation*}
+    \frac{m\alpha \beta e^2}{\hbar^2} = 1,
+\end{equation*}
+%
+which corresponds to scaling the equation such that
+%
+\begin{equation*}
+     \alpha = \frac{\hbar^2}{m\beta e^2}.
+\end{equation*}
+%
+Further introducing
+%
+\begin{equation*}
+    \lambda = \frac{m\alpha^2}{\hbar^2}E_r,
+\end{equation*}
+%
+the equation then becomes
+%
+\begin{equation*}
+    -\frac{d^2}{d\rho^2}\psi(\rho) + \left(\omega_r^2\rho^2 + \frac{1}{\rho}\right)\psi(\rho) = \lambda \psi(\rho),
+\end{equation*}
+%
+where the sum in the brackets corresponds to the potential of the two electrons interacting via the Coulomb repulsion in a harmonic oscillator potential.
 
 \section{Results}
 \label{sec:results}
@@ -301,7 +349,14 @@ Comparing the results from Jacobi's method and the analytic results from the pro
 Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, and how many integration points is needed to achieve four digit accuracy in the eigenvalues as a result from using Jacobi's method on a Toepliz matrix with quantum harmonic oscillator potential term. For $\rho_{n} = 5$, the size n required to achieve four leading digits is $n = 380$, which returns the value $E_{00} = 2.99995$, where the analytic eigenvalue is $\lambda = 3$.
 
 %
-CONSIDERING ADDING PLOTS OF INTEGRATION POINTS AND ENDPOINT ANALYSIS.
+\begin{figure}[H]
+\subfloat[At this matrix size $n = 80$ and interval size $\rho_{n} = 5$ the number of points per interval results in an acceptable resolution.]{{\includegraphics[scale=0.37]{Resolution1_15.pfd}}}
+\qquad
+\subfloat[Increasing the interval $\rho_{n} = 20$ while letting our matrix size stay the same significantly lowers the resolution of the plot because the number of points per interval decreases.]{{\includegraphics[scale=0.37]{Resolution2_15.png}}}\qquad
+\caption{Jacobi's method on a single quantum dot for matrix size $n = 80$ and two different intervals $\rho_n = {5}$ and $\rho_{n} = 20$}
+\label{fig:fig1}
+\end{figure}
+
 %
 
 \subsection{Quantum dots, two electrons}
