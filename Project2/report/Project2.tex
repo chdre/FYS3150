@@ -26,13 +26,15 @@
 
 
 \begin{abstract}
+In this study we will use Jacobi's method to solve eigenvalue problems. The problems that are solved are not eigenvalue problems to begin with, but are transformed to eigenvalue problems through scaling and methods discussed in our previous paper\cite{1}. When analyzing the results from Jacobi's method, we find it to be slow, but numerically accurate, when comparing the eigenvalues and CPU time to an eigenvalue solver from the C++ library Armadillo and comparing the eigenvalues with the results from the analytical solution. The number of iterations increase almost quadratically as $n^2$, with n being the dimension of an $n \times n$ matrix. With quantum mechanical potentials we find that approximations of maximum distance from the potential (allowed to be infinite) are crucial to avoid numerical errors. 
 
 \end{abstract}
+
 \keywords{classical physics --- quantum mechanics --- electromagnetism --- methods: numerical, scaling of equations, Jacobi's method}
 
 \section{Introduction}
 \label{sec:introduction}
-In this paper we will show how to transform problems such that it can be solved as an eigenvalue problem by Jacobi's method. We will start by considering a beam fastened in both ends with a force F acting on it, described by
+In this paper we will show how to transform problems such that it can be solved as an eigenvalue problem by Jacobi's method. We will start by considering a beam fastened in both ends with a force acting on it, described by
 %
 \begin{equation*}
     R\frac{d^2u(x)}{dx^2} = -Fu(x),
@@ -56,7 +58,7 @@ The three aforementioned equation can, by scaling, be transformed to an eigenval
     -\frac{d^2u(\rho)}{d\rho^2} + C(\rho)u(\rho) = \lambda u(\rho),
 \end{equation*}
 %
-where $C(\rho)$ is some function which depends on the system at hand, which for the buckling beam problem is zero and for the quantum mechanical systems represents the potential and Coulomb repulsion. By scaling the differential equation that describes the systems above, we obtain an equation that can be solved as an eigenvalue problem. The scaled equation is then discretized and set up as a matrix, which method  was discussed in our previous paper\cite{1}, which allows us to apply Jacobi's method to solve the problem. We will be comparing the CPU time of Jacobi's method to Armadillo's method for solving an eigenvalue problem. Also comparing the calculated eigenvalues of Jacobi's method with Armadillo's function and the analytically calculated eigenvalues. When we extend the problem to a quantum mechanical one, the matrix no longer has identical values along the diagonal (i.e. no longer a Toeplitz matrix) as the harmonic osillator potential, and the Coulomb repulsion, is not constant as the electrons move in the system. We will also study what happens to the wave function as the strength of the harmonic oscillator potential is changed. 
+where $C(\rho)$ is some function which depends on the system at hand, which for the buckling beam problem is zero and for the quantum mechanical systems represents the potential and Coulomb repulsion. By scaling the differential equation that describes the systems above, we obtain an equation that can be solved as an eigenvalue problem. The scaled equation is then discretized and set up as a matrix, which method  was discussed in our previous paper, which allows us to apply Jacobi's method to solve the problem. We will be comparing the CPU time of Jacobi's method to Armadillo's method for solving an eigenvalue problem. Also comparing the calculated eigenvalues of Jacobi's method with Armadillo's function and the analytically calculated eigenvalues. When we extend the problem to a quantum mechanical one, the matrix no longer has identical values along the diagonal (i.e. no longer a Toeplitz matrix) as the harmonic osillator potential, and the Coulomb repulsion, is not constant as the electrons move in the system. We will also study what happens to the wave function as the strength of the harmonic oscillator potential is changed. 
 
 
 \section{Method}
@@ -70,7 +72,19 @@ Solving the eigenvalue problem with Jacobi's method means solving an equation on
     \bold{S}^T\bold{A}\bold{S} = \bold{B},
 \end{gather}
 %
-where $\bold{S}$ is an orthogonal matrix, so it has the property $\bold{S}^{-1} = \bold{S}^T$. The resulting matrix $\bold{B}$ will consist of the eigenvalues along the diagonal. The matrix $\bold{S}$ is such that the elements along the diagonal are 1, and zero elsewhere, except four elements which are such that their position are decided by the largest element of the off-diagonal of $\bold{A}$. The largest element of $\bold{A}$ is found at a position $(k,l)$, and these indices are used to define the position of the mentioned four elements of $\bold{S}$, which are such that $s_{kk} = s_{ll} = \cos\theta$ and $s_{kl} = -s_{lk} = -\sin\theta$. This is considered as a rotation of an angle $\theta$ in the n-dimensional Euclidean space. When solving \eqref{eq:B=SAS} the resulting equations to solve are
+where $\bold{S}$ is an orthogonal matrix, so it has the property $\bold{S}^{-1} = \bold{S}^T$. The resulting matrix $\bold{B}$ will consist of the eigenvalues along the diagonal. The matrix $\bold{S}$ is such that the elements along the diagonal are 1, and zero elsewhere, except four elements which are such that their position are decided by the largest element of the off-diagonal of $\bold{A}$. For a unitary transformation the orthogonality and dot product are preserved, to show this, consider a vector $w$ and $v$ and a matrix $U$, we consider that $w_i = Uv_i$. We have 
+%
+\begin{equation*}
+    w_i^T = \left(Uv_i\right)^T = v_i^TU^T,
+\end{equation*}
+%
+and $w_j = Uv_j$. This gives
+%
+\begin{equation*}
+    w_i^Tw_j = u_i^TU^T U v_j = v_iv_j = \delta_{ij}
+\end{equation*}
+%
+where $U^T U = I$, so as previously mentioned the dot product and orthgonality is preserved under a unitary transformation. The largest element of $\bold{A}$ is found at a position $(k,l)$, and these indices are used to define the position of the mentioned four elements of $\bold{S}$, which are such that $s_{kk} = s_{ll} = \cos\theta$ and $s_{kl} = -s_{lk} = -\sin\theta$. This is considered as a rotation of an angle $\theta$ in the n-dimensional Euclidean space. When solving \eqref{eq:B=SAS} the resulting equations to solve are
 %
 \begin{align*}
     &b_{ii} = a_{ii}, i \neq k, i \neq l \\
@@ -126,8 +140,6 @@ and c can be expressed as
 \subsubsection{Numerical implementation}
 When implementing Jacobi's method numerically, $\bold{B}$ is not explicitly created, instead the elements of $\bold{A}$ are changed during each iteration. This allows the program to run with large matrices (large n), without taking up more memory thasn needed. This means the left hand side of the six previous equations are changed so that they are valid for the elements of $\bold{A}$ instead of $\bold{B}$, meaning $b_{ii} \rightarrow a_{ii}$, $b_{ik} \rightarrow a_{ik}$ and so forth.
 
-///EIGENVECTORS////
-
 \subsection{Buckling beam}
 Considering a beam that is fastened in both ends which moves up and down when a force F is exerted on it can be described by a differential equation
 %
@@ -135,7 +147,7 @@ Considering a beam that is fastened in both ends which moves up and down when a 
     R \frac{d^2 u(x)}{dx^2} = -Fu(x),
 \end{gather}
 %
-where $u(x)$ is the displacement of the beam in the y-direction and $R$ is a constant that is defined by the properties of the beam, such as the rigidity. Since the beam, with length L, is fastened in both ends, the displacement at the end points $u(0) = u(L) = 0$, so we have Dirichlet boundary condition as in the previous paper \cite{1}, and the sum of outer forces exerted on the beam is zero. Introducing the dimensionless variable $\rho = x/L \Rightarrow x = \rho L$, where $\rho \in [0,1]$. Introducing this into Eq. \eqref{eq:du2/dx2} gives
+where $u(x)$ is the displacement of the beam in the y-direction and $R$ is a constant that is defined by the properties of the beam, such as the rigidity. Since the beam, with length L, is fastened in both ends, the displacement at the end points $u(0) = u(L) = 0$, so we have Dirichlet boundary condition as in the previous paper, and the sum of outer forces exerted on the beam is zero. Introducing the dimensionless variable $\rho = x/L \Rightarrow x = \rho L$, where $\rho \in [0,1]$. Introducing this into Eq. \eqref{eq:du2/dx2} gives
 %
 \begin{gather*}
     \frac{R}{L}\frac{d^2 u(\rho)}{d\rho^2} = - FLu(\rho)
@@ -409,7 +421,7 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 %
 
 \subsection{Quantum dots, two electrons}
-
+%
 \begin{figure}[H]
 \mbox{\epsfig{figure=GSEperOMGr15.pdf,width=\linewidth,clip=}}
 \caption{Plot of the ground state energy as function of $\omega_{r}$, it seemingly increases linearly with slope $a = 3.4369$, with error $da = 0.0511$}
@@ -433,33 +445,30 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 \caption{Plot of probability distribution of the two electron quantum dot in a harmonic oscillator potential for different $\omega_{r}$, as well as for no Coulomb interaction. The probability is plotted as a function of the dimensionless relative particle position $\rho = \rho_n - \rho_0$. The maximum value of the $\rho_n$ is an approximation of an infinite value, and is selected as the value where the wave function has vanished}
 \label{fig:fig4}
 \end{figure}
-
-
-
-
-
+%
 \section{Conclusions}
 \label{sec:conclusions}
-
+%
 \subsection{Jacobi's method}
-Utilizing Jacobi's method on scaled differential equations have proven to be a powerful tool for classical and quantum mechanics problems alike. When reviewing numerical accuracy of the method  compared to the analytic results given in \cite{2}, it gives results accurate down to at least 8 significant figures. This result is unique for Toepliz matrices, meaning for other tridiagonal matrices like the ones in the quantum mechanis part of this paper the numerical precision is no longer as high compared to analytical results. However in comparison to other methods it is quite demanding as the number of iterations increases along a quadratic dependency of $n$ [fig: \ref{fig:fig1}], the size of the matrix. In addition the method increases quite fast in CPU-time meaning that the method will not be very versatile if one would need a large $n$. Already at $n = 400$ the CPU time passes $30$ seconds, where Armadillo's method for solving an eigenvalue problem has a CPU time of less than a second.
-
+Utilizing Jacobi's method on scaled differential equations have proven to be a powerful tool for classical and quantum mechanics problems alike. When reviewing numerical accuracy of the method  compared to the analytic results given in \cite{2}, it gives results accurate down to at least 8 significant figures. This result is unique for Toepliz matrices, meaning for other tridiagonal matrices like the ones in the quantum mechanis part of this paper the numerical precision is no longer as high compared to analytical results. However in comparison to other methods it is quite demanding as the number of iterations increases along a quadratic dependency of $n$ [fig: \ref{fig:fig1}], the size of the matrix. In addition the method increases quite fast in CPU-time meaning that the method will not be very versatile if one would need a large $n$. Already at $n = 400$ the CPU time passes $30$ seconds, where Armadillo's method for solving an eigenvalue problem has a CPU time of less than a second. As conclusion to this I would recommend finding another method for larger matrices.
+%
 \subsection{Quantum dots, one electron}
-Studying a case of one electron by adding a quantum harmonic oscillator potential to our tridiagonal matrix. The numerical precision from applying Jacobi's method to Toepliz matrix, is reduced under the now more complex tridiagonal matrix. To achieve four leading digits it becomes necessary to increase matrix size to $n = 380$. This is a result of probability function calculated for the ground state energy, which now requires a stable balance between interval size $\rho$ and matrix size $n$. As seen in [fig:\ref{fig:fig2}] the interval size $\rho$ governs our approximation of infinity in the potential, however letting this interval increase requires that matrix size increases along with the 
-
+Studying a case of one electron by adding a quantum harmonic oscillator potential to our tridiagonal matrix. The numerical precision from applying Jacobi's method to Toepliz matrix, is reduced under the now more complex tridiagonal matrix. To achieve four leading digits it becomes necessary to increase matrix size to $n = 380$, even on a reasonable interval $\rho$. The reduction in numerical precision is a result of probability function calculated for the ground state energy, which now requires a stable balance between interval size $\rho$ and matrix size $n$. As seen in [fig:\ref{fig:fig2}] the interval size $\rho$ governs our approximation of infinity in the potential, however letting this interval increase requires that matrix size increase to preserve the points per interval (resolution). Meaning to avoid significant numerical errors in the eigenvalues and eigenvectors, we should select $\rho_{n}$ to where the function has for all practical purposes died down, and not much further.
+%
 \subsection{Quantum dots, two electrons}
-
+%
+By scaling the equations we have reduced a 3 dimensional two body problem to a analytically solvable problem by changing coordinate system from euclidian to radial, and analyzing relative radius between the electrons. Changing from harmonic oscillator potential to both harmonic oscillator- and Coulomb potential. From \cite{3} we have analytic values of the energy eigenvalues of the system for a selection of $\omega_{r}$. Using the same $\omega_{r}$, $n=400$ and appropriate values interval $\rho$ we managed to reproduce the analytical results to five digits behind the decimal point. Analyzing the energy eigenvalues further we also wound a seemingly linear dependency on $\omega_{r}$.
+%
 \begin{figure}[H]
 \mbox{\epsfig{figure=Omg_r.pdf,width=\linewidth,clip=}}
-\caption{Plot of a quadratic potential scaled by $\omega_{r}$ like our harmonic oscillator potential, it is apparent that as $omega_{r}$ increases the potential becomes increasingly confined}
+\caption{Plot of a quadratic potential scaled by $\omega_{r}$ like our harmonic oscillator potential, it is apparent that as $\omega_{r}$ increases the potential becomes increasingly confined}
 \label{fig:fig5}
 \end{figure}
-
-
-%We have managed to reduce a 3 dimentional two body problem to a analytically solvable problem by changing coordinate system from euclidian to radial, and analyizing CM-system(?)
-
-
-
+%
+Reviewing [fig:\ref{fig:fig4}] it is clear that increasing $\omega_{r}$ in turn makes the potential become increasingly confined as explained with [fig\ref{fig:fig5}], this is seen on the location of the probability function in the plot. Removing the Coulomb potential has the same effect as confining the electrons in a very strong potential since the significance between interaction with the potential and between the electrons is reduced.
+%
+\subsection{Comments}
+This has been an educational project, and to complete it we have been forced to improve in both C++ and implementation in general. There is also room for gaining more intuition into quantum mechanical systems. However while trying to write a good abstract and conclusion we find this project lacking in clear goals.
 
 %\begin{figure}[t]
 %
@@ -495,6 +504,8 @@ Studying a case of one electron by adding a quantum harmonic oscillator potentia
 \bibitem{1}
  Stig-Nicolai Foyn, Christer Dreierstad
 \textit{Project 1}
+\url{https://github.com/chdre/FYS3150/blob/master/Project1/report/
+FYS3150-Project1-stignicf-chrisdre.pdf} (01.10.18)
 
 \bibitem{2}
  Morten Hjorth Jensen
