@@ -32,7 +32,31 @@
 
 \section{Introduction}
 \label{sec:introduction}
-In this paper we will show how to transform problems such that it can be solved as an eigenvalue problem by Jacobi's method. We will start by considering a beam fastened in both ends with a force F acting on it, and further apply the method to a quantum mechanical system of an electron in a harmonic oscillator potential. Lastly we will be extending the method to a two electron system in a harmonic oscillator potential where the electrons interact via Coulomb repulsion. By scaling the differential equation that describes the systems above, we obtain an equation that can be solved as an eigenvalue problem. The scaled equation is then discretized and set up as a matrix, which method  was discussed in our previous paper\cite{1}, which allows us to apply Jacobi's method to solve the problem. We will be comparing the CPU time of Jacobi's method to Armadillo's method for solving an eigenvalue problem. Also comparing the calculated eigenvalues of Jacobi's method with Armadillo's function and the analytically calculated eigenvalues. When we extend the problem to a quantum mechanical one, the matrix no longer has identical values along the diagonal (i.e. no longer a Toeplitz matrix) as the harmonic osillator potential, and the Coulomb repulsion, is not constant as the electrons move in the system. 
+In this paper we will show how to transform problems such that it can be solved as an eigenvalue problem by Jacobi's method. We will start by considering a beam fastened in both ends with a force F acting on it, described by
+%
+\begin{equation*}
+    R\frac{d^2u(x)}{dx^2} = -Fu(x),
+\end{equation*}
+%
+and further apply the method to a quantum mechanical system of an electron in a harmonic oscillator potential described by the radial part of the Schr$\ddot{\mathrm{o}}$dinger equation 
+%
+\begin{equation*}
+    \frac{-\hbar^2}{2m}\frac{d^2u(r)}{dr^2} + \frac{kr^2}{2}u(r) = Eu(r).
+\end{equation*}
+%
+Lastly we will be extending the method to a two electron system in a harmonic oscillator potential where the electrons interact via Coulomb repulsion, which by the radial part of the Schr$\ddot{\mathrm{o}}$dinger equation can be expressed as
+%
+\begin{equation*}
+    \left[\frac{-\hbar^2}{2m}\left[\frac{d^2}{dr_1^2} - \frac{d^2}{dr_2^2}\right] + \frac{k(r_1^2 + r_2^2)}{2}\right]u(r_1,r_2) = Eu(r_1,r_2)
+\end{equation*}
+%
+The three aforementioned equation can, by scaling, be transformed to an eigenvalue problem on as differential equation on the form
+%
+\begin{equation*}
+    -\frac{d^2u(\rho)}{d\rho^2} + C(\rho)u(\rho) = \lambda u(\rho),
+\end{equation*}
+%
+where $C(\rho)$ is some function which depends on the system at hand, which for the buckling beam problem is zero and for the quantum mechanical systems represents the potential and Coulomb repulsion. By scaling the differential equation that describes the systems above, we obtain an equation that can be solved as an eigenvalue problem. The scaled equation is then discretized and set up as a matrix, which method  was discussed in our previous paper\cite{1}, which allows us to apply Jacobi's method to solve the problem. We will be comparing the CPU time of Jacobi's method to Armadillo's method for solving an eigenvalue problem. Also comparing the calculated eigenvalues of Jacobi's method with Armadillo's function and the analytically calculated eigenvalues. When we extend the problem to a quantum mechanical one, the matrix no longer has identical values along the diagonal (i.e. no longer a Toeplitz matrix) as the harmonic osillator potential, and the Coulomb repulsion, is not constant as the electrons move in the system. We will also study what happens to the wave function as the strength of the harmonic oscillator potential is changed. 
 
 
 \section{Method}
@@ -421,7 +445,7 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 Utilizing Jacobi's method on scaled differential equations have proven to be a powerful tool for classical and quantum mechanics problems alike. When reviewing numerical accuracy of the method  compared to the analytic results given in \cite{2}, it gives results accurate down to at least 8 significant figures. This result is unique for Toepliz matrices, meaning for other tridiagonal matrices like the ones in the quantum mechanis part of this paper the numerical precision is no longer as high compared to analytical results. However in comparison to other methods it is quite demanding as the number of iterations increases along a quadratic dependency of $n$ [fig: \ref{fig:fig1}], the size of the matrix. In addition the method increases quite fast in CPU-time meaning that the method will not be very versatile if one would need a large $n$. Already at $n = 400$ the CPU time passes $30$ seconds, where Armadillo's method for solving an eigenvalue problem has a CPU time of less than a second.
 
 \subsection{Quantum dots, one electron}
-
+Studying a case of one electron by adding a quantum harmonic oscillator potential to our tridiagonal matrix. The numerical precision from applying Jacobi's method to Toepliz matrix, is reduced under the now more complex tridiagonal matrix. To achieve four leading digits it becomes necessary to increase matrix size to $n = 380$. This is a result of probability function calculated for the ground state energy, which now requires a stable balance between interval size $\rho$ and matrix size $n$. As seen in [fig:\ref{fig:fig2}] the interval size $\rho$ governs our approximation of infinity in the potential, however letting this interval increase requi
 
 \subsection{Quantum dots, two electrons}
 
@@ -475,8 +499,8 @@ Utilizing Jacobi's method on scaled differential equations have proven to be a p
 \bibitem{2}
  Morten Hjorth Jensen
 \textit{Project 2}
-\url{http://compphysics.github.io/ComputationalPhysics/doc/Projects/2018/
-Project2/pdf/Project2.pdf} (01.10.18)
+\url{http://compphysics.github.io/ComputationalPhysics/doc/Projects/
+2018/Project2/pdf/Project2.pdf} (01.10.18)
 
 \bibitem{3}
  M. Taut
