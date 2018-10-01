@@ -253,27 +253,65 @@ which is on the same form as the equation for the buckling beam, and the problem
 
 \subsection{Jacobi's method}
 
+Comparing the results from Jacobi's method and the analytic results from the provided in [SOURCE:Poject 2], we achieve sufficient numerical precision even for variyng sizes between $n = 5$ and $n = 400$.
+%
+\begin{deluxetable}{lcc}
+%\tablewidth{0pt}
+\tablecaption{\label{tab:results}}
+\tablecomments{Table comparing CPU-time between Armadillo's built in function (eigsym) and Jacobi's method, as visible from this data Jacobi's method increases in time spent considerably faster than that of Armadillo's function.}
+\tablecolumns{4}
+\tablehead{Size n  & Armadillo & Jacobi's method}
+\startdata
+10 & 0.000262s & 0.000155s \\
+50 & 0.000915s & 0.007585s \\
+100 & 0.005636s & 0.106488s \\
+200 & 0.018883s & 1.53787s \\
+300  & 0.04241s & 8.85018s \\
+400  & 0.085901s & 30.4565s
+\enddata
+\end{deluxetable}
+%
+%
 \begin{figure}[t]
 \mbox{\epsfig{figure=iterationspersize15.pdf,width=\linewidth,clip=}}
 \caption{Logarithmic plot of the number of iteration needed as function of the matrix dimentionality n, to illustrate the quadratic dependency we have plotted $y = 2log_{10}(n)$, which in the plot is seen as the dotted $y=2x$ line.}
 \label{fig:fig1}
 \end{figure}
-
+%
 \subsection{Quantum dots, single electron}
+Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, and how many integration points is needed to achieve four digit accuracy in the eigenvalues as a result from using Jacobi's method on a Toepliz matrix with quantum harmonic oscillator potential term. For $\rho_{n} = 5$, the size n required to achieve four leading digits is $n = 380$, which returns the value $E_{00} = 2.99995$ .
+
+%
+CONSIDERING ADDING PLOTS OF INTEGRATION POINTS AND ENDPOINT ANALYSIS.
+%
+
+\subsection{Quantum dots, two electrons}
 
 \begin{figure}[t]
 \mbox{\epsfig{figure=GSEperOMGr15.pdf,width=\linewidth,clip=}}
 \caption{Plot of the ground state energy as function of $\omega_{r}$, it seemingly increases linearly with slope $a = 3.4369$, with error $da = 0.0511$}
 \label{fig:fig2}
 \end{figure}
-
-\subsection{Quantum dots, two electrons}
-
+%
+\begin{deluxetable}{lcc}
+%\tablewidth{0pt}
+\tablecaption{\label{tab:results}}
+\tablecomments{Table comparing ground stat analytic energy eigenvalues found in [SOURCE:] and numerical energy eigenvalues, the analytic eigenvalues displayed in the table of the source are halved, $\epsilon ' = 0.6250$, for $\omega_{r} = 0.25$ and $\epsilon ' = 0.1750$ for $\omega_{r} = 0.05$.}
+\tablecolumns{4}
+\tablehead{$\omega_{r}$ & Analytic $2\epsilon '$ & Numerical $E_{00}$}
+\startdata
+0.25 & 1.250 & 1.24999 \\
+0.05 & 0.350 & 0.349999
+\enddata
+\end{deluxetable}
+%
 \begin{figure}[t]
 \mbox{\epsfig{figure=ProbfuncperRhons15.pdf,width=\linewidth,clip=}}
-\caption{Plot of different probability distribution of two electrons in a harmonic oscillator potential, with and without Coulomb interaction, for different $\omega_{r}$, as function of our approximation of infinity $\rho_{n}$}
+\caption{Plot of probability distribution of the two electron quantum dot in a harmonic oscillator potential for different $\omega_{r}$, as well as for no Coulomb interaction. The probability is plotted as a function of the dimensionless relative particle position $\rho = \rho_n - \rho_0$. The maximum value of the $\rho_n$ is an approximation of an infinite value, and is selected as the value where the wave function has vanished}
 \label{fig:fig3}
 \end{figure}
+
+
 
 \section{Conclusions}
 \label{sec:conclusions}
