@@ -26,7 +26,7 @@
 
 
 \begin{abstract}
-In this study we will use Jacobi's method to solve eigenvalue problems. The problems that are solved are not eigenvalue problems to begin with, but are transformed to eigenvalue problems through scaling and methods discussed in our previous paper\cite{1}. When analyzing the results from Jacobi's method, we find it to be slow, but numerically accurate, when comparing the eigenvalues and CPU time to an eigenvalue solver from the C++ library Armadillo and comparing the eigenvalues with the results from the analytical solution. The number of iterations increase almost quadratically as $n^2$, with n being the dimension of an $n \times n$ matrix. With quantum mechanical potentials we find that approximations of maximum distance from the potential (allowed to be infinite) are crucial to avoid numerical errors. 
+In this study we will use Jacobi's method to solve eigenvalue problems. The problems that are solved are not eigenvalue problems to begin with, but are transformed to eigenvalue problems through scaling and methods discussed in our previous paper\cite{1}. When analyzing the results from Jacobi's method, we find it to be slow, but numerically accurate, when comparing the eigenvalues and CPU time to an eigenvalue solver from the C++ library Armadillo and comparing the eigenvalues with the results from the analytical solution. The number of iterations increase almost quadratically as $n^2$, with n being the dimension of an $n \times n$ matrix. With quantum mechanical potentials we find that approximations of maximum distance from the potential (allowed to be infinite) are crucial to avoid numerical errors. In addition confining electrons in an increasingly larger potential has the same effect as omitting Coulomb interaction. 
 
 \end{abstract}
 
@@ -374,8 +374,6 @@ Comparing the results from Jacobi's method and the analytic results from the pro
 400  & 0.085901s & 30.4565s
 \enddata
 \end{deluxetable}
-%|
-Note here that Armadillo finished in less than a second of CPU-time even for $n = 400$, meanwhile CPU-time on Jacobi's method is already at 30 seconds.
 %
 \begin{figure}[H]
 \mbox{\epsfig{figure=iterationspersize15.pdf,width=\linewidth,clip=}}
@@ -384,14 +382,14 @@ Note here that Armadillo finished in less than a second of CPU-time even for $n 
 \end{figure}
 
 \subsection{Quantum dots, single electron}
-Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, and how many integration points is needed to achieve four digit accuracy in the eigenvalues as a result from using Jacobi's method on a tridiagonal matrix with quantum harmonic oscillator potential term. For $\rho_{n} = 5$, the size n required to achieve four leading digits is $n = 380$, which returns the value $E_{00} = 2.99995$, where the analytic eigenvalue is $\lambda = 3$.
+When analyzing how to achieve stable results by varying the integration points $n$ and the endpoint $\rho_{n}$, we found that for $\rho_{n} = 5$, the size n required to achieve four leading digits for the eigenvalue of the ground state is $n = 380$. This returns the value $E_{00} = 2.99995$, where the analytic eigenvalue is $\lambda = 3$. However $n=400$ provided (see Table \ref{tab:results2}) results that gives values closer to the analytical ones, and is more practical for testing purposes. 
 
 \begin{deluxetable}{lcc}
 %\tablewidth{0pt}
 \tablecaption{\label{tab:results2}}
-\tablecomments{Analytical energy eigenvalues provided in \cite{2} and the numerical ones found by Jacobi's method for $n=400$.}
+\tablecomments{Analytical energy eigenvalues given in by the paper by M. H. Jensen\cite{2} and the numerical ones calculated by Jacobi's method for $n=400$.}
 \tablecolumns{4}
-\tablehead{& Analytical energies & Numerical energies}
+\tablehead{& Analytical  & Numerical }
 \startdata
 & 3 & 2.99995 \\
 & 7 & 6.99976 \\
@@ -424,14 +422,14 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 %
 \begin{figure}[H]
 \mbox{\epsfig{figure=GSEperOMGr15.pdf,width=\linewidth,clip=}}
-\caption{Plot of the ground state energy as function of $\omega_{r}$, it seemingly increases linearly with slope $a = 3.4369$, with error $da = 0.0511$}
+\caption{Plot of the ground state energy as function of $\omega_{r}$, it seemingly increases linearly with slope $a = 3.4369$, with error $da = 0.0511$. The slope is found by a matlab software (found in the github as vekt.m).}
 \label{fig:fig3}
 \end{figure}
 %
 \begin{deluxetable}{lcc}
 %\tablewidth{0pt}
 \tablecaption{\label{tab:results3}}
-\tablecomments{Table comparing ground stat analytic energy eigenvalues found in \cite{3} and numerical energy eigenvalues, the analytic eigenvalues displayed in the table of the source are halved, $\epsilon ' = 0.6250$, for $\omega_{r} = 0.25$ and $\epsilon ' = 0.1750$ for $\omega_{r} = 0.05$.}
+\tablecomments{Table comparing the ground state analytic energy eigenvalues as provided in M. Taut's paper\cite{3} and the numerical energy eigenvalues found by Jacobi's method. The analytic eigenvalues displayed in the table of provided by M. Taut are halved.}
 \tablecolumns{4}
 \tablehead{$\omega_{r}$ & Analytic $2\epsilon '$ & Numerical $E_{00}$}
 \startdata
@@ -442,7 +440,7 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 %
 \begin{figure}[H]
 \mbox{\epsfig{figure=ProbfuncperRhons15.pdf,width=\linewidth,clip=}}
-\caption{Plot of probability distribution of the two electron quantum dot in a harmonic oscillator potential for different $\omega_{r}$, as well as for no Coulomb interaction. The probability is plotted as a function of the dimensionless relative particle position $\rho = \rho_n - \rho_0$. The maximum value of the $\rho_n$ is an approximation of an infinite value, and is selected as the value where the wave function has vanished}
+\caption{Plot of probability distribution of the two electron quantum dot in a harmonic oscillator potential for different $\omega_{r}$, as well as for no Coulomb interaction. The probability is plotted as a function of the dimensionless relative particle position $\rho = \rho_n - \rho_0$. The maximum value of the $\rho_n$ is an approximation of an infinite value, and is selected as the value where the wave function has vanished.}
 \label{fig:fig4}
 \end{figure}
 %
@@ -450,22 +448,22 @@ Analyzing how the number of integration points $n$ and the endpoint $\rho_{n}$, 
 \label{sec:conclusions}
 %
 \subsection{Jacobi's method}
-Utilizing Jacobi's method on scaled differential equations have proven to be a powerful tool for classical and quantum mechanics problems alike. When reviewing numerical accuracy of the method  compared to the analytic results given in \cite{2}, it gives results accurate down to at least 8 significant figures. This result is unique for Toepliz matrices, meaning for other tridiagonal matrices like the ones in the quantum mechanis part of this paper the numerical precision is no longer as high compared to analytical results. However in comparison to other methods it is quite demanding as the number of iterations increases along a quadratic dependency of $n$ [fig: \ref{fig:fig1}], the size of the matrix. In addition the method increases quite fast in CPU-time meaning that the method will not be very versatile if one would need a large $n$. Already at $n = 400$ the CPU time passes $30$ seconds, where Armadillo's method for solving an eigenvalue problem has a CPU time of less than a second. As conclusion to this I would recommend finding another method for larger matrices.
+Utilizing Jacobi's method on scaled differential equations tranformed to an eigenvalue problem have proven to be a powerful tool for classical and quantum mechanics problems alike. When reviewing numerical accuracy of the method  compared to the analytic eigenvalues given in \cite{2}, it gives results accurate down to at least 8 significant figures. This result is unique for Toeplitz matrices, meaning for other tridiagonal matrices like the ones in the quantum mechanis part of this paper the numerical precision is no longer as high compared to analytical results. However in comparison to other methods it is quite demanding as the number of iterations increases along a quadratic dependency of $n$ (see Fig. \ref{fig:fig1}), the size of the matrix. In addition the CPU time of the method increases fast, meaning that the method will not be very usable if one would need a large $n$. Already at $n = 400$ the CPU time passes $30$ seconds, where Armadillo's method for solving an eigenvalue problem has a CPU time of less than a second. For problems that require large matrices Jacobi's method is insufficient considering is high CPU time.
 %
 \subsection{Quantum dots, one electron}
-Studying a case of one electron by adding a quantum harmonic oscillator potential to our tridiagonal matrix. The numerical precision from applying Jacobi's method to Toepliz matrix, is reduced under the now more complex tridiagonal matrix. To achieve four leading digits it becomes necessary to increase matrix size to $n = 380$, even on a reasonable interval $\rho$. The reduction in numerical precision is a result of probability function calculated for the ground state energy, which now requires a stable balance between interval size $\rho$ and matrix size $n$. As seen in [fig:\ref{fig:fig2}] the interval size $\rho$ governs our approximation of infinity in the potential, however letting this interval increase requires that matrix size increase to preserve the points per interval (resolution). Meaning to avoid significant numerical errors in the eigenvalues and eigenvectors, we should select $\rho_{n}$ to where the function has for all practical purposes died down, and not much further.
+Studying a case of one electron by adding a quantum harmonic oscillator potential to the diagonal of the tridiagonal matrix. The numerical precision, compared to that of Jacobi's method on a Toeplitz matrix, is reduced as the matrix is more complex (the diagonal is no longer constant). To achieve four leading digits it becomes necessary to increase matrix size n, to a minimum of $n = 380$, even on a reasonable interval $\rho$. The reduction in numerical precision is a result of the potential added. The potential requires a stable balance between interval size $\rho$ and matrix size $n$, to achieve a good resolution of the probability function of the ground state energy. As seen in Fig.\ref{fig:fig2} the interval size $\rho$ decides the approximation of infinity in the potential, however letting this interval increase requires that the size of the matrix increase to preserve the resolution (points per interval). Meaning that to avoid significant numerical errors in the calculations of the eigenvalues and the eigenvectors, the interval end $\rho_{n}$ is required to be at the $\rho$ where the wave functions has collapsed. If $\rho_{n}$ is further out resolution will be sacrificed for diminishing returns in physical insight of our system.
 %
 \subsection{Quantum dots, two electrons}
 %
-By scaling the equations we have reduced a 3 dimensional two body problem to a analytically solvable problem by changing coordinate system from euclidian to radial, and analyzing relative radius between the electrons. Changing from harmonic oscillator potential to both harmonic oscillator- and Coulomb potential. From \cite{3} we have analytic values of the energy eigenvalues of the system for a selection of $\omega_{r}$. Using the same $\omega_{r}$, $n=400$ and appropriate values interval $\rho$ we managed to reproduce the analytical results to five digits behind the decimal point. Analyzing the energy eigenvalues further we also wound a seemingly linear dependency on $\omega_{r}$.
+By scaling the equations we have reduced a 3 dimensional two body problem to a analytically solvable problem. This is done by changing coordinate system from euclidean to spherical symmetric, and analyzing relative distance between the electrons. From \cite{3} we have analytic values of the energy eigenvalues of the system for a selection of $\omega_{r}$. Using the $\omega_r$ in \ref{tab:results3}, $n=400$ and appropriate values interval $\rho$ we managed to reproduce the analytical results to five digits behind the decimal point. Analyzing the energy eigenvalues further we also wound a seemingly linear dependency on $\omega_{r}$ as seen in Fig.\ref{fig:fig3}.
 %
 \begin{figure}[H]
 \mbox{\epsfig{figure=Omg_r.pdf,width=\linewidth,clip=}}
-\caption{Plot of a quadratic potential scaled by $\omega_{r}$ like our harmonic oscillator potential, it is apparent that as $\omega_{r}$ increases the potential becomes increasingly confined}
+\caption{Plot of a quadratic potential scaled by $\omega_{r}$ like the harmonic oscillator potential, it is apparent that as $\omega_{r}$ increases the potential becomes increasingly confined.}
 \label{fig:fig5}
 \end{figure}
 %
-Reviewing [fig:\ref{fig:fig4}] it is clear that increasing $\omega_{r}$ in turn makes the potential become increasingly confined as explained with [fig:\ref{fig:fig5}], this is seen on the location of the probability function in the plot. Removing the Coulomb potential has the same effect as confining the electrons in a very strong potential since the significance between interaction with the potential and between the electrons is reduced.
+Reviewing Fig.\ref{fig:fig4} it is clear that increasing $\omega_{r}$ in turn makes the potential become increasingly confined as explained with Fig.\ref{fig:fig5}, this is seen on the location of the probability function in the plot. Removing the Coulomb potential has the same effect as confining the electrons in a very strong potential since the significance between interaction with the potential and between the electrons is reduced.
 %
 \subsection{Comments}
 This has been an educational project, and to complete it we have been forced to improve in both C++ and implementation in general. There is also room for gaining more intuition into quantum mechanical systems. However while trying to write a good abstract and conclusion we find this project lacking in clear goals.
