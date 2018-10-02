@@ -1,8 +1,8 @@
 #include "eigvals.h"
 
 double max_offdiag(mat &A, int n, int *l, int *k) {
-        // function to find the maximum value of the array A
-        double maxelm = 0.0;
+        // function to find the maximum value of the array A.
+        double maxelm = 0.0;  // temporary value of the max element
 
         for (int i = 0; i < n; i++) {
                 for (int j = i + 1; j < n; j++) {
@@ -29,7 +29,7 @@ void rotate(mat &A, mat &R, int &k, int &l, int n) {
                 }
                 c = 1.0/sqrt(1 + pow(t,2));
                 s = t*c;
-        } else {
+        } else {  // setting the angle theta to 90 degrees
                 c = 1.0;
                 s = 0.0;
         }
@@ -66,34 +66,38 @@ void rotate(mat &A, mat &R, int &k, int &l, int n) {
 }
 
 vec jacobi(mat &A, mat &R, int n, double h) {
-        int k, l;      // indices for largest off diagonal element
-        double eps = 1.0e-8; // tolerance
+        /* Jacobi's method for finding the eigenvalues of A. Function takes the
+           adresse of A and R, the matrix dimension n and the step size h. Returns
+           the eigenvalues (sorted by size) of A. */
+        int k, l;             // indices for largest off diagonal element
+        double eps = 1.0e-8;  // tolerance
 
-        R = zeros<mat>(n,n); // eigenvector matrix
+        R = zeros<mat>(n,n);  // eigenvector matrix
         R.diag() += double(1.0);
 
         double max_offdiagval = max_offdiag(A, n, &l, &k); // max offdiag element
         double max_iter = pow(double(n),3);         // max number of iterations
-        int iter = 0;                                // counter for iterations
+        int iter = 0;                               // counter for iterations
 
-        // creating a while loop that checks whether the off diagonal elements are
-        // larger than eps. Calling the function max_offdiag to find.
         while (abs(max_offdiagval) > eps && iter < max_iter) {
+                /*checking whether the off diagonal elements are larger than eps.
+                   Calling the function max_offdiag to find .*/
                 max_offdiagval = max_offdiag(A, n, &l, &k);
                 rotate(A, R, k, l, n);
                 iter++;
         }
         cout << "Number of iterations: " << iter << "\n";
-        vec eigvals = A.diag(); // eigenvalues are the diagonal of A
-        eigvals = sort(eigvals); // sorting eigenvalues
+        vec eigvals = A.diag();   // eigenvalues are the diagonal of A
+        eigvals = sort(eigvals);  // sorting eigenvalues
         return eigvals;
 }
 
 vec eigvals_arma(int n, double h, double a, double d) {
-        // returns eigenvalues of matrix A using Armadillo's "eig_sym"
+        /* returns eigenvalues of matrix A using Armadillo's "eig_sym".
+           Creating a copy of A and solving. Returns the eigenvalues of A.*/
         mat A_copy = zeros<mat>(n, n);        // matrix for A
-        A_copy.diag() += d; // center diagonal
-        A_copy.diag(1) += a; // upper diagonal
+        A_copy.diag() += d;   // center diagonal
+        A_copy.diag(1) += a;  // upper diagonal
         A_copy.diag(-1) += a; // lower diagonal
 
         vec eigval;

@@ -8,13 +8,16 @@ using namespace std;
 using namespace arma;
 
 void write_to_file(mat &A, mat &R, double a, double d, double h, int n, double w_r){
-        //vec eigvals_arm = eigvals_arma(n, h, a, d); // eigenvalues from Armadillo
+        /* Writing values to file. Takes the adress of matrix A and R, and the
+           values along the diagonal, upper diagonal and lower diagonal of A, theta
+           step size h and matrix dimension n.*/
         vec eigvals_jac = jacobi(A, R, n, h);
 
         // writing to file
         ofstream outfile;
         outfile.open("2e_results.txt");
         for (int i = 0; i < n; i++) {
+                // writing eigenvalues of the jacobis method
                 outfile << eigvals_jac[i] << endl;
         }
         outfile.close();
@@ -30,16 +33,15 @@ main(int argc, char *argv[]) {
                 exit(1);
         }
         else{
-                // reading filename and value of n from command line
+                // reading filename, value of n, omega_r and rho_n from command line
                 filename = argv[1];
                 n = atoi(argv[1]); // size of matrix
                 w_r = atof(argv[2]); // angular frequency
-                rho_n = atof(argv[3]);
+                rho_n = atof(argv[3]);  // end value of rho
         }
 
-        double rho_0 = 0.0;
-        //double rho_n = 10.0;
-        double h = (rho_n - rho_0)/double(n);               // step length, preserving u(L) = 1
+        double rho_0 = 0.0; // start value of dimensionless length variable
+        double h = (rho_n - rho_0)/double(n);  // step length
         double a = -1.0/pow(h,2);
         double d = 2.0/pow(h,2);
 

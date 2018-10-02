@@ -8,14 +8,18 @@ using namespace std;
 using namespace arma;
 
 void write_to_file(mat &A, mat &R, double a, double d, double h, int n){
+        /* Writing values to file. Takes the adress of matrix A and R, and the
+           values along the diagonal, upper diagonal and lower diagonal of A, theta
+           step size h and matrix dimension n.*/
         vec eigvals_arm = eigvals_arma(n, h, a, d); // eigenvalues from Armadillo
-        vec eigvals_jac = jacobi(A, R, n, h);
+        vec eigvals_jac = jacobi(A, R, n, h);       // eigenvalues from Jacobi
 
         // writing to file
         ofstream outfile;
         outfile.open("2d_results.txt");
         for (int i = 0; i < n; i++) {
                 if(i < 4) {
+                        // writing the first 4 eigenvalues to file
                         outfile << eigvals_jac[i] << endl;;
                 }
                 else{
@@ -38,13 +42,13 @@ main(int argc, char *argv[]) {
                 n = atoi(argv[2]); // setting n from ascii to integer
         }
 
-        double rho_0 = 0.0;
-        double rho_n = 5.0;
-        double h = (rho_n - rho_0)/double(n);               // step length, preserving u(L) = 1
+        double rho_0 = 0.0;     // start value of dimensionless length variable
+        double rho_n = 5.0;     // end value of dimensionless length variable
+        double h = (rho_n - rho_0)/double(n);  // step length
         double a = -1.0/pow(h,2);
         double d = 2.0/pow(h,2);
 
-        vec rho = rho_0 + linspace<vec>(1,n,n)*h;
+        vec rho = rho_0 + linspace<vec>(1,n,n)*h; // rho_i's
 
         // Creating tridiagonal matrix
         mat A = zeros<mat>(n, n);        // matrix for A

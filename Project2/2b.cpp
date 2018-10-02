@@ -8,6 +8,9 @@ using namespace std;
 using namespace arma;
 
 void write_to_file(mat &A, mat &R, double a, double d, double h, int n){
+        /* Writing values to file. Takes the adress of matrix A and R, and the
+           values along the diagonal, upper diagonal and lower diagonal of A, theta
+           step size h and matrix dimension n.*/
         vec eigvals_arm = eigvals_arma(n, h, a, d); // eigenvalues from Armadillo
         vec eigvals_ana = eigvals_analytical(n, a, d); // analytical eigenvalues
         vec eigvals_jac = jacobi(A, R, n, h);
@@ -16,6 +19,7 @@ void write_to_file(mat &A, mat &R, double a, double d, double h, int n){
         ofstream outfile;
         outfile.open(filename);
         for (int i = 0; i < n; i++) {
+                // writing all eigenvalues to file
                 outfile << eigvals_jac[i];
                 outfile << " " << eigvals_arm[i];
                 outfile << " " << eigvals_ana[i] << endl;
@@ -36,9 +40,9 @@ main(int argc, char *argv[]) {
                 n = atoi(argv[2]);      // setting n from ascii to integer
         }
 
-        double rho_0 = 0.0;
-        double rho_n = 1.0;
-        double h = (rho_n - rho_0)/double(n);               // step length, preserving u(L) = 1
+        double rho_0 = 0.0;   // start value of dimensionless length variable
+        double rho_n = 1.0;   // end value of dimensionless length variable
+        double h = (rho_n - rho_0)/double(n);  // step length
         double a = -1.0/pow(h,2);
         double d = 2.0/pow(h,2);
 
