@@ -1,1 +1,6 @@
-#include "euler.h"
+#include "solver.h"
+#include "planet.h"
+#include <cmath>
+
+
+void solver::euler()

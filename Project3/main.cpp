@@ -1,0 +1,4 @@
+
+
+
+planet *Sun = new planet(...);
