@@ -16,7 +16,7 @@ double accel, G;
 vec *vel, *pos;
 
 // initializers
-euler(double G, planet &otherPlanet, double h);
+euler(double G, planet &otherPlanet, planet &currentPlanet, double h);
 
 };
 

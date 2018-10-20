@@ -22,7 +22,7 @@ int main(){
         planet Earth(M_e, 1, 0, 0, 0, 2.0*M_PI, 0);
 
         for(int i=0; i < n; i++) {
-                euler(G, Earth, timestep);
+                euler(G, Earth, Sun, timestep);
                 cout << Earth.position << " ";
                 cout << Earth.velocity << " ";
                 cout << i << endl;

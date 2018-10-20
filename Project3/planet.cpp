@@ -38,7 +38,7 @@ double planet::distance(planet otherPlanet) {
         x = x1 - x2;
         y = y1 - y2;
         z = z1 - z2;
-        cout << sqrt(pow(x,2) + pow(y,2) + pow(z,2)) << endl;
+        //cout << sqrt(pow(x,2) + pow(y,2) + pow(z,2)) << endl;
 
         return sqrt(pow(x,2) + pow(y,2) + pow(z,2));
 }
