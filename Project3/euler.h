@@ -1,3 +1,6 @@
+#ifndef euler_H
+#define euler_H
+
 #include <armadillo>
 #include <iostream>
 
@@ -14,4 +17,6 @@ double vel, pos, accel;
 //
 euler(double accel, double G, planet &otherPlanet);
 
-}
+};
+
+#endif /*euler_H*/

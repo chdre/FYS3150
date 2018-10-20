@@ -1,3 +1,6 @@
+#ifndef planet_H
+#define planet_H
+
 #include <armadillo>
 #include <iostream>
 
@@ -18,4 +21,6 @@ planet(double M, double x, double y, double z, double vx, double vy, double vz);
 // functions
 double distance(planet otherPlanet);
 double acceleration(planet otherPlanet, double G);
-}
+};
+
+#endif /*planet_H*/

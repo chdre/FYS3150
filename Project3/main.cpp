@@ -4,6 +4,7 @@
 #include "euler.h"
 #include "planet.h"
 
-planet *Sun =;
+int main(){
+        planet *Sun = new planet::planet();
 
-planet *Sun = new planet(...);
+};

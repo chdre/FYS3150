@@ -1,4 +1,5 @@
 #include "euler.h"
+#include "planet.h"
 #include <cmath>
 
 euler::euler(double accel, double G, planet &otherPlanet) {
@@ -11,4 +12,4 @@ euler::euler(double accel, double G, planet &otherPlanet) {
 
         vel += accel*h;
         pos += vel*h;
-}
+};
