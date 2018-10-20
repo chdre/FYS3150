@@ -10,6 +10,7 @@ euler::euler(double G, planet otherPlanet, double h) {
         vel = &(otherPlanet.velocity);
         pos = &(otherPlanet.position);
         accel = otherPlanet.acceleration(otherPlanet, G);
+        cout << accel << endl;
 
         (*vel) += accel*h;
         (*pos) += (*vel)*h;

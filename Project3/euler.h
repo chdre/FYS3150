@@ -13,7 +13,7 @@ public:
 
 double h;   // step length
 double accel, G;
-vec vel, pos;
+vec *vel, *pos;
 
 // initializers
 euler(double G, planet otherPlanet, double h);
