@@ -9,7 +9,7 @@ using namespace std;
 int main(){
         double M_e, G;
 
-        double Time = 1.0;  // years
+        double Time = 2.0;  // years
         int n = 1000;               // steps
 
         double timestep = Time/n;
@@ -24,10 +24,9 @@ int main(){
         outfile.open("test.txt");
         for(int i=0; i <= n; i++) {
                 solver solve(G, timestep, Earth, Sun);
+                solve.VelocityVerlet(G, timestep, Earth, Sun);
                 outfile << Earth.position[0] << " ";
-                outfile << Earth.position[1] << " ";
-                outfile << Sun.position[0] << " ";
-                outfile << Sun.position[1] << endl;
+                outfile << Earth.position[1] << endl;
         }
         outfile.close();
 

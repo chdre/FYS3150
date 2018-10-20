@@ -12,12 +12,15 @@ class solver {
 public:
 
 double h, G;
-vec accel;
+vec accel, accel_new;
 vec *vel, *pos;
 
-// initializers
-void euler(double G, double h, planet &otherPlanet, planet &currentPlanet);
+//contructor
+solver(double G, double h, planet &currentPlanet, planet &otherPlanet);
 
+// function
+void euler(double G, double h, planet &otherPlanet, planet &currentPlanet);
+void VelocityVerlet(double G, double h, planet &currentPlanet, planet &otherPlanet);
 };
 
 #endif /*solver_H*/
