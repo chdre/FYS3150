@@ -1,8 +1,10 @@
 #include <iostream>
 #include <cmath>
 #include <armadillo>
-#include "euler.h"
 #include "planet.h"
+#include "euler.h"
+
+
 
 int main(){
         planet *Sun = new planet::planet();
