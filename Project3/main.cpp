@@ -7,6 +7,7 @@
 
 
 int main(){
+        //planet *Sun = new planet::planet();
         planet sun();
 
 };

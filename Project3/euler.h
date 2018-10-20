@@ -1,6 +1,7 @@
 #ifndef euler_H
 #define euler_H
 
+#include "planet.h"
 #include <armadillo>
 #include <iostream>
 
@@ -12,7 +13,8 @@ class euler {
 public:
 
 double h;   // step length
-double vel, pos, accel;
+double accel, G;
+vec vel, pos;
 
 //
 euler(double accel, double G, planet &otherPlanet);

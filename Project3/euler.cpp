@@ -8,7 +8,7 @@ euler::euler(double accel, double G, planet &otherPlanet) {
            Extract values in main to plot. */
         vel = otherPlanet.velocity;
         pos = otherPlanet.position;
-        accel = planet::acceleration(planet otherPlanet, double G);
+        accel = otherPlanet.acceleration(otherPlanet, G);
 
         vel += accel*h;
         pos += vel*h;
