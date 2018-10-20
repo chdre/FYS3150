@@ -11,12 +11,12 @@ class euler {
 
 public:
 
-double h;   // step length
-double accel, G;
+double h, G;
+vec accel;
 vec *vel, *pos;
 
 // initializers
-euler(double G, planet &otherPlanet, planet &currentPlanet, double h);
+euler(double G, double h, planet &otherPlanet, planet &currentPlanet);
 
 };
 

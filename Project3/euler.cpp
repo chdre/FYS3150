@@ -3,13 +3,13 @@
 
 #include <cmath>
 
-euler::euler(double G, planet &otherPlanet, planet &currentPlanet, double h) {
+euler::euler(double G, double h, planet &currentPlanet, planet &otherPlanet) {
         /* calculating over the adresse of vel og pos, so that the values in the class
            "planet" are changed. This is again used when calculating the acceleration.
            Extract values in main to plot. */
-        vel = &(otherPlanet.velocity);
-        pos = &(otherPlanet.position);
-        accel = otherPlanet.acceleration(currentPlanet, G);
+        vel = &(currentPlanet.velocity);
+        pos = &(currentPlanet.position);
+        accel = currentPlanet.acceleration(otherPlanet, G);
         //cout << accel << endl;
 
         (*vel) += accel*h;

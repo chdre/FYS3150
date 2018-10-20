@@ -38,18 +38,20 @@ double planet::distance(planet otherPlanet) {
         x = x1 - x2;
         y = y1 - y2;
         z = z1 - z2;
-        //cout << sqrt(pow(x,2) + pow(y,2) + pow(z,2)) << endl;
+        cout << sqrt(pow(x,2) + pow(y,2) + pow(z,2)) << endl;
 
         return sqrt(pow(x,2) + pow(y,2) + pow(z,2));
 }
 
-double planet::acceleration(planet otherPlanet, double G) {
+vec planet::acceleration(planet otherPlanet, double G) {
         // calculating the acceleration a = -GM_sun/r²
         double r = this->distance(otherPlanet);
         if (r != 0) {
-                return -G*this->mass/pow(r,2);
+                double otherMass = otherPlanet.mass;
+                vec currentPos = this->position;
+                return -G*otherMass*currentPos/pow(r,3);
         }
         else {
-                return 0;
+                return vec({0,0,0});
         }
 };
