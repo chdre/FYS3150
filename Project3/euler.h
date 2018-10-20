@@ -10,6 +10,8 @@ public:
 
 double h;   // step length
 double vel, pos, accel;
-euler(double accel);
+
+//
+euler(double accel, double G, planet &otherPlanet);
 
 }
