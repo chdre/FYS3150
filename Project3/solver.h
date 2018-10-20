@@ -1,5 +1,5 @@
-#ifndef euler_H
-#define euler_H
+#ifndef solver_H
+#define solver_H
 
 #include "planet.h"
 #include <armadillo>
@@ -16,8 +16,8 @@ vec accel;
 vec *vel, *pos;
 
 // initializers
-euler(double G, double h, planet &otherPlanet, planet &currentPlanet);
+void euler(double G, double h, planet &otherPlanet, planet &currentPlanet);
 
 };
 
-#endif /*euler_H*/
+#endif /*solver_H*/

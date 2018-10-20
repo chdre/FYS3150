@@ -2,7 +2,7 @@
 #include <cmath>
 #include <armadillo>
 #include "planet.h"
-#include "euler.h"
+#include "solver.h"
 
 using namespace std;
 
@@ -23,8 +23,7 @@ int main(){
         ofstream outfile;
         outfile.open("test.txt");
         for(int i=0; i <= n; i++) {
-                euler(G, timestep, Earth, Sun);
-                euler(G, timestep, Sun, Earth);
+                solver solve(G, timestep, Earth, Sun);
                 outfile << Earth.position[0] << " ";
                 outfile << Earth.position[1] << " ";
                 outfile << Sun.position[0] << " ";

@@ -1,9 +1,8 @@
 #include "planet.h"
-#include "euler.h"
-
+#include "solver.h"
 #include <cmath>
 
-solver::euler(double G, double h, planet &currentPlanet, planet &otherPlanet) {
+void solver::euler(double G, double h, planet &currentPlanet, planet &otherPlanet) {
         /* calculating over the adresse of vel og pos, so that the values in the class
            "planet" are changed. This is again used when calculating the acceleration.
            Extract values in main to plot. */
