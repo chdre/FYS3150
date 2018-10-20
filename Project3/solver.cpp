@@ -20,8 +20,8 @@ void solver::euler(double G, double h, planet &currentPlanet, planet &otherPlane
 };
 
 void solver::VelocityVerlet(double G, double h, planet &currentPlanet, planet &otherPlanet) {
-        vel = &(currentPlanet.position);
-        pos = &(currentPlanet.velocity);
+        pos = &(currentPlanet.position);
+        vel = &(currentPlanet.velocity);
         accel = currentPlanet.acceleration(otherPlanet, G);
 
         (*pos) += (*vel)*h + h*h/2.0*accel;
@@ -30,4 +30,4 @@ void solver::VelocityVerlet(double G, double h, planet &currentPlanet, planet &o
 
         (*vel) += h/2.0*(accel_new + accel);
 
-}
+};
