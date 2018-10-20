@@ -17,8 +17,8 @@ planet::planet(double M, double x, double y, double z, double vx, double vy, dou
 {
         // for other planets
         mass = M;
-        position = {x, y, z};
-        velocity = {vx, vy, vz};
+        position = vec({x, y, z});
+        velocity = vec({vx, vy, vz});
 }
 
 double planet::distance(planet otherPlanet) {
@@ -38,6 +38,7 @@ double planet::distance(planet otherPlanet) {
         x = x1 - x2;
         y = y1 - y2;
         z = z1 - z2;
+        cout << sqrt(pow(x,2) + pow(y,2) + pow(z,2)) << endl;
 
         return sqrt(pow(x,2) + pow(y,2) + pow(z,2));
 }

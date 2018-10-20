@@ -5,7 +5,6 @@
 #include <armadillo>
 #include <iostream>
 
-using namespace std;
 using namespace arma;
 
 class euler {
@@ -16,8 +15,8 @@ double h;   // step length
 double accel, G;
 vec vel, pos;
 
-//
-euler(double accel, double G, planet &otherPlanet);
+// initializers
+euler(double G, planet otherPlanet, double h);
 
 };
 
