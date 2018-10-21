@@ -18,7 +18,7 @@ main(int argc, char *argv[]){
         }
         else{
                 n = atoi(argv[1]);
-                T = atof(argv[2]);
+                T = at::of(argv[2]);
                 euler = atoi(argv[3]);
                 filename = argv[4];
 
