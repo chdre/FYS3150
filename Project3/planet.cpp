@@ -55,3 +55,37 @@ vec planet::acceleration(planet otherPlanet, double G) {
                 return vec({0,0,0});
         }
 };
+
+double planet::kineticEnergy(){
+        double vel2 = pow(this->velocity[0],2) + pow(this->velocity[1],2) + pow(this->velocity[2],2);
+        return this->mass*vel2/2.0;
+};
+
+double planet::potentialEnergy(){
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
