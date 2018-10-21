@@ -14,7 +14,7 @@ int main(){
         //vfac = atof(argv[2]);    // factor to change the velocity
 
         Time = 10.0;    // time [years]
-        n = 10000;    // steps
+        n = 1000;    // steps
         timestep = Time/n;
 
         // constants
