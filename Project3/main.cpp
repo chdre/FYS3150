@@ -30,8 +30,12 @@ int main(){
         for(int i=0; i <= n; i++) {
                 solver solve(G, timestep, Earth, Sun);
                 solve.VelocityVerlet(G, timestep, Earth, Sun);
-                outfile << Earth.position[0] << " ";
-                outfile << Earth.position[1] << endl;
+                Earth.potential = Earth.potentialEnergy(G,Sun);
+                Earth.kinetic = Earth.kineticEnergy();
+
+                outfile << Earth.kinetic << " ";
+                outfile << Earth.potential << " ";
+                outfile << timestep*i << endl;
         }
         outfile.close();
 };

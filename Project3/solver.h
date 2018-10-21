@@ -21,6 +21,7 @@ solver(double G, double h, planet &currentPlanet, planet &otherPlanet);
 // function
 void euler(double G, double h, planet &otherPlanet, planet &currentPlanet);
 void VelocityVerlet(double G, double h, planet &currentPlanet, planet &otherPlanet);
+void energy(double G, planet &currentPlanet, planet &otherPlanet);
 };
 
 #endif /*solver_H*/

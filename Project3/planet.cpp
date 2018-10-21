@@ -11,6 +11,8 @@ planet::planet(){
         mass = 1.0;
         position = vec({1.0, 0.0, 0.0});
         velocity = vec({0.0, 0.0, 0.0});
+        potential = 0;
+        kinetic = 0;
 }
 
 planet::planet(double M, double x, double y, double z, double vx, double vy, double vz)
@@ -19,6 +21,8 @@ planet::planet(double M, double x, double y, double z, double vx, double vy, dou
         mass = M;
         position = vec({x, y, z});
         velocity = vec({vx, vy, vz});
+        potential = 0;
+        kinetic = 0;
 }
 
 double planet::distance(planet otherPlanet) {
@@ -61,8 +65,8 @@ double planet::kineticEnergy(){
         return this->mass*vel2/2.0;
 };
 
-double planet::potentialEnergy(){
-
+double planet::potentialEnergy(double G, planet otherPlanet){
+        return -G*otherPlanet.mass*this->mass/this->distance(otherPlanet);
 }
 
 
