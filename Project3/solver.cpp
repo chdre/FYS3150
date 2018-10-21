@@ -13,7 +13,6 @@ void solver::euler(double G, double h, planet &currentPlanet, planet &otherPlane
         vel = &(currentPlanet.velocity);
         pos = &(currentPlanet.position);
         accel = currentPlanet.acceleration(otherPlanet, G);
-        //cout << accel << endl;
 
         // euler-cromer. Change position of vel and pos below to use euler
         (*vel) += accel*h;
@@ -28,10 +27,9 @@ void solver::VelocityVerlet(double G, double h, planet &currentPlanet, planet &o
         (*pos) += (*vel)*h + h*h/2.0*accel;
         accel_new = currentPlanet.acceleration(otherPlanet, G);
         (*vel) += h/2.0*(accel_new + accel);
-
 };
 
 void solver::energy(double G, planet &currentPlanet, planet &otherPlanet) {
         currentPlanet.kinetic = currentPlanet.kineticEnergy();
         currentPlanet.potential = currentPlanet.potentialEnergy(G, otherPlanet);
-}
+};

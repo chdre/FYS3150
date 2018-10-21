@@ -13,6 +13,7 @@ planet::planet(){
         velocity = vec({0.0, 0.0, 0.0});
         potential = 0;
         kinetic = 0;
+        angularMom = 0;
 }
 
 planet::planet(double M, double x, double y, double z, double vx, double vy, double vz)
@@ -23,6 +24,7 @@ planet::planet(double M, double x, double y, double z, double vx, double vy, dou
         velocity = vec({vx, vy, vz});
         potential = 0;
         kinetic = 0;
+        angularMom = 0;
 }
 
 double planet::distance(planet otherPlanet) {
@@ -45,7 +47,7 @@ double planet::distance(planet otherPlanet) {
         // cout << sqrt(pow(x,2) + pow(y,2) + pow(z,2)) << endl;
 
         return sqrt(pow(x,2) + pow(y,2) + pow(z,2));
-}
+};
 
 vec planet::acceleration(planet otherPlanet, double G) {
         // calculating the acceleration a = -GM_sun/r²
@@ -67,21 +69,12 @@ double planet::kineticEnergy(){
 
 double planet::potentialEnergy(double G, planet otherPlanet){
         return -G*otherPlanet.mass*this->mass/this->distance(otherPlanet);
-}
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+double planet::angularMomentum(planet otherPlanet){
+        double vel = sqrt(pow(this->velocity[0],2) + pow(this->velocity[1],2) + pow(this->velocity[2],2));
+        return this->mass*vel*this->distance(otherPlanet);
+};
 
 
 
