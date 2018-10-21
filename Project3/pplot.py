@@ -24,6 +24,47 @@ if data == "pos3d":
     plt.legend(['Initial $v = 1.41 * 2\\pi$'],prop={'size': 15})
     plt.show()
 
+if data == "pos3dr3":
+    x = np.loadtxt("data/3d-newforce.txt", usecols=0)
+    y = np.loadtxt("data/3d-newforce.txt", usecols=1)
+
+    plt.figure()
+    plt.plot(x,y)
+    plt.title("Earth orbit around sun using Velocity Verlet",size=15)
+    plt.xlabel("x",size=15); plt.ylabel("y",size=15)
+    plt.legend(['Earth'],prop={'size': 15})
+    plt.show()
+
+if data == "pos3e":
+    x = np.loadtxt("data/3e.txt", usecols=0)
+    y = np.loadtxt("data/3e.txt", usecols=1)
+    x2 = np.loadtxt("data/3e.txt", usecols=2)
+    y2 = np.loadtxt("data/3e.txt", usecols=3)
+
+
+    plt.figure()
+    plt.plot(x,y)
+    plt.plot(x2,y2)
+    plt.title("Earth and Jupiter orbit around sun using Velocity Verlet",size=15)
+    plt.xlabel("x",size=15); plt.ylabel("y",size=15)
+    plt.legend(['Earth','Jupiter'],prop={'size': 15})
+    plt.show()
+
+if data == "pos3e2":
+    x = np.loadtxt("data/3e2.txt", usecols=0)
+    y = np.loadtxt("data/3e2.txt", usecols=1)
+    x2 = np.loadtxt("data/3e2.txt", usecols=2)
+    y2 = np.loadtxt("data/3e2.txt", usecols=3)
+
+
+    plt.figure()
+    plt.plot(x,y)
+    plt.plot(x2,y2)
+    plt.title("Earth and Jupiter orbit around sun using Velocity Verlet",size=15)
+    plt.xlabel("x",size=15); plt.ylabel("y",size=15)
+    plt.legend(['Earth','Jupiter'],prop={'size': 15})
+    plt.show()
+
 
 if data == "energy":
     kinetic = np.loadtxt("data/energy.txt", usecols=0)

@@ -49,18 +49,20 @@ double planet::distance(planet otherPlanet) {
         return sqrt(pow(x,2) + pow(y,2) + pow(z,2));
 };
 
-vec planet::acceleration(planet otherPlanet, double G, double beta) {
+vec planet::acceleration(planet otherPlanet, double G) {
         // calculating the acceleration a = -GM_sun/r²
         double r = this->distance(otherPlanet);
         if (r != 0) {
                 double otherMass = otherPlanet.mass;
                 vec currentPos = this->position;
-                return -G*otherMass*currentPos/pow(r,beta+1);
+                vec otherPos = otherPlanet.position;
+                return -G*otherMass*(currentPos - otherPos)/pow(r,3);
         }
         else {
                 return vec({0,0,0});
         }
 };
+
 
 double planet::kineticEnergy(){
         double vel2 = pow(this->velocity[0],2) + pow(this->velocity[1],2) + pow(this->velocity[2],2);
@@ -76,11 +78,33 @@ double planet::angularMomentum(planet otherPlanet){
         return this->mass*vel*this->distance(otherPlanet);
 };
 
+vec planet::newton(double G, planet otherPlanet1, planet otherPlanet2) {
+        double r1 = this->distance(otherPlanet1);
+        double r2 = this->distance(otherPlanet2);
+        double currentMass = this->mass;
+        vec F1, F2;
+        if (r1 != 0) {
+                double otherMass = otherPlanet1.mass;
+                vec currentPos1 = this->position;
+                vec otherPos1 = otherPlanet1.position;
+                F1 = -G*otherMass*currentMass*(currentPos1 - otherPos1)/pow(r1,3);
+        }
+        else{
+                F1 = vec({0,0,0});
+        }
+        if (r2 != 0) {
+                double otherMass = otherPlanet2.mass;
+                vec currentPos2 = this->position;
+                vec otherPos2 = otherPlanet2.position;
+                F2 = -G*otherMass*currentMass*(currentPos2 - otherPos2)/pow(r2,3);
 
+        }
+        else{
+                F2 = vec({0,0,0});
+        }
 
-
-
-
+        return (F1 + F2)/currentMass;;
+}
 
 
 
