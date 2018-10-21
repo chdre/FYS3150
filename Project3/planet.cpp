@@ -9,8 +9,8 @@
 planet::planet(){
         // sun
         mass = 1.0;
-        position = {1.0, 0.0, 0.0};
-        velocity = {0.0, 0.0, 0.0};
+        position = vec({1.0, 0.0, 0.0});
+        velocity = vec({0.0, 0.0, 0.0});
 }
 
 planet::planet(double M, double x, double y, double z, double vx, double vy, double vz)

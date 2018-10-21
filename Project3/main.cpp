@@ -29,6 +29,4 @@ int main(){
                 outfile << Earth.position[1] << endl;
         }
         outfile.close();
-
-
 };
