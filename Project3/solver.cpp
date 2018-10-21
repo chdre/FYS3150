@@ -6,13 +6,13 @@ solver::solver(double G, double h, planet &currentPlanet, planet &otherPlanet) {
         // empty solver object for use with methods
 }
 
-void solver::euler(double G, double h, planet &currentPlanet, planet &otherPlanet) {
+void solver::euler(double G, double h, double beta, planet &currentPlanet, planet &otherPlanet) {
         /* calculating over the adresse of vel og pos, so that the values in the class
            "planet" are changed. This is again used when calculating the acceleration.
            Extract values in main to plot. */
         vel = &(currentPlanet.velocity);
         pos = &(currentPlanet.position);
-        accel = currentPlanet.acceleration(otherPlanet, G);
+        accel = currentPlanet.acceleration(otherPlanet, G, beta);
 
         // euler-cromer. Change position of vel and pos below to use euler
         (*vel) += accel*h;

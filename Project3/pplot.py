@@ -13,6 +13,17 @@ if data == "momentum":
     plt.plot(time,angularMom)
     plt.show()
 
+if data == "pos3d":
+    x = np.loadtxt("data/3d-escape.txt", usecols=0)
+    y = np.loadtxt("data/3d-escape.txt", usecols=1)
+
+    plt.figure()
+    plt.plot(x,y)
+    plt.title("Earth orbit around sun using Velocity Verlet",size=15)
+    plt.xlabel("x",size=15); plt.ylabel("y",size=15)
+    plt.legend(['Initial $v = 1.41 * 2\\pi$'],prop={'size': 15})
+    plt.show()
+
 
 if data == "energy":
     kinetic = np.loadtxt("data/energy.txt", usecols=0)
@@ -31,8 +42,8 @@ if data == "energy":
 
 if data == "pos":
     if sys.argv[2] == "verlet":
-        x = np.loadtxt("3c-verlet.txt", usecols=0)
-        y = np.loadtxt("3c-verlet.txt", usecols=1)
+        x = np.loadtxt("data/3c-verlet.txt", usecols=0)
+        y = np.loadtxt("data/3c-verlet.txt", usecols=1)
 
         plt.figure()
         plt.plot(x,y)
@@ -41,8 +52,8 @@ if data == "pos":
         plt.legend(['Eearth'],prop={'size': 15})
         plt.show()
     if sys.argv[2] == "euler-cromer":
-        x = np.loadtxt("3c-eulercromer.txt", usecols=0)
-        y = np.loadtxt("3c-eulercromer.txt", usecols=1)
+        x = np.loadtxt("data/3c-eulercromer.txt", usecols=0)
+        y = np.loadtxt("data/3c-eulercromer.txt", usecols=1)
 
         plt.figure()
         plt.plot(x,y)
@@ -52,8 +63,8 @@ if data == "pos":
         plt.show()
 
     if sys.argv[2] == "euler":
-        x = np.loadtxt("3c-euler.txt", usecols=0)
-        y = np.loadtxt("3c-euler.txt", usecols=1)
+        x = np.loadtxt("data/3c-euler.txt", usecols=0)
+        y = np.loadtxt("data/3c-euler.txt", usecols=1)
 
         plt.figure()
         plt.plot(x,y)

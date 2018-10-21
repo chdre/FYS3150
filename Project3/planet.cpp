@@ -49,13 +49,13 @@ double planet::distance(planet otherPlanet) {
         return sqrt(pow(x,2) + pow(y,2) + pow(z,2));
 };
 
-vec planet::acceleration(planet otherPlanet, double G) {
+vec planet::acceleration(planet otherPlanet, double G, double beta) {
         // calculating the acceleration a = -GM_sun/r²
         double r = this->distance(otherPlanet);
         if (r != 0) {
                 double otherMass = otherPlanet.mass;
                 vec currentPos = this->position;
-                return -G*otherMass*currentPos/pow(r,3);
+                return -G*otherMass*currentPos/pow(r,beta+1);
         }
         else {
                 return vec({0,0,0});
