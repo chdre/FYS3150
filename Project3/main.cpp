@@ -7,61 +7,99 @@
 using namespace std;
 
 int main(){
-        double M_e, M_sun, M_j, M_sunval, G, Time, timestep, vfac, v0_e;
+        double M_e, M_sun, M_j, M_sunval, M_m, v_sun0, v_j0, v_e0, initPos_sun;
+        double totalMass, CenterOfMass, G, Time, timestep, vfac, v0_e;
         int n;
 
-        Time = 24.0;    // time [years]
-        n = 10000;    // steps
+        Time = 100;    // time [years]
+        n = 1e9;    // steps
         timestep = Time/n;
 
         // constants
         G = 4.0*pow(M_PI,2);    // gravitational constant [AU³/yr²]
 
         // masses
-        M_sunval = 2e30;          // mass of sun
-        M_sun = 1.0;              // relative mass of sun
-        M_e = 6.0e24/M_sunval;    // relative mass of earth
-        M_j = 1.9e27/M_sunval;    // relative mass of jupiter
+        M_sunval = 2.0e30;          // mass of sun
+        M_sun = 1.0;              // relative mass of Sun
+        M_e = 6.0e24/M_sunval;    // relative mass of Earth
+        M_j = 1.9e27/M_sunval;    // relative mass of Jupiter
+        M_m = 3.3e23/M_sunval;    // relative mass of Mercury
+        totalMass = M_sun + M_e + M_j;
 
-        planet Sun(M_sun, -0.0049, 0, 0, 0, -0.01, 0);
-        planet Earth(M_e, 1-0.0049, 0, 0, 0, 2.0*M_PI, 0);
-        planet Jupiter(M_j, 5.2-0.0049, 0, 0, 0, 0.7*M_PI, 0);
+        v_e0 = 2.0*M_PI;    // initial velocity of Earth
+        v_j0 = 0.7*M_PI;    // initial velocity of Jupiter
+        v_sun0 = -(v_e0*M_e + v_j0*M_j)/M_sun;  // initial velocuty of Sun
+
+        // CenterOfMass = (M_e*1.0 + M_j*5.2 + M_sun*0)/totalMass;
+        // initPos_sun = -(5.2*M_j + M_e)/(totalMass*M_sun);   // initial position of Sun found by requiring center of mass = 0
+
+        planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
+        //planet Earth(M_e, 8.762968100249854e-01, 4.788339338174544e-01, -9.307050339169484e-05,
+        //             -8.439075390315470e-03*365.25, 1.508194738302731e-02*365.25, -1.191747734059677e-07*365.25);
+        //planet Jupiter(M_j, 5.2, 0, 0, 0, v_j0, 0);
+        planet Mercury(M_m, 2.268331723540750e-02, -4.527628626217761e-01, -3.976201975514675e-02,
+                       2.244877340585597e-02*365.25, 2.845538482588606e-03*365.25, -1.827605072960171e-03*365.25);
+
 
         /*ofstream outfile;
-           outfile.open("data/3e.txt");
+           outfile.open("data/3g.txt");
            for(int i=0; i <= n; i++) {
-                solver ES(G, timestep, Earth, Sun);
-                ES.VelocityVerlet(G, timestep, Earth, Sun);
-                // solver SE(G, timestep, Earth, Sun);
-                // SE.VelocityVerlet(G, timestep, Sun, Earth)
+                solver mercury(G, timestep, Mercury, Sun);
+                ES.VelocityVerlet(G, timestep, Mercury, Sun);
+                solver sun(G, timestep, Sun, Mercury);
+                SE.VelocityVerlet(G, timestep, Sun, Mercury);
 
                 outfile << Earth.position[0] << " ";
                 outfile << Earth.position[1] << " ";
-                outfile << Jupiter.position[0] << " ";
-                outfile << Jupiter.position[1] << endl;
+                outfile << Mercury.position[0] << " ";
+                outfile << Mercury.position[1] << endl;
            }
            outfile.close();*/
+        /*ofstream outfile;
+           outfile.open("data/3g.txt");
+           double counter = 0;
+           for(int i=0; i <= n; i++) {
+                if(i=counter) {
+                        solver earth(G, timestep, Mercury, Sun);
+                        earth.VelocityVerletSystem(G, timestep, Earth, Mercury, Sun);
+
+                        solver mercury(G, timestep, Earth, Sun);
+                        mercury.VelocityVerletSystem(G, timestep, Mercury, Earth, Sun);
+
+                        solver sun(G, timestep, Earth, Mercury);
+                        sun.VelocityVerletSystem(G, timestep, Sun, Earth, Mercury);
+
+                        //vec CoM = (M_e*Earth.position + M_j*Jupiter.position + M_sun*Sun.position)/totalMass;
+
+                        outfile << Earth.position[0] << " ";
+                        outfile << Earth.position[1] << " ";
+                        // outfile << Earth.position[2] << " ";
+
+                        outfile << Mercury.position[0] << " ";
+                        outfile << Mercury.position[1] << " ";
+                        // outfile << Mercury.position[2] << " ";
+
+                        outfile << Sun.position[0] << " ";
+                        outfile << Sun.position[1] << endl;
+                        // outfile << Sun.position[2] << endl;
+                }
+                counter += 100;
+
+           }
+           outfile.close();*/
+
         ofstream outfile;
-        outfile.open("data/3f.txt");
+        outfile.open("data/3g.txt");
         for(int i=0; i <= n; i++) {
-                solver earth(G, timestep, Jupiter, Sun);
-                earth.VelocityVerletSystem(G, timestep, Earth, Jupiter, Sun);
-
-                solver jupiter(G, timestep, Earth, Sun);
-                jupiter.VelocityVerletSystem(G, timestep, Jupiter, Earth, Sun);
-
-                solver sun(G, timestep, Earth, Jupiter);
-                sun.VelocityVerletSystem(G, timestep, Sun, Earth, Jupiter);
+                solver mercury(G, timestep, Mercury, Sun);
+                mercury.VelocityVerletEinstein(G, timestep, Mercury, Sun);
+                solver sun(G, timestep, Sun, Mercury);
+                sun.VelocityVerletEinstein(G, timestep, Sun, Mercury);
 
                 outfile << Earth.position[0] << " ";
                 outfile << Earth.position[1] << " ";
-                outfile << Jupiter.position[0] << " ";
-                outfile << Jupiter.position[1] << " ";
-                outfile << Sun.position[0] << " ";
-                outfile << Sun.position[1] << " ";
-                outfile << Sun.angularMomentum(Earth, Jupiter) << " ";
-                outfile << Earth.angularMomentum(Sun, Jupiter) << " ";
-                outfile << Jupiter.angularMomentum(Earth, Sun) << endl;
+                outfile << Mercury.position[0] << " ";
+                outfile << Mercury.position[1] << endl;
         }
         outfile.close();
 };
