@@ -78,12 +78,11 @@ double planet::angularMomentum(planet otherPlanet){
         return this->mass*vel*this->distance(otherPlanet);
 };
 
-double planet::angularMomentum(planet otherPlanet1, planet otherPlanet2){
+double planet::angularMomentum(planet otherPlanet,planet otherPlanet2){
         double vel = sqrt(pow(this->velocity[0],2) + pow(this->velocity[1],2) + pow(this->velocity[2],2));
-        double p1 = this->mass*vel*this->distance(otherPlanet1);
-        double p2 = this->mass*vel*this->distance(otherPlanet2);
-        return p1 + p2;
+        return this->mass*vel*this->distance(otherPlanet);
 };
+
 
 vec planet::newton(double G, planet otherPlanet1, planet otherPlanet2) {
         double r1 = this->distance(otherPlanet1);

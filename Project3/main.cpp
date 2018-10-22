@@ -26,9 +26,9 @@ int main(){
         M_e = 6.0e24/M_sunval;    // relative mass of earth
         M_j = 1.9e27/M_sunval;    // relative mass of jupiter
 
-        planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
-        planet Earth(M_e, 1, 0, 0, 0, 2.0*M_PI, 0);
-        planet Jupiter(M_j, 5.2, 0, 0, 0, 0.7*M_PI, 0);
+        planet Sun(M_sun, -0.0049, 0, 0, 0, -0.01, 0);
+        planet Earth(M_e, 1-0.0049, 0, 0, 0, 2.0*M_PI, 0);
+        planet Jupiter(M_j, 5.2-0.0049, 0, 0, 0, 0.7*M_PI, 0);
 
         /*ofstream outfile;
            outfile.open("data/3e.txt");
