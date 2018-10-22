@@ -10,7 +10,9 @@ if data == "momentum":
 
 
     plt.figure()
+    plt.title("Momentum of Earth-Sun system using Velocity Verlet")
     plt.plot(time,angularMom)
+    plt.xlabel('Time'); plt.ylabel('p')
     plt.show()
 
 if data == "pos3d":
@@ -19,7 +21,7 @@ if data == "pos3d":
 
     plt.figure()
     plt.plot(x,y)
-    plt.title("Earth orbit around sun using Velocity Verlet",size=15)
+    plt.title("Earth orbiting the Sun using Velocity Verlet",size=15)
     plt.xlabel("x",size=15); plt.ylabel("y",size=15)
     plt.legend(['Initial $v = 1.41 * 2\\pi$'],prop={'size': 15})
     plt.show()
@@ -30,7 +32,7 @@ if data == "pos3dr3":
 
     plt.figure()
     plt.plot(x,y)
-    plt.title("Earth orbit around sun using Velocity Verlet",size=15)
+    plt.title("Earth orbiting the Sun using Velocity Verlet",size=15)
     plt.xlabel("x",size=15); plt.ylabel("y",size=15)
     plt.legend(['Earth'],prop={'size': 15})
     plt.show()
@@ -45,7 +47,7 @@ if data == "pos3e":
     plt.figure()
     plt.plot(x,y)
     plt.plot(x2,y2)
-    plt.title("Earth and Jupiter orbit around sun using Velocity Verlet",size=15)
+    plt.title("Earth and Jupiter orbiting the Sun using Velocity Verlet",size=15)
     plt.xlabel("x",size=15); plt.ylabel("y",size=15)
     plt.legend(['Earth','Jupiter'],prop={'size': 15})
     plt.show()
@@ -60,9 +62,10 @@ if data == "pos3e2":
     plt.figure()
     plt.plot(x,y)
     plt.plot(x2,y2)
-    plt.title("Earth and Jupiter orbit around sun using Velocity Verlet",size=15)
+    plt.plot(0,0,"ko")
+    plt.title("Earth and Jupiter orbiting the Sun",size=15)
     plt.xlabel("x",size=15); plt.ylabel("y",size=15)
-    plt.legend(['Earth','Jupiter'],prop={'size': 15})
+    plt.legend(['Earth','Jupiter', 'Sun'],prop={'size': 15},loc='upper right')
     plt.show()
 
 
@@ -75,7 +78,7 @@ if data == "energy":
     plt.plot(time,kinetic)
     plt.plot(time,potential)
 
-    plt.title("Energy of Earth in orbit around sun",size=15)
+    plt.title("Energy of Earth orbiting the Sun",size=15)
     plt.xlabel("time [years]",size=15); plt.ylabel("Energy",size=15)
     plt.legend(['Kinetic', 'Potential'],prop={'size': 15})
     plt.show()
@@ -88,7 +91,7 @@ if data == "pos":
 
         plt.figure()
         plt.plot(x,y)
-        plt.title("Earth orbit around sun using Velocity Verlet",size=15)
+        plt.title("Earth orbiting the Sun using Velocity Verlet",size=15)
         plt.xlabel("x",size=15); plt.ylabel("y",size=15)
         plt.legend(['Eearth'],prop={'size': 15})
         plt.show()
@@ -109,7 +112,7 @@ if data == "pos":
 
         plt.figure()
         plt.plot(x,y)
-        plt.title("Earth orbit around sun using Euler",size=15)
+        plt.title("Earth orbiting the Sun using Euler",size=15)
         plt.xlabel("x",size=15); plt.ylabel("y",size=15)
         plt.legend(['Eearth'],prop={'size': 15})
         plt.show()

@@ -13,8 +13,8 @@ int main(){
         //beta = atof(argv[1]);
         //vfac = atof(argv[2]);    // factor to change the velocity
 
-        Time = 10.0;    // time [years]
-        n = 1000;    // steps
+        Time = 7.5;    // time [years]
+        n = 100000;    // steps
         timestep = Time/n;
 
         // constants
@@ -24,7 +24,7 @@ int main(){
         M_sunval = 2e30;          // mass of sun
         M_sun = 1.0;              // relative mass of sun
         M_e = 6.0e24/M_sunval;    // relative mass of earth
-        M_j = 1.9e27/M_sunval;    // relative mass of jupiter
+        M_j = 1000*1.9e27/M_sunval;    // relative mass of jupiter
 
         planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
         planet Earth(M_e, 1, 0, 0, 0, 2.0*M_PI, 0);
