@@ -30,11 +30,112 @@
 \section{Introduction}
 \label{sec:introduction}
 
+Simulating the orbits of the planets in the Solar System is a suitable problem for making use of object-oriented code. While the two-body problem is straightforward to implement numerically, introducing multiple planets can quickly become tedious if the code is not written for this purpose. This is where object-orientation excels, as it is based on writing code once and then running it several times for different cases. In practice, this is done by writing classes in C++.
+
+Our procedure for creating an object-oriented code starts with solving the motion of Earth around the Sun with no object-orientation in mind. This gives us an idea of which parts of our code that is suited for object-orientation. The calculation of the orbits is performed with Euler's method and then the velocity Verlet method, which allows us to compare their stability and properties such as energy conservation.
 
 
-
-\section{Method}
+\section{Theory and method}
 \label{sec:method}
+a
+\subsection{Integration methods}
+The Euler method is a first-order method to approximate the solution to a differential equation. Given an analytical expression for the acceleration $a$ and an initial velocity $v(t)$ and position $x(t)$, the new values at a time $t + \Delta t$ can be found with
+
+\begin{gather}
+    v(t + \Delta t) = v(t) + a(t) \Delta t \\
+    x(t + \Delta t) = x(t) + v(t) \Delta t \\
+    a(t + \Delta t) = f( ... ).
+\end{gather}
+In our case, $a = f(x)$
+
+
+\subsection{Object-orientation}
+a
+
+\subsection{Scaling the equations governing the Solar System}
+We will consider a model of our Solar System where gravity is the only force present. By Newton's law of gravitation, two celestial bodies with mass $M_1$ and $M_2$ separated by a distance $r$ will both experience a force with magnitude
+
+\begin{equation}\label{eq:gforce}
+    F_G = \frac{G M_1 M_2}{r^2},
+\end{equation}
+where $G = 6.67408 \times 10^{-11} \ \textrm{N} \ \textrm{kg}^{-2} \textrm{m}^2$. The acceleration experienced by body 1 is then
+\begin{equation}
+    a_1 = \frac{F_G}{M_1} = \frac{G M_2}{r^2},
+\end{equation}
+and similarly for body 2.
+
+If we consider a 'flat' Solar System with only two dimensions (naming the axes $x$ and $y$), the acceleration can be decomposed into
+
+\begin{equation}
+    a_x = \frac{G M_2}{r^2}\cdot\frac{\Delta x}{r}, \quad a_y = \frac{G M_2}{r^2}\cdot\frac{\Delta y}{r},
+\end{equation}
+where $\Delta_x$ and $\Delta_y$ are the differences in position coordinates $x$ and $y$ between the two bodies. This can easily be extended to include the third dimension (the 'height' of the Solar System) as well. 
+
+In order to make our values easier to work with, we can scale the equations accordingly. We define the Sun to have a mass $M_\odot = 2\times 10^{30}$ kg and express the other masses (i. e. planets, moons) as a fraction of $M_\odot$. Distance is measured in terms of astronomical units AU, where $1 \ \textrm{AU} = 1.496 \times 10^{11} \ \textrm{meters}$ and time is measured in years. This is appropriate for the scales we are looking at, since the Earth takes one year (surprise) to orbit the Sun once at an average distance of 1 AU. The gravitational constant can now be expressed as 
+
+\begin{equation}
+G = 4\pi^2 \ \frac{\textrm{AU}^3}{\textrm{yr}^{2}M} 
+\end{equation}
+where $M$ is the total mass in the system. From this we get the expression that will be used to calculate the acceleration $a$ induced by a body with mass $M$:
+
+\begin{equation}
+a = \frac{4\pi^2 M}{r^2}, \ \textrm{with} \ [a] = \frac{\textrm{AU}}{\textrm{yr}^2}.
+\end{equation}
+
+
+\subsection{Our simplest model: Earth orbiting a stationary Sun}
+
+To get an idea on how to produce a realistic model of the Solar System, we will first look at a simple model with only the Earth and the Sun present. Earth's orbit is set to be perfectly circular, while in reality it is slightly elliptical. The velocity of a circular orbit expressed in terms of the radius (or orbital distance) $r$ and period $T$ is
+
+\begin{equation}
+    v_r = \frac{2\pi r}{T}.
+\end{equation}
+For Earth, we have $r = 1 \ \textrm{AU}$ and $T = 1 \ \textrm{yr}$. Earth's orbital velocity is thus always $2\pi$ AU/yr.
+
+In our algorithm we position the Sun in the origin of our coordinate system. This further simplifies our calculations, as the distance between the Sun and Earth is simply defined by the coordinates $(x, y)$ of Earth. To test this simple case, we initialize the position of Earth at $x = 1 \ \textrm{AU}$ and $y = 0$. This means that the initial velocity in the $x$-direction has to be zero, otherwise we would not get a circular orbit. For a counter-clockwise orbit around the Sun, we then need to set the initial velocities to
+
+\begin{equation}
+    v_x = 0, \quad v_y = 2\pi.
+\end{equation}
+
+The stability of our Euler and velocity Verlet algorithms are then tested using different time steps $\Delta t$. By looking at the kinetic and potential energy of the system, we can also determine how well the two algorithms conserve energy. Total energy and angular momentum should be conserved in this system since gravity is the only force present, and because gravity is a conservative force we should not lose any energy. In theory, the Verlet algorithm should perform better (why?) than the Euler algorithm in this regard.
+
+After this, we will not be using Euler's method due to it's lack of precision.
+
+\subsection{Expanding our model: Adding Jupiter to the system}
+
+After object-orienting our code, adding more planets should only be a matter of introducing new objects that represent the physical parameters of the planets. Adding the planet Jupiter will let us study a three-body problem, though we will still keep the Sun motionless. Due to the significant mass of Jupiter ($\approx 300$ times more massive than Earth) we should see some changes in Earth's orbit.
+
+Introducing another planet means adding another term contributing to the total force on Earth. Jupiter will also experience this force, but the effect will be much less significant due the planet's high mass. The magnitude of this force is
+
+\begin{equation}
+    F_{\textrm{Earth-Jupiter}} = \frac{GM_{\textrm{Jupiter}} M_{\textrm{Earth}}}{r_{\textrm{Earth-Jupiter}}^2} = \frac{GM_E M_J}{r_{E-J}^2}
+\end{equation}
+where the masses of Earth and Jupiter are $M_{\textrm{E}} = 6 \times 10^{24}$ kg and $M_{\textrm{J}} = 1.9 \times 10^{27}$ kg. The distance between the two planets $r_{\textrm{E-J}}$ is calculated using the $x$ and $y$ coordinates of the planets,
+
+\begin{equation}
+    r_{\textrm{E-J}} = \sqrt{\left(x_E - x_j\right)^2 + \left(y_E - y_J\right)^2 } = \sqrt{(\Delta x_{E-J})^2 + (\Delta y_{E-J})^2}.
+\end{equation}
+Jupiter has an orbital radius of 5.2 AU with respect to the Sun, so that the distance between Earth and Jupiter can vary from 4.2 AU to 6.2 AU. Because $F \propto 1/r^2$, this means that the gravitational forces between the two planets vary by a factor
+
+\begin{equation}
+    \frac{1}{(4.2 \ \textrm{AU})^2} \bigg/  \frac{1}{(6.2 \ \textrm{AU})^2} \approx 2.2.
+\end{equation}
+At a distance of 4.2 AU away from Earth, the forces between the two are as high as possible. Comparing this to the force exerted by the Sun on Earth, we get
+
+\begin{equation}
+    \frac{F_{Earth-Sun}}{F_{Earth-Jupiter}} = \frac{G M_E M_{Sun}/r_{Earth-Sun}^2}{G M_E M_J/r_{Earth-Jupiter}^2} = \frac{M_{Sun} \ r_{Earth-Jupiter}^2}{M_J \ r_{Earth-Sun}^2}
+\end{equation}
+Using that $M_{J} = 9.5 \times 10^{-4} M_\odot$, we get
+
+\begin{equation}
+    \frac{F_{Earth-Sun}}{F_{Earth-Jupiter}} = \frac{M_\odot \cdot (4.2 \ \textrm{AU})^2}{9.5 \times 10^{-4} M_\odot \cdot (1 \ \textrm{AU})^2} \approx 18600.
+\end{equation}
+The gravitational force from Jupiter is around 18600 times weaker than the gravitational force from the Sun, even at the lowest possible Earth-Jupiter distance. This implies that the effects of Jupiter on Earth's orbit should be minimal. However, we will be scaling up the mass of Jupiter in order to examine the stability of our Verlet solver.
+
+\subsection{Final model: Include all planets and Pluto}
+
+Our final model of the Solar System will include all planets and the dwarf planet Pluto. Additionally, we will allow the gravitational attraction from the planets to also affect the Sun. We define the origin to be the center of mass of the system, then give the Sun an initial velocity that gives a total momentum of zero for the whole system. This ensures that the center of mass remains at the origin.
 
 
 \section{Data}
