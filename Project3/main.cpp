@@ -10,9 +10,6 @@ int main(){
         double M_e, M_sun, M_j, M_sunval, G, Time, timestep, vfac, v0_e;
         int n;
 
-        //beta = atof(argv[1]);
-        //vfac = atof(argv[2]);    // factor to change the velocity
-
         Time = 24.0;    // time [years]
         n = 10000;    // steps
         timestep = Time/n;
