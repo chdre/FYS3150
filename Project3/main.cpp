@@ -8,7 +8,7 @@ using namespace std;
 
 int main(){
         double M_e, M_sun, M_j, M_sunval, M_m, v_sun0, v_j0, v_e0, initPos_sun;
-        double totalMass, CenterOfMass, G, Time, timestep, vfac, v0_e;
+        double totalMass, CenterOfMass, G, Time, timestep, vfac, v0_e, c;
         int n;
 
         Time = 100;    // time [years]
@@ -29,6 +29,8 @@ int main(){
         v_e0 = 2.0*M_PI;    // initial velocity of Earth
         v_j0 = 0.7*M_PI;    // initial velocity of Jupiter
         v_sun0 = -(v_e0*M_e + v_j0*M_j)/M_sun;  // initial velocuty of Sun
+
+        c = 173*365.25;   // speed of light [AU/yr]
 
         // CenterOfMass = (M_e*1.0 + M_j*5.2 + M_sun*0)/totalMass;
         // initPos_sun = -(5.2*M_j + M_e)/(totalMass*M_sun);   // initial position of Sun found by requiring center of mass = 0
@@ -87,19 +89,18 @@ int main(){
 
            }
            outfile.close();*/
-
         ofstream outfile;
         outfile.open("data/3g.txt");
-        for(int i=0; i <= n; i++) {
+        for(int i=0; i <= n; i+=1000) {
                 solver mercury(G, timestep, Mercury, Sun);
-                mercury.VelocityVerletEinstein(G, timestep, Mercury, Sun);
+                mercury.VelocityVerletEinstein(G, c, timestep, Mercury, Sun);
                 solver sun(G, timestep, Sun, Mercury);
-                sun.VelocityVerletEinstein(G, timestep, Sun, Mercury);
+                sun.VelocityVerletEinstein(G, c, timestep, Sun, Mercury);
 
-                outfile << Earth.position[0] << " ";
-                outfile << Earth.position[1] << " ";
                 outfile << Mercury.position[0] << " ";
-                outfile << Mercury.position[1] << endl;
+                outfile << Mercury.position[1] << " ";
+                outfile << Sun.position[0] << " ";
+                outfile << Sun.position[1] << endl;
         }
         outfile.close();
 };

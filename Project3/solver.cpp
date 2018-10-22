@@ -48,12 +48,12 @@ void solver::VelocityVerletSystem(double G, double h, planet &currentPlanet, pla
         (*vel) += h/2.0*(accel_new + accel);
 };
 
-void solver::VelocityVerletEinstein(double G, double h, planet &currentPlanet, planet &otherPlanet) {
+void solver::VelocityVerletEinstein(double G, double c, double h, planet &currentPlanet, planet &otherPlanet) {
         pos = &(currentPlanet.position);
         vel = &(currentPlanet.velocity);
-        accel = currentPlanet.einstein(G, otherPlanet);
+        accel = currentPlanet.einstein(G, c, otherPlanet);
 
         (*pos) += (*vel)*h + h*h/2.0*accel;
-        accel_new = currentPlanet.einstein(G, otherPlanet);
+        accel_new = currentPlanet.einstein(G, c, otherPlanet);
         (*vel) += h/2.0*(accel_new + accel);
 }

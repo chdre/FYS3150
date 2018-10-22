@@ -9,7 +9,7 @@ using namespace arma;
 class planet {
 public:
 
-double mass, potential, kinetic, angularMom;
+double mass, potential, kinetic, angularMom, c;
 vec position, velocity, F1, F2;
 
 // initializers
@@ -24,6 +24,7 @@ double potentialEnergy(double G, planet otherPlanet);
 double angularMomentum(planet otherPlanet);
 double angularMomentum(planet otherPlanet1, planet otherPlanet2);
 vec newton(double G, planet otherPlanet1, planet otherPlanet2);
+vec einstein(double G, double c, planet otherPlanet);
 };
 
 #endif /*planet_H*/
