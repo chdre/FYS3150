@@ -6,6 +6,10 @@ solver::solver(double G, double h, planet &currentPlanet, planet &otherPlanet) {
         // empty solver object for use with methods
 }
 
+solver::solver(double G, double h, planet &currentPlanet, planet &otherPlanet1, planet &otherPlanet2) {
+// empty solver object for use with methods
+}
+
 void solver::euler(double G, double h, planet &currentPlanet, planet &otherPlanet) {
         /* calculating over the adresse of vel og pos, so that the values in the class
            "planet" are changed. This is again used when calculating the acceleration.

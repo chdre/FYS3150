@@ -8,7 +8,7 @@
 
 planet::planet(){
         // sun
-        mass = 1.0;
+        mass = 0.0;
         position = vec({1.0, 0.0, 0.0});
         velocity = vec({0.0, 0.0, 0.0});
         potential = 0;
@@ -78,6 +78,13 @@ double planet::angularMomentum(planet otherPlanet){
         return this->mass*vel*this->distance(otherPlanet);
 };
 
+double planet::angularMomentum(planet otherPlanet1, planet otherPlanet2){
+        double vel = sqrt(pow(this->velocity[0],2) + pow(this->velocity[1],2) + pow(this->velocity[2],2));
+        double p1 = this->mass*vel*this->distance(otherPlanet1);
+        double p2 = this->mass*vel*this->distance(otherPlanet2);
+        return p1 + p2;
+};
+
 vec planet::newton(double G, planet otherPlanet1, planet otherPlanet2) {
         double r1 = this->distance(otherPlanet1);
         double r2 = this->distance(otherPlanet2);
@@ -102,7 +109,6 @@ vec planet::newton(double G, planet otherPlanet1, planet otherPlanet2) {
         else{
                 F2 = vec({0,0,0});
         }
-
         return (F1 + F2)/currentMass;;
 }
 

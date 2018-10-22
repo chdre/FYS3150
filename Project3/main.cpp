@@ -13,8 +13,8 @@ int main(){
         //beta = atof(argv[1]);
         //vfac = atof(argv[2]);    // factor to change the velocity
 
-        Time = 7.5;    // time [years]
-        n = 100000;    // steps
+        Time = 24.0;    // time [years]
+        n = 10000;    // steps
         timestep = Time/n;
 
         // constants
@@ -24,7 +24,7 @@ int main(){
         M_sunval = 2e30;          // mass of sun
         M_sun = 1.0;              // relative mass of sun
         M_e = 6.0e24/M_sunval;    // relative mass of earth
-        M_j = 1000*1.9e27/M_sunval;    // relative mass of jupiter
+        M_j = 1.9e27/M_sunval;    // relative mass of jupiter
 
         planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
         planet Earth(M_e, 1, 0, 0, 0, 2.0*M_PI, 0);
@@ -45,18 +45,26 @@ int main(){
            }
            outfile.close();*/
         ofstream outfile;
-        outfile.open("data/3e2.txt");
+        outfile.open("data/3f.txt");
         for(int i=0; i <= n; i++) {
-                solver earth(G, timestep, Sun, Jupiter);
-                earth.VelocityVerletSystem(G, timestep, Earth, Sun, Jupiter);
+                solver earth(G, timestep, Jupiter, Sun);
+                earth.VelocityVerletSystem(G, timestep, Earth, Jupiter, Sun);
 
-                solver jupiter(G, timestep, Sun, Earth);
-                jupiter.VelocityVerletSystem(G, timestep, Jupiter, Sun, Earth);
+                solver jupiter(G, timestep, Earth, Sun);
+                jupiter.VelocityVerletSystem(G, timestep, Jupiter, Earth, Sun);
+
+                solver sun(G, timestep, Earth, Jupiter);
+                sun.VelocityVerletSystem(G, timestep, Sun, Earth, Jupiter);
 
                 outfile << Earth.position[0] << " ";
                 outfile << Earth.position[1] << " ";
                 outfile << Jupiter.position[0] << " ";
-                outfile << Jupiter.position[1] << endl;
+                outfile << Jupiter.position[1] << " ";
+                outfile << Sun.position[0] << " ";
+                outfile << Sun.position[1] << " ";
+                outfile << Sun.angularMomentum(Earth, Jupiter) << " ";
+                outfile << Earth.angularMomentum(Sun, Jupiter) << " ";
+                outfile << Jupiter.angularMomentum(Earth, Sun) << endl;
         }
         outfile.close();
 };

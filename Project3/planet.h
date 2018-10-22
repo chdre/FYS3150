@@ -22,6 +22,7 @@ vec acceleration(planet otherPlanet, double G);
 double kineticEnergy();
 double potentialEnergy(double G, planet otherPlanet);
 double angularMomentum(planet otherPlanet);
+double angularMomentum(planet otherPlanet1, planet otherPlanet2);
 vec newton(double G, planet otherPlanet1, planet otherPlanet2);
 };
 
