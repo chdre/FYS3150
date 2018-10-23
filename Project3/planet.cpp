@@ -7,7 +7,7 @@
  */
 
 planet::planet(){
-        // sun
+        //
         mass = 0.0;
         position = vec({1.0, 0.0, 0.0});
         velocity = vec({0.0, 0.0, 0.0});
@@ -16,9 +16,8 @@ planet::planet(){
         angularMom = 0;
 }
 
-planet::planet(double M, double x, double y, double z, double vx, double vy, double vz)
-{
-        // for other planets
+planet::planet(double M, double x, double y, double z, double vx, double vy, double vz){
+        //
         mass = M;
         position = vec({x, y, z});
         velocity = vec({vx, vy, vz});
@@ -44,7 +43,6 @@ double planet::distance(planet otherPlanet) {
         x = x1 - x2;
         y = y1 - y2;
         z = z1 - z2;
-        // cout << sqrt(pow(x,2) + pow(y,2) + pow(z,2)) << endl;
 
         return sqrt(pow(x,2) + pow(y,2) + pow(z,2));
 };
@@ -119,15 +117,13 @@ vec planet::einstein(double G, double c, planet otherPlanet) {
 
 
         double m = this->mass;
-        double M = otherPlanet.mass;
 
-        vec l = cross(rvec,v);
-        double l2 = dot(l,l);
+        double l = abs(norm(cross(rvec,v)));
 
         vec F;
 
         if (r != 0) {
-                F = -G*M*m*rvec/pow(r,3) + dot(-G*M*m*rvec/pow(r,3),(3.0*l2*rvec/(pow(r,3)*pow(c,2))));
+                F = rvec*(-G*m/pow(r,3)*(1 + 3.0*pow(l,2)/(pow(r,2)*pow(c,2))));
         }
         else{
                 F = vec({0,0,0});

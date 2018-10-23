@@ -34,13 +34,14 @@ int main(){
         v_j0 = 0.7*M_PI;    // initial velocity of Jupiter
         v_sun0 = -(v_e0*M_e + v_j0*M_j)/M_sun;  // initial velocuty of Sun
 
-        c = 173*365.25;   // speed of light [AU/yr]
+        c = 63240.08034;   // speed of light [AU/yr]
 
 
-        initPos_sun = -(5.2*M_j + M_e)/(totalMass*M_sun);   // initial position of Sun found by requiring center of mass = 0
+        //initPos_sun = -(5.2*M_j + M_e)/(totalMass*M_sun);   // initial position of Sun found by requiring center of mass = 0
 
         planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
-        planet Mercury(M_m, -0.3075, 0, 0, 0, -12.44, 0);
+        //planet Mercury(M_m, -1.323E-01, -4.393E-01, -2.444E-02, 2.132E-02*365.25, 6.577E-03*365.25, -2.494E-03*365.25);
+        planet Mercury(M_m, 0.3075, 0, 0, 0, 12.44, 0);
 
 
         /*ofstream outfile;
@@ -98,20 +99,23 @@ int main(){
                 r_pos = Mercury.position;
                 solver mercury(G, timestep, Mercury, Sun);
                 mercury.VelocityVerletEinstein(G, c, timestep, Mercury, Sun);
+
                 r_new = Mercury.distance(Sun);
-                if (r_old < r_old2 && r_new > r_old) {
+
+                if (r_old < r_old2 and r_new > r_old) {
                         arcsec.push_back(atan(r_pos[1]/r_pos[0])*206265.806);
                 }
                 r_old2 = r_old;
-                /*
-                   outfile << Mercury.position[0] << " ";
+
+
+
+                /*outfile << Mercury.position[0] << " ";
                    outfile << Mercury.position[1] << " ";
                    outfile << Sun.position[0] << " ";
                    outfile << Sun.position[1] << endl;*/
         }
 
         outfile.close();
-        cout << arcsec.size() << endl;
         for (int i = 0; i < arcsec.size(); i++) {
                 cout << arcsec[i] << endl;
         }
