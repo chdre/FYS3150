@@ -114,16 +114,37 @@ vec planet::newton(double G, planet otherPlanet1, planet otherPlanet2) {
 
 vec planet::einstein(double G, double c, planet otherPlanet) {
         double r = this->distance(otherPlanet);
-        double currentMass = this->mass;
-        double otherMass = otherPlanet.mass;
-        vec currentPos = this->position;
-        vec currentVel = this->velocity;
-        vec otherPos = otherPlanet.position;
-        vec l = cross((currentPos - otherPos),currentVel);
+        vec v = this->velocity;
+        vec rvec = this->position;
 
-        vec F = (-G*otherMass*(currentPos-otherPos)/pow(r,3))%(1 + (3*pow(l,2)/(pow(r,2)*pow(c,2))));
-        return F/currentMass;
+
+        double m = this->mass;
+        double M = otherPlanet.mass;
+
+        vec l = cross(rvec,v);
+        double l2 = dot(l,l);
+
+        vec F;
+
+        if (r != 0) {
+                F = -G*M*m*rvec/pow(r,3) + dot(-G*M*m*rvec/pow(r,3),(3.0*l2*rvec/(pow(r,3)*pow(c,2))));
+        }
+        else{
+                F = vec({0,0,0});
+        }
+        return F/m;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 //

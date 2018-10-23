@@ -9,9 +9,13 @@ using namespace std;
 int main(){
         double M_e, M_sun, M_j, M_sunval, M_m, v_sun0, v_j0, v_e0, initPos_sun;
         double totalMass, CenterOfMass, G, Time, timestep, vfac, v0_e, c;
+        double r_old2, r_old, r_new;
         int n;
+        vec r_pos;
 
-        Time = 100;    // time [years]
+        vector<double> arcsec;
+
+        Time = 100.0;    // time [years]
         n = 1e9;    // steps
         timestep = Time/n;
 
@@ -32,15 +36,11 @@ int main(){
 
         c = 173*365.25;   // speed of light [AU/yr]
 
-        // CenterOfMass = (M_e*1.0 + M_j*5.2 + M_sun*0)/totalMass;
-        // initPos_sun = -(5.2*M_j + M_e)/(totalMass*M_sun);   // initial position of Sun found by requiring center of mass = 0
+
+        initPos_sun = -(5.2*M_j + M_e)/(totalMass*M_sun);   // initial position of Sun found by requiring center of mass = 0
 
         planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
-        //planet Earth(M_e, 8.762968100249854e-01, 4.788339338174544e-01, -9.307050339169484e-05,
-        //             -8.439075390315470e-03*365.25, 1.508194738302731e-02*365.25, -1.191747734059677e-07*365.25);
-        //planet Jupiter(M_j, 5.2, 0, 0, 0, v_j0, 0);
-        planet Mercury(M_m, 2.268331723540750e-02, -4.527628626217761e-01, -3.976201975514675e-02,
-                       2.244877340585597e-02*365.25, 2.845538482588606e-03*365.25, -1.827605072960171e-03*365.25);
+        planet Mercury(M_m, -0.3075, 0, 0, 0, -12.44, 0);
 
 
         /*ofstream outfile;
@@ -91,16 +91,28 @@ int main(){
            outfile.close();*/
         ofstream outfile;
         outfile.open("data/3g.txt");
-        for(int i=0; i <= n; i+=1000) {
+
+        r_old2 = Mercury.distance(Sun);
+        for(int i=0; i <= n; i++) {
+                r_old = Mercury.distance(Sun);
+                r_pos = Mercury.position;
                 solver mercury(G, timestep, Mercury, Sun);
                 mercury.VelocityVerletEinstein(G, c, timestep, Mercury, Sun);
-                solver sun(G, timestep, Sun, Mercury);
-                sun.VelocityVerletEinstein(G, c, timestep, Sun, Mercury);
-
-                outfile << Mercury.position[0] << " ";
-                outfile << Mercury.position[1] << " ";
-                outfile << Sun.position[0] << " ";
-                outfile << Sun.position[1] << endl;
+                r_new = Mercury.distance(Sun);
+                if (r_old < r_old2 && r_new > r_old) {
+                        arcsec.push_back(atan(r_pos[1]/r_pos[0])*206265.806);
+                }
+                r_old2 = r_old;
+                /*
+                   outfile << Mercury.position[0] << " ";
+                   outfile << Mercury.position[1] << " ";
+                   outfile << Sun.position[0] << " ";
+                   outfile << Sun.position[1] << endl;*/
         }
+
         outfile.close();
+        cout << arcsec.size() << endl;
+        for (int i = 0; i < arcsec.size(); i++) {
+                cout << arcsec[i] << endl;
+        }
 };
