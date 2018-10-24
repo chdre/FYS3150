@@ -4,7 +4,7 @@ import sys
 
 data = sys.argv[1]
 
-params = {'legend.fontsize':'x-large',
+"""params = {'legend.fontsize':'x-large',
         'axes.labelsize': 'x-large',
         'axes.titlesize': 'x-large',
         'xtick.labelsize': 'x-large',
@@ -16,7 +16,7 @@ params = {'legend.fontsize': 'x-large',
         'axes.titlesize': 'x-large',
         'xtick.labelsize': 'x-large',
         'ytick.labelsize': 'x-large'}
-plt.rcParams.update(params)
+plt.rcParams.update(params)"""
 
 if data == "momentum":
     angularMom = np.loadtxt("data/test.txt", usecols=0)
@@ -26,7 +26,7 @@ if data == "momentum":
     plt.figure()
     plt.title("Momentum of Earth-Sun system using Velocity Verlet")
     plt.plot(time,angularMom)
-    plt.xlabel('Time'); plt.ylabel('p')
+    plt.xlabel('Time [yr]'); plt.ylabel('p [solar mass AU$^2$/yr$^2$]')
     plt.show()
 
 if data == "pos3d":
@@ -36,7 +36,7 @@ if data == "pos3d":
     plt.figure()
     plt.plot(x,y)
     plt.title("Earth orbiting the Sun",size=15)
-    plt.xlabel("x",size=15); plt.ylabel("y",size=15)
+    plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
     plt.legend(['Initial $v = 1.41 * 2\\pi$'],prop={'size': 15})
     plt.show()
 
@@ -62,7 +62,7 @@ if data == "pos3e":
     plt.plot(x,y)
     plt.plot(x2,y2)
     plt.title("Earth and Jupiter orbiting the Sun using Velocity Verlet",size=15)
-    plt.xlabel("x",size=15); plt.ylabel("y",size=15)
+    plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
     plt.legend(['Earth','Jupiter'],prop={'size': 15})
     plt.show()
 
@@ -78,7 +78,7 @@ if data == "pos3e2":
     plt.plot(x2,y2)
     plt.plot(0,0,"ko")
     plt.title("Earth and Jupiter orbiting the Sun",size=15)
-    plt.xlabel("x",size=15); plt.ylabel("y",size=15)
+    plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
     plt.legend(['Earth','Jupiter', 'Sun'],prop={'size': 15},loc='upper right')
     plt.show()
 
@@ -99,7 +99,7 @@ if data == "pos3f":
     plt.plot(x3,y3)
     plt.plot(x4,y4)
     plt.title("Solar system of Earth, Jupiter and Sun",size=15)
-    plt.xlabel("x",size=15); plt.ylabel("y",size=15)
+    plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
     plt.legend(['Earth','Jupiter', 'Sun', 'Center of Mass'],prop={'size': 15},loc='upper right')
     plt.show()
 
@@ -114,7 +114,7 @@ if data == "pos3g":
     plt.plot(x,y)
     plt.plot(x2,y2)
     plt.title("Solar system of Mercury and Sun",size=15)
-    plt.xlabel("x",size=15); plt.ylabel("y",size=15)
+    plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
     plt.legend(['Mercury', 'Sun'],prop={'size': 15},loc='upper right')
     plt.show()
 
@@ -128,7 +128,7 @@ if data == "energy":
     plt.plot(time,potential)
 
     plt.title("Energy of Earth orbiting the Sun",size=15)
-    plt.xlabel("time [years]",size=15); plt.ylabel("Energy",size=15)
+    plt.xlabel("time [yr]",size=15); plt.ylabel("Energy [Solar mass AU$^2$/yr$^2$]",size=15)
     plt.legend(['Kinetic', 'Potential'],prop={'size': 15})
     plt.show()
 
@@ -141,8 +141,8 @@ if data == "pos":
         plt.figure()
         plt.plot(x,y)
         plt.title("Earth orbiting the Sun using Velocity Verlet",size=15)
-        plt.xlabel("x",size=15); plt.ylabel("y",size=15)
-        plt.legend(['Eearth'],prop={'size': 15})
+        plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
+        plt.legend(['Earth'],prop={'size': 15})
         plt.show()
     if sys.argv[2] == "euler-cromer":
         x = np.loadtxt("data/3c-eulercromer.txt", usecols=0)
@@ -151,8 +151,8 @@ if data == "pos":
         plt.figure()
         plt.plot(x,y)
         plt.title("Earth orbit around sun using Euler-Cromer",size=15)
-        plt.xlabel("x",size=15); plt.ylabel("y",size=15)
-        plt.legend(['Eearth'],prop={'size': 15})
+        plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
+        plt.legend(['Earth'],prop={'size': 15})
         plt.show()
 
     if sys.argv[2] == "euler":
@@ -162,6 +162,6 @@ if data == "pos":
         plt.figure()
         plt.plot(x,y)
         plt.title("Earth orbiting the Sun using Euler",size=15)
-        plt.xlabel("x",size=15); plt.ylabel("y",size=15)
-        plt.legend(['Eearth'],prop={'size': 15})
+        plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
+        plt.legend(['Earth'],prop={'size': 15})
         plt.show()

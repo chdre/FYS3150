@@ -33,6 +33,16 @@ void solver::VelocityVerlet(double G, double h, planet &currentPlanet, planet &o
         (*vel) += h/2.0*(accel_new + accel);
 };
 
+void solver::VelocityVerletAlt(double G, double h, double beta, planet &currentPlanet, planet &otherPlanet) {
+        pos = &(currentPlanet.position);
+        vel = &(currentPlanet.velocity);
+        accel = currentPlanet.accelerationAlt(otherPlanet, G, beta);
+
+        (*pos) += (*vel)*h + h*h/2.0*accel;
+        accel_new = currentPlanet.accelerationAlt(otherPlanet, G, beta);
+        (*vel) += h/2.0*(accel_new + accel);
+};
+
 void solver::energy(double G, planet &currentPlanet, planet &otherPlanet) {
         currentPlanet.kinetic = currentPlanet.kineticEnergy();
         currentPlanet.potential = currentPlanet.potentialEnergy(G, otherPlanet);

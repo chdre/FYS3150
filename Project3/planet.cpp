@@ -61,6 +61,20 @@ vec planet::acceleration(planet otherPlanet, double G) {
         }
 };
 
+vec planet::accelerationAlt(planet otherPlanet, double G, double beta) {
+        // calculating the acceleration a = -GM_sun/r²
+        double r = this->distance(otherPlanet);
+        if (r != 0) {
+                double otherMass = otherPlanet.mass;
+                vec currentPos = this->position;
+                vec otherPos = otherPlanet.position;
+                return -G*otherMass*(currentPos - otherPos)/pow(r,beta);
+        }
+        else {
+                return vec({0,0,0});
+        }
+};
+
 
 double planet::kineticEnergy(){
         double vel2 = pow(this->velocity[0],2) + pow(this->velocity[1],2) + pow(this->velocity[2],2);
@@ -112,15 +126,12 @@ vec planet::newton(double G, planet otherPlanet1, planet otherPlanet2) {
 
 vec planet::einstein(double G, double c, planet otherPlanet) {
         double r = this->distance(otherPlanet);
+        double m = this->mass;
+        vec F;
         vec v = this->velocity;
         vec rvec = this->position;
 
-
-        double m = this->mass;
-
         double l = abs(norm(cross(rvec,v)));
-
-        vec F;
 
         if (r != 0) {
                 F = rvec*(-G*m/pow(r,3)*(1 + 3.0*pow(l,2)/(pow(r,2)*pow(c,2))));

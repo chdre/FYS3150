@@ -19,6 +19,7 @@ planet(double M, double x, double y, double z, double vx, double vy, double vz);
 // functions
 double distance(planet otherPlanet);
 vec acceleration(planet otherPlanet, double G);
+vec accelerationAlt(planet otherPlanet, double G, double beta);
 double kineticEnergy();
 double potentialEnergy(double G, planet otherPlanet);
 double angularMomentum(planet otherPlanet);
