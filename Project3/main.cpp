@@ -40,7 +40,6 @@ int main(){
         //initPos_sun = -(5.2*M_j + M_e)/(totalMass*M_sun);   // initial position of Sun found by requiring center of mass = 0
 
         planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
-        //planet Mercury(M_m, -1.323E-01, -4.393E-01, -2.444E-02, 2.132E-02*365.25, 6.577E-03*365.25, -2.494E-03*365.25);
         planet Mercury(M_m, 0.3075, 0, 0, 0, 12.44, 0);
 
 
