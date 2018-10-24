@@ -18,8 +18,8 @@ int main(){
         double totalMass, CenterOfMass, G, Time, timestep, vfac, v0_e, c, beta;
         int n;
 
-        Time = 100.0;    // time [years]
-        n = 1e8;    // steps
+        Time = 2.0;    // time [years]
+        n = 1e3;    // steps
         timestep = Time/n;
         beta = 3;
 
@@ -40,11 +40,11 @@ int main(){
         v_sun0 = -(v_e0*M_e + v_j0*M_j)/M_sun;  // initial velocuty of Sun
 
         //Write3cToFile(1, G, timestep, n, M_e, M_sun);
-        //WriteEnergynMomentumToFile(G, timestep, n, M_sun, M_e);
+        WriteEnergynMomentumToFile(G, timestep, n, M_sun, M_e);
         //Write3dToFile(G, timestep, beta, n, M_sun, M_e);
         //Write3eToFile(G, timestep, n, M_e, M_j, M_sun);
         //Write3fToFile(G, timestep, n, M_e, M_m, M_sun);
-        Write3gToFile(G, timestep, n, c, M_sun, M_m);
+        //Write3gToFile(G, timestep, n, c, M_sun, M_m);
 }
 
 void WriteEnergynMomentumToFile(double G, double h, int n, double M_sun, double M_e){
@@ -55,7 +55,7 @@ void WriteEnergynMomentumToFile(double G, double h, int n, double M_sun, double 
         outfile.open("data/3c-energy.txt");
         for(int i=0; i <= n; i++) {
                 solver solve(G, h, Earth, Sun);
-                solve.euler(G, h, Earth, Sun);
+                solve.VelocityVerlet(G, h, Earth, Sun);
                 Earth.potential = Earth.potentialEnergy(G,Sun);
                 Earth.kinetic = Earth.kineticEnergy();
                 Earth.angularMom = Earth.angularMomentum(Sun);
@@ -193,7 +193,7 @@ void Write3gToFile(double G, double h, int n, double c, double M_sun, double M_m
         //               2.244877340585597E-02*365.25, 2.845538482588606E-03*365.25, -1.827605072960171E-03*365.25);
 
         ofstream outfile;
-        outfile.open("data/testing.txt");
+        outfile.open("data/3g-data.txt");
 
         r_old2 = Mercury.distance(Sun);
         for(int i=0; i <= n; i++) {
@@ -223,7 +223,7 @@ void Write3gToFile(double G, double h, int n, double c, double M_sun, double M_m
 
         }
         for (int i = 0; i < arcsec.size(); i++) {
-                cout << arcsec[i] << endl;
-
+                outfile << arcsec[i] << endl;
+                outfile.close();
         }
 };

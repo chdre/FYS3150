@@ -24,9 +24,10 @@ if data == "momentum":
 
 
     plt.figure()
-    plt.title("Angular momentum of Earth-Sun system")
+    plt.title("Angular momentum of Earth-Sun system",size=15)
     plt.plot(time,angularMom)
-    plt.xlabel('Time [yr]'); plt.ylabel('L $M_{\\odot} AU$^2$/yr]')
+    plt.xlabel('Time [yr]', size=15); plt.ylabel('L $M_{\\odot} AU$^2$/yr]', size=15)
+    plt.legend(['L'], prop={'size': 15})
     plt.show()
 
 if data == "pos3d":
@@ -155,3 +156,14 @@ if data == "pos":
         plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
         plt.legend(['Earth', 'Sun'],prop={'size': 15})
         plt.show()
+
+if data == "arcsec":
+    x = np.loadtxt("data/3g-data.txt")
+    t = np.linspace(0,100,414)
+
+    plt.figure()
+    plt.title("Arc seconds of Mercury-Sun system",size=15)
+    plt.plot(t,x)
+    plt.xlabel('Time [yr]', size=15); plt.ylabel('Arc seconds', size=15)
+    plt.legend(['Arc seconds'], prop={'size': 15})
+    plt.show()
