@@ -18,9 +18,10 @@ void solver::euler(double G, double h, planet &currentPlanet, planet &otherPlane
         pos = &(currentPlanet.position);
         accel = currentPlanet.acceleration(otherPlanet, G);
 
+        (*pos) += (*vel)*h;
         // euler-cromer. Change position of vel and pos below to use euler
         (*vel) += accel*h;
-        (*pos) += (*vel)*h;
+
 };
 
 void solver::VelocityVerlet(double G, double h, planet &currentPlanet, planet &otherPlanet) {

@@ -19,14 +19,14 @@ params = {'legend.fontsize': 'x-large',
 plt.rcParams.update(params)"""
 
 if data == "momentum":
-    angularMom = np.loadtxt("data/test.txt", usecols=0)
-    time = np.loadtxt("data/test.txt", usecols=1)
+    angularMom = np.loadtxt("data/3c-energy.txt", usecols=2)
+    time = np.loadtxt("data/3c-energy.txt", usecols=3)
 
 
     plt.figure()
-    plt.title("Momentum of Earth-Sun system")
+    plt.title("Angular momentum of Earth-Sun system")
     plt.plot(time,angularMom)
-    plt.xlabel('Time [yr]'); plt.ylabel('p [solar mass AU$^2$/yr$^2$]')
+    plt.xlabel('Time [yr]'); plt.ylabel('L $M_{\\odot} AU$^2$/yr]')
     plt.show()
 
 if data == "pos3d":
@@ -35,9 +35,10 @@ if data == "pos3d":
 
     plt.figure()
     plt.plot(x,y)
-    plt.title("Earth orbiting the Sun",size=15)
+    plt.plot(0,0, "C1o")
+    plt.title("Earth escaping orbit of Sun",size=15)
     plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
-    plt.legend(['Initial $v = 1.41 * 2\\pi$'],prop={'size': 15})
+    plt.legend(['Earth', 'Sun'],prop={'size': 15})
     plt.show()
 
 if data == "pos3dr3":
@@ -46,9 +47,10 @@ if data == "pos3dr3":
 
     plt.figure()
     plt.plot(x,y)
-    plt.title("Earth orbiting the Sun",size=15)
-    plt.xlabel("x",size=15); plt.ylabel("y",size=15)
-    plt.legend(['Earth'],prop={'size': 15})
+    plt.plot(0,0, "C1o")
+    plt.title("Earth-Sun system with modified gravity",size=15)
+    plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
+    plt.legend(['Earth', 'Sun'],prop={'size': 15})
     plt.show()
 
 if data == "pos3e":
@@ -59,27 +61,12 @@ if data == "pos3e":
 
 
     plt.figure()
-    plt.plot(x,y)
-    plt.plot(x2,y2)
+    plt.plot(x,y,)
+    plt.plot(x2,y2,'C5')
+    plt.plot(0,0,'C1o')
     plt.title("Earth and Jupiter orbiting the Sun",size=15)
     plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
-    plt.legend(['Earth','Jupiter'],prop={'size': 15})
-    plt.show()
-
-if data == "pos3e2":
-    x = np.loadtxt("data/3e2.txt", usecols=0)
-    y = np.loadtxt("data/3e2.txt", usecols=1)
-    x2 = np.loadtxt("data/3e2.txt", usecols=2)
-    y2 = np.loadtxt("data/3e2.txt", usecols=3)
-
-
-    plt.figure()
-    plt.plot(x,y)
-    plt.plot(x2,y2)
-    plt.plot(0,0,"ko")
-    plt.title("Earth and Jupiter orbiting the Sun",size=15)
-    plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
-    plt.legend(['Earth','Jupiter', 'Sun'],prop={'size': 15},loc='upper right')
+    plt.legend(['Earth','Jupiter', 'Sun'],prop={'size': 15})
     plt.show()
 
 if data == "pos3f":
@@ -89,18 +76,14 @@ if data == "pos3f":
     y2 = np.loadtxt("data/3f.txt", usecols=3)
     x3 = np.loadtxt("data/3f.txt", usecols=4)
     y3 = np.loadtxt("data/3f.txt", usecols=5)
-    x4 = np.loadtxt("data/3f.txt", usecols=6)
-    y4 = np.loadtxt("data/3f.txt", usecols=7)
-
 
     plt.figure()
     plt.plot(x,y)
     plt.plot(x2,y2)
     plt.plot(x3,y3)
-    plt.plot(x4,y4)
     plt.title("Solar system of Earth, Jupiter and Sun",size=15)
     plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
-    plt.legend(['Earth','Jupiter', 'Sun', 'Center of Mass'],prop={'size': 15},loc='upper right')
+    plt.legend(['Earth','Jupiter', 'Sun'],prop={'size': 15},loc='upper right')
     plt.show()
 
 if data == "pos3g":
@@ -119,16 +102,16 @@ if data == "pos3g":
     plt.show()
 
 if data == "energy":
-    kinetic = np.loadtxt("data/energy.txt", usecols=0)
-    potential = np.loadtxt("data/energy.txt", usecols=1)
-    time = np.loadtxt("data/energy.txt", usecols=2)
+    kinetic = np.loadtxt("data/3c-energy.txt", usecols=0)
+    potential = np.loadtxt("data/3c-energy.txt", usecols=1)
+    time = np.loadtxt("data/3c-energy.txt", usecols=3)
 
     plt.figure()
     plt.plot(time,kinetic)
     plt.plot(time,potential)
 
     plt.title("Energy of Earth orbiting the Sun",size=15)
-    plt.xlabel("time [yr]",size=15); plt.ylabel("Energy [Solar mass AU$^2$/yr$^2$]",size=15)
+    plt.xlabel("time [yr]",size=15); plt.ylabel("Energy [M_{\\odot} AU$^2$/yr$^2$]",size=15)
     plt.legend(['Kinetic', 'Potential'],prop={'size': 15})
     plt.show()
 
@@ -137,22 +120,28 @@ if data == "pos":
     if sys.argv[2] == "verlet":
         x = np.loadtxt("data/3c-verlet.txt", usecols=0)
         y = np.loadtxt("data/3c-verlet.txt", usecols=1)
+        x2 = np.loadtxt("data/3c-verlet.txt", usecols=2)
+        y2 = np.loadtxt("data/3c-verlet.txt", usecols=3)
 
         plt.figure()
         plt.plot(x,y)
+        plt.plot(x2,y2, 'C1o')
         plt.title("Earth orbiting the Sun (Velocity Verlet)",size=15)
         plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
-        plt.legend(['Earth'],prop={'size': 15})
+        plt.legend(['Earth', 'Sun'],prop={'size': 15})
         plt.show()
     if sys.argv[2] == "euler-cromer":
         x = np.loadtxt("data/3c-eulercromer.txt", usecols=0)
         y = np.loadtxt("data/3c-eulercromer.txt", usecols=1)
+        x2 = np.loadtxt("data/3c-eulercromer.txt", usecols=2)
+        y2 = np.loadtxt("data/3c-eulercromer.txt", usecols=3)
 
         plt.figure()
         plt.plot(x,y)
+        plt.plot(x2,y2, 'C1o')
         plt.title("Earth orbit around Sun (Euler-Cromer)",size=15)
         plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
-        plt.legend(['Earth'],prop={'size': 15})
+        plt.legend(['Earth', 'Sun'],prop={'size': 15})
         plt.show()
 
     if sys.argv[2] == "euler":
@@ -161,7 +150,8 @@ if data == "pos":
 
         plt.figure()
         plt.plot(x,y)
+        plt.plot(0,0, 'C1o')
         plt.title("Earth orbiting the Sun (Euler)",size=15)
         plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
-        plt.legend(['Earth'],prop={'size': 15})
+        plt.legend(['Earth', 'Sun'],prop={'size': 15})
         plt.show()
