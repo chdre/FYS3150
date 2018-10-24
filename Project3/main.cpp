@@ -39,17 +39,15 @@ int main(){
         v_sun0 = -(v_e0*M_e + v_j0*M_j)/M_sun;  // initial velocuty of Sun
 
         //initPos_sun = -(5.2*M_j + M_e)/(totalMass*M_sun);   // initial position of Sun found by requiring center of mass = 0
-
-        Write3cToFile(string euler, G, timestep, n, M_e, M_sun);
+        string euler;
+        Write3cToFile(euler, G, timestep, n, M_e, M_sun);
         //Write3eToFile(G, timestep, n, M_e, M_j, M_sun);
         //Write3dToFile(G, timestep, beta, n, M_sun, M_e);
         //Write3fToFile(G, timestep, n, M_e, M_m, M_sun);
         //Write3gToFile(G, timestep, n, c, M_sun, M_m)M
-
-
-
-
 }
+
+
 void Write3cToFile(string method, double G, double h, int n, double M_e, double M_sun){
         planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
         planet Earth(M_e, 1, 0, 0, 0, 2.0*M_PI, 0);
@@ -133,7 +131,6 @@ void Write3eToFile(double G, double h, int n, double M_e, double M_j, double M_s
         }
         outfile.close();
 }
-
 
 void Write3fToFile(double G, double h, int n, double M_e, double M_m, double M_sun){
         double v0_j = sqrt(4.0*pow(M_PI,2)/5.2);

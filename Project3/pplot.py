@@ -24,7 +24,7 @@ if data == "momentum":
 
 
     plt.figure()
-    plt.title("Momentum of Earth-Sun system using Velocity Verlet")
+    plt.title("Momentum of Earth-Sun system")
     plt.plot(time,angularMom)
     plt.xlabel('Time [yr]'); plt.ylabel('p [solar mass AU$^2$/yr$^2$]')
     plt.show()
@@ -46,7 +46,7 @@ if data == "pos3dr3":
 
     plt.figure()
     plt.plot(x,y)
-    plt.title("Earth orbiting the Sun using Velocity Verlet",size=15)
+    plt.title("Earth orbiting the Sun",size=15)
     plt.xlabel("x",size=15); plt.ylabel("y",size=15)
     plt.legend(['Earth'],prop={'size': 15})
     plt.show()
@@ -61,7 +61,7 @@ if data == "pos3e":
     plt.figure()
     plt.plot(x,y)
     plt.plot(x2,y2)
-    plt.title("Earth and Jupiter orbiting the Sun using Velocity Verlet",size=15)
+    plt.title("Earth and Jupiter orbiting the Sun",size=15)
     plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
     plt.legend(['Earth','Jupiter'],prop={'size': 15})
     plt.show()
@@ -140,7 +140,7 @@ if data == "pos":
 
         plt.figure()
         plt.plot(x,y)
-        plt.title("Earth orbiting the Sun using Velocity Verlet",size=15)
+        plt.title("Earth orbiting the Sun (Velocity Verlet)",size=15)
         plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
         plt.legend(['Earth'],prop={'size': 15})
         plt.show()
@@ -150,7 +150,7 @@ if data == "pos":
 
         plt.figure()
         plt.plot(x,y)
-        plt.title("Earth orbit around sun using Euler-Cromer",size=15)
+        plt.title("Earth orbit around Sun (Euler-Cromer)",size=15)
         plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
         plt.legend(['Earth'],prop={'size': 15})
         plt.show()
@@ -161,7 +161,7 @@ if data == "pos":
 
         plt.figure()
         plt.plot(x,y)
-        plt.title("Earth orbiting the Sun using Euler",size=15)
+        plt.title("Earth orbiting the Sun (Euler)",size=15)
         plt.xlabel("x [AU]",size=15); plt.ylabel("y [AU]",size=15)
         plt.legend(['Earth'],prop={'size': 15})
         plt.show()
