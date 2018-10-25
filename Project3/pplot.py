@@ -4,20 +4,6 @@ import sys
 
 data = sys.argv[1]
 
-"""params = {'legend.fontsize':'x-large',
-        'axes.labelsize': 'x-large',
-        'axes.titlesize': 'x-large',
-        'xtick.labelsize': 'x-large',
-        'ytick.labelsize': 'x-large'}
-plt.rcParams.update(params)
-
-params = {'legend.fontsize': 'x-large',
-        'axes.labelsize': 'x-large',
-        'axes.titlesize': 'x-large',
-        'xtick.labelsize': 'x-large',
-        'ytick.labelsize': 'x-large'}
-plt.rcParams.update(params)"""
-
 if data == "momentum":
     angularMom = np.loadtxt("data/3c-energy.txt", usecols=2)
     time = np.loadtxt("data/3c-energy.txt", usecols=3)
