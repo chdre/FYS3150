@@ -39,6 +39,8 @@ int main(){
         v_j0 = 0.7*M_PI;    // initial velocity of Jupiter
         v_sun0 = -(v_e0*M_e + v_j0*M_j)/M_sun;  // initial velocuty of Sun
 
+        
+        // Below are the calls for the functions to write to file. Remove // to call
         //Write3cToFile(1, G, timestep, n, M_e, M_sun);
         WriteEnergynMomentumToFile(G, timestep, n, M_sun, M_e);
         //Write3dToFile(G, timestep, beta, n, M_sun, M_e);
@@ -48,6 +50,7 @@ int main(){
 }
 
 void WriteEnergynMomentumToFile(double G, double h, int n, double M_sun, double M_e){
+        /* Writing the enery and angular momentum off the Sun and Earth system. Using Velocity Verlet. */
         planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
         planet Earth(M_e, 1, 0, 0, 0, 2.0*M_PI, 0);
 
@@ -70,7 +73,8 @@ void WriteEnergynMomentumToFile(double G, double h, int n, double M_sun, double 
 }
 
 void Write3cToFile(int method, double G, double h, int n, double M_e, double M_sun){
-        // method 1 = Verlet. Method 2 = euler.
+        /* method = 1 => Verlet. method = 2 = > euler. 
+        Writing the position of the Earth to file using either Euler or Velocity Verlet.*/
         planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
         planet Earth(M_e, 1, 0, 0, 0, 2.0*M_PI, 0);
 
@@ -78,12 +82,14 @@ void Write3cToFile(int method, double G, double h, int n, double M_e, double M_s
         outfile.open("data/3c-verlet.txt");
         for(int i=0; i <= n; i++) {
                 if(method == 1) {
+                        // Velocity Verlet
                         solver earth(G, h, Earth, Sun);
                         earth.VelocityVerlet(G, h, Earth, Sun);
                         solver sun(G, h, Sun, Earth);
                         sun.VelocityVerlet(G, h, Sun, Earth);
                 }
                 if(method == 2) {
+                        // Euler
                         solver earth(G, h, Earth, Sun);
                         earth.euler(G, h, Earth, Sun);
                         solver sun(G, h, Sun, Earth);
@@ -97,6 +103,7 @@ void Write3cToFile(int method, double G, double h, int n, double M_e, double M_s
 };
 
 void Write3dToFile(double G, double h, double beta, int n, double M_sun, double M_e) {
+        /* Writing Earth position to file using the alternative force with 1/r^{beta}. Velocity Verlet.*/
         planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
         planet Earth(M_e, 1, 0, 0, 0, 2.0*M_PI, 0);
 
@@ -114,8 +121,10 @@ void Write3dToFile(double G, double h, double beta, int n, double M_sun, double 
 }
 
 void Write3eToFile(double G, double h, int n, double M_e, double M_j, double M_sun){
-        double v0_j = sqrt(4.0*pow(M_PI,2)/5.2);
-        double mass_factor = 1000;
+        /* Writing Earth and  Jupiter's position to file. Three body problem with Earth fixed.
+        Using Velocity Verlet. */
+        double v0_j = sqrt(4.0*pow(M_PI,2)/5.2);        // initial velocity of Jupiter
+        double mass_factor = 1000;      // factor to change Jupiter's mass
 
         planet Sun(M_sun, 0, 0, 0, 0, 0, 0);
         planet Earth(M_e, 1, 0, 0, 0, 2.0*M_PI, 0);
@@ -123,7 +132,7 @@ void Write3eToFile(double G, double h, int n, double M_e, double M_j, double M_s
 
         ofstream outfile;
         outfile.open("data/3e.txt");
-        int counter = 0;
+        int counter = 0;        // counter to not write all positions to file, if n is large
         for(int i=0; i <= n; i++) {
                 solver earth(G, h, Jupiter, Sun);
                 earth.VelocityVerletSystem(G, h, Earth, Jupiter, Sun);
@@ -137,17 +146,19 @@ void Write3eToFile(double G, double h, int n, double M_e, double M_j, double M_s
 
                         outfile << Jupiter.position[0] << " ";
                         outfile << Jupiter.position[1] << endl;
-                        counter += 1;
+                        counter += 1;   // set this larger if n > 1e4
                 }
         }
         outfile.close();
 }
 
 void Write3fToFile(double G, double h, int n, double M_e, double M_j, double M_sun){
-        double v0_j = sqrt(4.0*pow(M_PI,2)/5.2);
-        double totalMass = M_j + M_sun + M_e;
+        /* Writing positon of Earth, Jupiter and Sun (no longer fixex) to file. Calculating using 
+        Velocity Verlet. */
+        double v0_j = sqrt(4.0*pow(M_PI,2)/5.2);        // initial velocity of Jupiter
+        double totalMass = M_j + M_sun + M_e;           // total mass of solar system
         double initPos_sun = -(5.2*M_j + M_e)/(totalMass*M_sun);   // initial position of Sun found by requiring center of mass = 0
-        double initVel_sun = -(M_e*2*M_PI + M_j*v0_j)/M_sun;
+        double initVel_sun = -(M_e*2*M_PI + M_j*v0_j)/M_sun;       // initial velocity of Sun found by requiring sum of momentum = 0
 
         planet Sun(M_sun, initPos_sun, 0, 0, 0, 0, 0);
         planet Earth(M_e, 1, 0, 0, 0, 2.0*M_PI, 0);
@@ -183,6 +194,11 @@ void Write3fToFile(double G, double h, int n, double M_e, double M_j, double M_s
 }
 
 void Write3gToFile(double G, double h, int n, double c, double M_sun, double M_m){
+        /* Writing positions of Mercury and Sun to file, OR precession of Mercury in arcseconds.
+        Main idea: 
+        1) calculate old and old old radius and old position
+        2) update and calculate new radius
+        3) check if the old radius is the lowest by requiring that the new radius and the old old radius is larger */
         double r_old, r_old2, r_new;
         vec r_pos;
         vector<double> arcsec;
@@ -211,7 +227,8 @@ void Write3gToFile(double G, double h, int n, double c, double M_sun, double M_m
                         arcsec.push_back(atan(r_pos[1]/r_pos[0])*206265.806);
                 }
                 r_old2 = r_old;
-
+                
+                // unlock below to write position to file, if interested.
                 /*int counter = 0;
                    if (i == counter) {
                         outfile << Mercury.position[0] << " ";
