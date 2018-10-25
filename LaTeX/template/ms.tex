@@ -138,12 +138,30 @@ The gravitational force from Jupiter is around 18600 times weaker than the gravi
 Our final model of the Solar System will include all planets and the dwarf planet Pluto. Additionally, we will allow the gravitational attraction from the planets to also affect the Sun. We define the origin to be the center of mass of the system, then give the Sun an initial velocity that gives a total momentum of zero for the whole system. This ensures that the center of mass remains at the origin.
 
 
-\section{Data}
-\label{sec:data}
-
 
 \section{Results}
 \label{sec:results}
+
+\begin{deluxetable}{lcc}
+%\tablewidth{0pt}
+\tablecaption{\label{tab:results1}}
+\tablecomments{Table comparing CPU-time between the forward Euler and velocity Verlet algorithms, as a function of number of iterations, for the case of Earth revolving around the Sun, time complexity seemingly increases linearly for larger number of iterations.}
+\tablecolumns{3}
+\tablehead{Iterations  & Euler & Verlet}
+\startdata
+10^{3} & 0.000572 & 0.000838 \\
+10^{4} & 0.004041 & 0.006914 \\
+10^{5} & 0.13305 & 0.239944 \\
+10^{6} & 1.26058 & 2.39078 \\
+10^{7} & 12.649 & 23.6886 \\
+10^{8} & 125.378 & 236.845  \\
+\enddata
+\end{deluxetable}
+
+
+\section{Discussion}
+\label{sec:discussion}
+As seen in table \ref{tab:results1} time complexity of velocity Verlet is seemingly close to double compared to time complexity of Euler. This however is consistent with the number of FLOPS used for each of the methods as our Verlet algorithm seemingly runs at close to double the amount of FLOPS compared to Euler.
 
 
 
