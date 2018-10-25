@@ -1,13 +1,7 @@
 #include "planet.h"
 #include <cmath>
 
-/*
-   1) Call either planet or planet(w/ arguments) to set sun or otherPlanet.
-   2) calculate distance.
- */
-
 planet::planet(){
-        //
         mass = 0.0;
         position = vec({1.0, 0.0, 0.0});
         velocity = vec({0.0, 0.0, 0.0});
@@ -17,7 +11,7 @@ planet::planet(){
 }
 
 planet::planet(double M, double x, double y, double z, double vx, double vy, double vz){
-        //
+        // contructor to set values of a planet (object)
         mass = M;
         position = vec({x, y, z});
         velocity = vec({vx, vy, vz});
@@ -27,7 +21,7 @@ planet::planet(double M, double x, double y, double z, double vx, double vy, dou
 }
 
 double planet::distance(planet otherPlanet) {
-        // returning the distance between planets/sun-planet.
+        // returning the distance between current object and another object.
         double x, y, z, x1, x2, y1, y2, z1, z2;
 
         // position of planet (sun)
@@ -62,6 +56,7 @@ vec planet::acceleration(planet otherPlanet, double G) {
 };
 
 vec planet::accelerationAlt(planet otherPlanet, double G, double beta) {
+        // calculating the acceleration a = -GM_sun/r^{beta}
         double r = this->distance(otherPlanet);
         if (r != 0) {
                 double otherMass = otherPlanet.mass;
@@ -76,20 +71,24 @@ vec planet::accelerationAlt(planet otherPlanet, double G, double beta) {
 
 
 double planet::kineticEnergy(){
+        // returns kinetic energy of current object
         double vel2 = pow(this->velocity[0],2) + pow(this->velocity[1],2) + pow(this->velocity[2],2);
         return this->mass*vel2/2.0;
 };
 
 double planet::potentialEnergy(double G, planet otherPlanet){
+        // returns potential energy of current object relative to given object.
         return -G*otherPlanet.mass*this->mass/this->distance(otherPlanet);
 };
 
 double planet::angularMomentum(planet otherPlanet){
+        // returns angular momentum of current object relative to given object
         double vel = sqrt(pow(this->velocity[0],2) + pow(this->velocity[1],2) + pow(this->velocity[2],2));
         return this->mass*vel*this->distance(otherPlanet);
 };
 
 double planet::angularMomentum(planet otherPlanet1,planet otherPlanet2){
+        // returns sum of angular momentum of current object relative to two given objects
         double vel = sqrt(pow(this->velocity[0],2) + pow(this->velocity[1],2) + pow(this->velocity[2],2));
         double p1 = this->mass*vel*this->distance(otherPlanet1);
         double p2 = this->mass*vel*this->distance(otherPlanet2);
@@ -98,6 +97,7 @@ double planet::angularMomentum(planet otherPlanet1,planet otherPlanet2){
 
 
 vec planet::newton(double G, planet otherPlanet1, planet otherPlanet2) {
+        // returns sum of newtonian force of current object relative to two given objects
         double r1 = this->distance(otherPlanet1);
         double r2 = this->distance(otherPlanet2);
         double currentMass = this->mass;
@@ -124,6 +124,7 @@ vec planet::newton(double G, planet otherPlanet1, planet otherPlanet2) {
 }
 
 vec planet::einstein(double G, double c, planet otherPlanet) {
+        // returns newtonian force of current object relative given objects
         double r = this->distance(otherPlanet);
         double m = this->mass;
         vec F;
