@@ -7,7 +7,7 @@ solver::solver(double G, double h, planet &currentPlanet, planet &otherPlanet) {
 }
 
 solver::solver(double G, double h, planet &currentPlanet, planet &otherPlanet1, planet &otherPlanet2) {
-// empty solver object for use with methods
+        // empty solver object for use with methods of three objects
 }
 
 void solver::euler(double G, double h, planet &currentPlanet, planet &otherPlanet) {
@@ -17,14 +17,15 @@ void solver::euler(double G, double h, planet &currentPlanet, planet &otherPlane
         vel = &(currentPlanet.velocity);
         pos = &(currentPlanet.position);
         accel = currentPlanet.acceleration(otherPlanet, G);
-
+        
+        // euler-cromer => move pos below vel
         (*pos) += (*vel)*h;
-        // euler-cromer. Change position of vel and pos below to use euler
         (*vel) += accel*h;
 
 };
 
 void solver::VelocityVerlet(double G, double h, planet &currentPlanet, planet &otherPlanet) {
+        /* see disciption above, applied to Velocity Verlet */
         pos = &(currentPlanet.position);
         vel = &(currentPlanet.velocity);
         accel = currentPlanet.acceleration(otherPlanet, G);
@@ -35,6 +36,7 @@ void solver::VelocityVerlet(double G, double h, planet &currentPlanet, planet &o
 };
 
 void solver::VelocityVerletAlt(double G, double h, double beta, planet &currentPlanet, planet &otherPlanet) {
+        /* Velocity Verlet with alternative force -> 1/r^{beta} */
         pos = &(currentPlanet.position);
         vel = &(currentPlanet.velocity);
         accel = currentPlanet.accelerationAlt(otherPlanet, G, beta);
@@ -45,11 +47,13 @@ void solver::VelocityVerletAlt(double G, double h, double beta, planet &currentP
 };
 
 void solver::energy(double G, planet &currentPlanet, planet &otherPlanet) {
+        // for solving the energy of planet relative to other planet
         currentPlanet.kinetic = currentPlanet.kineticEnergy();
         currentPlanet.potential = currentPlanet.potentialEnergy(G, otherPlanet);
 };
 
 void solver::VelocityVerletSystem(double G, double h, planet &currentPlanet, planet &otherPlanet1, planet &otherPlanet2) {
+        // Velocity Verlet of a solar system
         pos = &(currentPlanet.position);
         vel = &(currentPlanet.velocity);
         accel = currentPlanet.newton(G, otherPlanet1, otherPlanet2);
@@ -60,6 +64,7 @@ void solver::VelocityVerletSystem(double G, double h, planet &currentPlanet, pla
 };
 
 void solver::VelocityVerletEinstein(double G, double c, double h, planet &currentPlanet, planet &otherPlanet) {
+        // Velocity Verlet for a relativistic force term
         pos = &(currentPlanet.position);
         vel = &(currentPlanet.velocity);
         accel = currentPlanet.einstein(G, c, otherPlanet);
