@@ -20,7 +20,7 @@ void Energy(int n, mat &SMat, double &energy);
 map<double, double> energies(double T);
 void initialize(double &energy, double &magMoment, int n, mat SMat);
 void Metropolis(int n, int mcs, double T, map<double, double> energyDiff);
-void WriteToFile(double energy, double magMoment);
+void WriteToFile(double energy, double magMoment, int mcc, double T, int n);
 
 
 int main(int argc, char *argv[]){
@@ -35,18 +35,20 @@ int main(int argc, char *argv[]){
 }
 
 void initialize(double &energy, double &magMoment, int n, mat SMat){
-        magMoment = pow(double(n),2);
+        magMoment += pow(double(n),2);
 
         for(int x = 0; x < n; x++) {
                 for(int y = 0; y < n; y++)
-                        energy -= SMat(x,y)*(SMat(x, PB(y,n,-1)) + SMat(PB(x,n,-1),y));
+                        energy -= (double) SMat(x,y)*(SMat(x, PB(y,n,-1)) + SMat(PB(x,n,-1),y));
         }
 }
 
 void Metropolis(int n, int mcc, double T, map<double, double> energyDiff){
         random_device rd;
         mt19937_64 generator(10);
-        uniform_real_distribution<> RNG(0.0,1.0);
+        uniform_real_distribution<double> RNG(0.0,1.0);
+        uniform_int_distribution<int> RNGSpin(0,n-1);
+
 
         mat SMat = ones<mat>(n,n);    // ground state
 
@@ -55,37 +57,29 @@ void Metropolis(int n, int mcc, double T, map<double, double> energyDiff){
 
         // initializing lattice
         initialize(energy, magMoment, n, SMat);
-        // calculating energy of lattice
-        Energy(n, SMat, energy);
 
+        int counter = 0;
         for(int m = 1; m < mcc; m++) {
                 for (int x = 0; x < n; x++) {
                         for (int y = 0; y < n; y++) {
-                                int xr = (int) RNG(generator)*(double) n; // indices for random element
-                                int yr = (int) RNG(generator)*(double) n;
+                                //int xr = RNGSpin(generator);//(int) (RNG(generator)*(double) n); // indices for random element
+                                //int yr = RNGSpin(generator);//(int) (RNG(generator)*(double) n);
+                                SMat(x,y) = 2*RNGSpin(generator) - 1;
 
-                                int dE = 2*SMat(xr,yr)*(SMat(xr, PB(yr, n, 1)) + SMat(xr, PB(yr, n, -1))
-                                                        + SMat(PB(xr, n, 1),yr) + SMat(PB(xr, n, -1),yr));
+                                int dE = 2.0*SMat(x,y)*(SMat(x, PB(y, n, 1)) + SMat(x, PB(y, n, -1))
+                                                        + SMat(PB(x, n, 1),y) + SMat(PB(x, n, -1),y));
 
                                 if (RNG(generator) <= energyDiff.find(dE)->second) {
-                                        SMat(xr,yr) *= -1.0;   // flipping spin
-                                        magMoment += (double) 2.0*SMat(xr,yr);
+                                        // counter += 1;
+                                        SMat(x,y) *= -1.0; // flipping spin
+                                        magMoment += 2.0*SMat(x,y);
                                         energy += (double) dE;
                                 }
                         }
                 }
-                WriteToFile(energy, magMoment);
+                WriteToFile(energy, magMoment, mcc, T, n);
         } //mc e
-}
-
-void Energy(int n, mat &SMat, double &energy){
-        // initial energy of lattice
-        for(int x = 0; x < n; x++) {
-                for(int y = 0; y < n; y++) {
-                        energy -= SMat(x, y)*(SMat(PB(x, n, -1), y) + SMat(PB(x, n, 1), y)
-                                              + SMat(x, PB(y, n, -1)) + SMat(x, (y, n, 1)));
-                }
-        }
+          //cout << counter << endl;
 }
 
 map<double, double> energies(double T){
@@ -98,14 +92,25 @@ map<double, double> energies(double T){
         return acceptE;
 }
 
-void WriteToFile(double energy, double magMoment){
+void WriteToFile(double energy, double magMoment, int mcc, double T, int n){
         outfile.open("data/mean_vals.txt", fstream::app);
-        outfile << energy << " ";
-        outfile << energy*energy << " ";
-        outfile << magMoment << " ";
-        outfile << magMoment*magMoment << endl;
+        double nfac = 1.0/mcc;
 
+        double E = energy*nfac;
+        double E2 = E*E;
+        double M = magMoment*nfac;
+        double M2 = M*M;
+
+        double C_V = (E2 - E)/(pow(T,2)*pow(n,2));
+        double chi = (M2 - M)/(T*pow(n,2));
+
+
+        outfile << E << " ";
+        outfile << M << " ";
+        outfile << C_V << " ";
+        outfile << chi << endl;
         outfile.close();
+
 }
 
 
