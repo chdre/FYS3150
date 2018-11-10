@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
 }
 
 void initialize(double &energy, double &magMoment, int n, mat SMat){
-        magMoment += pow(double(n),2);
+        magMoment += pow(double(n),2);  // initial all spin up
 
         for(int x = 0; x < n; x++) {
                 for(int y = 0; y < n; y++)
@@ -43,17 +43,16 @@ void initialize(double &energy, double &magMoment, int n, mat SMat){
         }
 }
 
-void Metropolis(int n, int mcc, double T, map<double, double> energyDiff){
+void Metropolis(int n, int mcc, double T, map<double, double> acceptE){
         random_device rd;
         mt19937_64 generator(10);
-        uniform_real_distribution<double> RNG(0.0,1.0);
+        uniform_real_distribution<float> RNG(0.0,1.0);
         uniform_int_distribution<int> RNGSpin(0,n-1);
-
 
         mat SMat = ones<mat>(n,n);    // ground state
 
-        double energy = 0;  // energy
-        double magMoment = 0; // magnetic moment (initial value, of ground state = n²)
+        double energy = 0.0;  // energy
+        double magMoment = 0.0; // magnetic moment (initial value, of ground state = n²)
 
         // initializing lattice
         initialize(energy, magMoment, n, SMat);
@@ -62,24 +61,25 @@ void Metropolis(int n, int mcc, double T, map<double, double> energyDiff){
         for(int m = 1; m < mcc; m++) {
                 for (int x = 0; x < n; x++) {
                         for (int y = 0; y < n; y++) {
-                                //int xr = RNGSpin(generator);//(int) (RNG(generator)*(double) n); // indices for random element
-                                //int yr = RNGSpin(generator);//(int) (RNG(generator)*(double) n);
-                                SMat(x,y) = 2*RNGSpin(generator) - 1;
+                                int xr = RNGSpin(generator);//int xr = (int) (RNG(generator)*(double) n); // indices for random element
+                                int yr = RNGSpin(generator);//int yr = (int) (RNG(generator)*(double) n);//;
 
-                                int dE = 2.0*SMat(x,y)*(SMat(x, PB(y, n, 1)) + SMat(x, PB(y, n, -1))
-                                                        + SMat(PB(x, n, 1),y) + SMat(PB(x, n, -1),y));
+                                int dE = 2.0*SMat(xr,yr)*(SMat(xr,PB(yr,n,1)) + SMat(xr,PB(yr,n,-1))
+                                                          + SMat(PB(xr,n,1),yr) + SMat(PB(xr,n,-1),yr));
 
-                                if (RNG(generator) <= energyDiff.find(dE)->second) {
-                                        // counter += 1;
-                                        SMat(x,y) *= -1.0; // flipping spin
-                                        magMoment += 2.0*SMat(x,y);
+                                cout << acceptE.find(dE)->second << endl;
+
+                                if (RNG(generator) <= acceptE.find(dE)->second) {
+                                        counter += 1;
+                                        SMat(xr,yr) *= -1.0; // flipping spin
+                                        magMoment += (double) 2*SMat(xr,yr);
                                         energy += (double) dE;
                                 }
                         }
                 }
                 WriteToFile(energy, magMoment, mcc, T, n);
         } //mc e
-          //cout << counter << endl;
+        cout << counter << endl;
 }
 
 map<double, double> energies(double T){
@@ -96,13 +96,13 @@ void WriteToFile(double energy, double magMoment, int mcc, double T, int n){
         outfile.open("data/mean_vals.txt", fstream::app);
         double nfac = 1.0/mcc;
 
-        double E = energy*nfac;
+        double E = energy;//*nfac;
         double E2 = E*E;
-        double M = magMoment*nfac;
+        double M = magMoment;//*nfac;
         double M2 = M*M;
 
-        double C_V = (E2 - E)/(pow(T,2)*pow(n,2));
-        double chi = (M2 - M)/(T*pow(n,2));
+        double C_V = (E2 - E)/(pow(T,2));//*pow(n,2));
+        double chi = (M2 - M)/(T);//*pow(n,2));
 
 
         outfile << E << " ";
