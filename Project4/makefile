@@ -1,6 +1,7 @@
-CPPflags = g++ -O3
+CXX = g++
+CPPflags = -g -Wall -std=c++11 -O3
 
 LIB = -DARMA_DONT_USE_WRAPPER -lblas -llapack
 
-main: p4.o
-		${CPPflags} p4.cpp -o test.x  ${LIB}
+main: main.o
+		${CXX} ${CPPflags} main.cpp -o test.x  ${LIB}
