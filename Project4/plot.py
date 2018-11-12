@@ -13,7 +13,9 @@ Mabs = np.loadtxt(file, usecols=4)
 
 mcs = np.linspace(0,len(M),len(M))
 
-plt.plot(mcs,M)
+plt.plot(mcs,E)
+plt.legend(["Energy"])
+plt.xlabel("Monte Carlo cycles"); plt.ylabel("$\\langle E \\rangle$")
 plt.show()
 
 os.remove("data/test.txt")

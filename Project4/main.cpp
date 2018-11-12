@@ -1,3 +1,4 @@
+#include "mpi.h"
 #include <cmath>
 #include <iostream>
 #include <fstream>
@@ -17,21 +18,46 @@ inline int PB(int index, int spins, int correction) {
 }
 
 void Energy(int n, mat &S, double &energy);
+void initialize(double &energy, double &magMoment, int n, mat S, int GS);
+void Metropolis(int n, int mcs, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin);
 map<double, double> energies(double T);
-void initialize(double &energy, double &magMoment, int n, mat S);
-void Metropolis(int n, int mcs, double T, map<double, double> energyDiff);
-void WriteToFile(double energy, double magMoment, int mcc, double T, int n);
-
+void WriteToFile(vec TotalExpectVals, int mcc, double T, int n);
+void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment);
+void PrintExpectVals(vec TotalExpectVals, int mcc, double T);
 
 int main(int argc, char *argv[]){
-        int n, mcc;
+        int n, mcc, numprocs, my_rank;
         double T;
+
+        T = 1.0;    // temperature [kT/J]
 
         n = atoi(argv[1]);    // number of spins
         mcc = atoi(argv[2]);  // number of MC cycles
-        T = atof(argv[3]);    // temperature [kT/J]
 
-        Metropolis(n, mcc, T, energies(T));
+        //  MPI initializations
+        MPI_Init (&argc, &argv);
+        MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
+        MPI_Comm_rank (MPI_COMM_WORLD, &my_rank);
+
+        int no_intervals = mcc/numprocs;
+        int myloop_begin = my_rank*no_intervals + 1;
+        int myloop_end = (my_rank + 1)*no_intervals;
+
+        if((my_rank == numprocs - 1) && (myloop_end < mcc)) {
+                myloop_end = mcc;
+        }
+
+        double TimeStart, TimeEnd, TotalTime;
+        TimeStart = MPI_Wtime();
+
+        Metropolis(n, mcc, T, energies(T), numprocs, my_rank, myloop_end, myloop_begin);
+
+        TimeEnd = MPI_Wtime();
+        TotalTime = TimeEnd - TimeStart;
+        if(my_rank == 0) {
+                cout << "Time = " << TotalTime << " on number of threads: " << numprocs << endl;
+        }
+        MPI_Finalize();
 }
 
 void initialize(double &energy, double &magMoment, int n, mat &S, int GS, mt19937_64 generator){
@@ -56,7 +82,7 @@ void initialize(double &energy, double &magMoment, int n, mat &S, int GS, mt1993
         }
 }
 
-void Metropolis(int n, int mcc, double T, map<double, double> acceptE){
+void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin){
         random_device rd;
         mt19937_64 generator(rd());
         uniform_real_distribution<float> RNG(0.0,1.0);
@@ -66,15 +92,18 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE){
         double magMoment = 0.0; // magnetic moment (initial value, of ground state = n²)
 
         vec ExpectVals = zeros<vec>(5);
+        vec TotalExpectVals = zeros<vec>(5);
         mat S = zeros<mat>(n,n);
 
         // initializing lattice
         initialize(energy, magMoment, n, S, 1, generator);
 
-        outfile.open("data/test.txt", fstream::app);
+        if(my_rank == 0) {
+                outfile.open("data/test.txt", fstream::app);
+        }
 
         int counter = 0;
-        for(int m = 1; m <= mcc; m++) {
+        for(int m = myloop_begin; m <= myloop_end; m++) {
                 for (int x = 0; x < n; x++) {
                         for (int y = 0; y < n; y++) {
                                 int xr = RNGPos(generator); // indices for random element int) (RNG(generator)*(double) n); //
@@ -89,22 +118,25 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE){
                                         energy += (double) dE;
                                 }
                         }
-                }
-                WriteToFile(energy, magMoment, mcc, T, n);
-                ExpectVals(0) += energy;
-                ExpectVals(1) += energy*energy;
-                ExpectVals(2) += magMoment;
-                ExpectVals(3) += magMoment*magMoment;
-                ExpectVals(4) += fabs(magMoment);
 
-        } //mc e
-        outfile.close();
-        ExpectVals = ExpectVals/mcc;
-        double temp = 1.0;//*pow(n,2);
-        cout << "E: " << ExpectVals(0)*temp << " ";
-        cout << "M: " << ExpectVals(4)*temp << " ";
-        cout << "C_V: " << (ExpectVals(1) - pow(ExpectVals(0),2))/(pow(T,2))*temp << " ";
-        cout << "chi: " << (ExpectVals(3) - pow(ExpectVals(2),2))/T*temp << endl;
+                }
+                EM_mat(energy, magMoment);
+                AddExpectValsToVec(ExpectVals, energy, magMoment);
+                ExpectVals_all(ExpectVals)
+        } //mc end
+        for(int i = 0; i < 3; i++) {
+                // Summing the results of the parallelized calculations, storing in "TotalExpectVals"
+                MPI_Reduce(&ExpectVals(i), &TotalExpectVals(i), 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        }
+
+        if(my_rank == 0) {
+                // only 1 print to file
+                WriteToFile(TotalExpectVals, mcc, T, n);
+        }
+        if(my_rank == 0) {
+                outfile.close();
+                PrintExpectVals(TotalExpectVals, mcc, T);
+        }
 }
 
 map<double, double> energies(double T){
@@ -117,14 +149,14 @@ map<double, double> energies(double T){
         return acceptE;
 }
 
-void WriteToFile(double energy, double magMoment, int mcc, double T, int n){
+void WriteToFile(vec TotalExpectVals, int mcc, double T, int n){
         double nfac = 1.0/mcc;
 
-        double E = energy*nfac;
-        double E2 = energy*energy*nfac;
-        double M = magMoment*nfac;
-        double M2 = magMoment*magMoment*nfac;
-        double Mabs = fabs(magMoment)*nfac;
+        double E = TotalExpectVals(0)*nfac;
+        double E2 = TotalExpectVals(1)*nfac;
+        double M = TotalExpectVals(2)*nfac;
+        double M2 = TotalExpectVals(3)*nfac;
+        double Mabs = TotalExpectVals(4)*nfac;
 
         double C_V = (E2 - E)/(pow(T,2));//*pow(n,2));
         double chi = (M2 - M)/(T);//*pow(n,2));
@@ -136,9 +168,21 @@ void WriteToFile(double energy, double magMoment, int mcc, double T, int n){
         outfile << Mabs << endl;
 }
 
+void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment){
+        ExpectVals(0) += energy;
+        ExpectVals(1) += energy*energy;
+        ExpectVals(2) += magMoment;
+        ExpectVals(3) += magMoment*magMoment;
+        ExpectVals(4) += fabs(magMoment);
+}
 
-
-
+void PrintExpectVals(vec TotalExpectVals, int mcc, double T) {
+        TotalExpectVals = TotalExpectVals/mcc;
+        cout << "E: " << TotalExpectVals(0) << " ";
+        cout << "Mabs: " << TotalExpectVals(4) << " ";
+        cout << "C_V: " << (TotalExpectVals(1) - pow(TotalExpectVals(0),2))/(pow(T,2)) << " ";
+        cout << "chi: " << (TotalExpectVals(3) - pow(TotalExpectVals(2),2))/T << endl;
+}
 
 
 
