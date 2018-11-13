@@ -21,7 +21,7 @@ void Energy(int n, mat &S, double &energy);
 void initialize(double &energy, double &magMoment, int n, mat S, int GS);
 void Metropolis(int n, int mcs, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin);
 map<double, double> energies(double T);
-void WriteToFile(vec TotalExpectVals, int mcc, double T, int n);
+void WriteToFile(mat EnergyMagSave, int mcc, double T);
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment);
 void PrintExpectVals(vec TotalExpectVals, int mcc, double T);
 
@@ -94,6 +94,9 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
         vec ExpectVals = zeros<vec>(5);
         vec TotalExpectVals = zeros<vec>(5);
         mat S = zeros<mat>(n,n);
+        mat EnergyMagSave = zeros<mat>(mcc,2);     // for storing energy and magnetic moment values
+        mat EnergyMagSaveTot = zeros<mat>(mcc,2);     // for storing energy and magnetic moment values
+
 
         // initializing lattice
         initialize(energy, magMoment, n, S, 1, generator);
@@ -118,20 +121,24 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
                                         energy += (double) dE;
                                 }
                         }
-
                 }
-                EM_mat(energy, magMoment);
                 AddExpectValsToVec(ExpectVals, energy, magMoment);
-                ExpectVals_all(ExpectVals)
-        } //mc end
-        for(int i = 0; i < 3; i++) {
-                // Summing the results of the parallelized calculations, storing in "TotalExpectVals"
+                EnergyMagSave(m-1,0) = energy;
+                EnergyMagSave(m-1,1) = magMoment;
+
+        }  //mc end
+
+        for(int i = 0; i < 5; i++) {
+                // Summing the expectvals
                 MPI_Reduce(&ExpectVals(i), &TotalExpectVals(i), 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
         }
 
         if(my_rank == 0) {
                 // only 1 print to file
-                WriteToFile(TotalExpectVals, mcc, T, n);
+                //EnergyMagSave = EnegyMagSave/mcc;
+                EnergyMagSave.save("data/test.txt", arma_ascii);
+                //  WriteToFile(EnergyMagSave, mcc, T);
+
         }
         if(my_rank == 0) {
                 outfile.close();
@@ -149,23 +156,25 @@ map<double, double> energies(double T){
         return acceptE;
 }
 
-void WriteToFile(vec TotalExpectVals, int mcc, double T, int n){
+void WriteToFile(mat EnergyMagSave, int mcc, double T){
         double nfac = 1.0/mcc;
 
-        double E = TotalExpectVals(0)*nfac;
-        double E2 = TotalExpectVals(1)*nfac;
-        double M = TotalExpectVals(2)*nfac;
-        double M2 = TotalExpectVals(3)*nfac;
-        double Mabs = TotalExpectVals(4)*nfac;
+        for(int i = 0; i < mcc; i++) {
+                double E = EnergyMagSave(i,0)*nfac;
+                double E2 = EnergyMagSave(i,0)*EnergyMagSave(i,0)*nfac;
+                double M = EnergyMagSave(i,1)*nfac;
+                double M2 = EnergyMagSave(i,1)*EnergyMagSave(i,1)*nfac;
+                double Mabs = fabs(EnergyMagSave(i,1))*nfac;
 
-        double C_V = (E2 - E)/(pow(T,2));//*pow(n,2));
-        double chi = (M2 - M)/(T);//*pow(n,2));
+                double C_V = (E2 - E)/pow(T,2);//*pow(n,2));
+                double chi = (M2 - M)/T;//*pow(n,2));
 
-        outfile << E << " ";
-        outfile << M << " ";
-        outfile << C_V << " ";
-        outfile << chi << " ";
-        outfile << Mabs << endl;
+                outfile << E << " ";
+                outfile << M << " ";
+                outfile << C_V << " ";
+                outfile << chi << " ";
+                outfile << Mabs << endl;
+        }
 }
 
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment){
@@ -183,7 +192,6 @@ void PrintExpectVals(vec TotalExpectVals, int mcc, double T) {
         cout << "C_V: " << (TotalExpectVals(1) - pow(TotalExpectVals(0),2))/(pow(T,2)) << " ";
         cout << "chi: " << (TotalExpectVals(3) - pow(TotalExpectVals(2),2))/T << endl;
 }
-
 
 
 
