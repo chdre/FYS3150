@@ -21,7 +21,7 @@ void Energy(int n, mat &S, double &energy);
 void initialize(double &energy, double &magMoment, int n, mat S, int GS);
 void Metropolis(int n, int mcs, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin);
 map<double, double> energies(double T);
-void WriteToFile(mat EnergyMagSave, int mcc, double T);
+void WriteToFile(double energy, double magMoment, int mcc, double T);
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment);
 void PrintExpectVals(vec TotalExpectVals, int mcc, double T);
 
@@ -30,7 +30,6 @@ int main(int argc, char *argv[]){
         double T;
 
         T = 1.0;    // temperature [kT/J]
-
         n = atoi(argv[1]);    // number of spins
         mcc = atoi(argv[2]);  // number of MC cycles
 
@@ -43,9 +42,7 @@ int main(int argc, char *argv[]){
         int myloop_begin = my_rank*no_intervals + 1;
         int myloop_end = (my_rank + 1)*no_intervals;
 
-        if((my_rank == numprocs - 1) && (myloop_end < mcc)) {
-                myloop_end = mcc;
-        }
+        if((my_rank == numprocs - 1) && (myloop_end < mcc)) (myloop_end = mcc);
 
         double TimeStart, TimeEnd, TotalTime;
         TimeStart = MPI_Wtime();
@@ -95,17 +92,14 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
         vec TotalExpectVals = zeros<vec>(5);
         mat S = zeros<mat>(n,n);
         mat EnergyMagSave = zeros<mat>(mcc,2);     // for storing energy and magnetic moment values
-        mat EnergyMagSaveTot = zeros<mat>(mcc,2);     // for storing energy and magnetic moment values
 
 
         // initializing lattice
         initialize(energy, magMoment, n, S, 1, generator);
 
-        if(my_rank == 0) {
-                outfile.open("data/test.txt", fstream::app);
-        }
+        if(numprocs == 1) outfile.open("data/test.txt", fstream::app);
 
-        int counter = 0;
+        int accepts = 0;
         for(int m = myloop_begin; m <= myloop_end; m++) {
                 for (int x = 0; x < n; x++) {
                         for (int y = 0; y < n; y++) {
@@ -115,7 +109,7 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
                                 int dE = 2.0*S(xr,yr)*(S(xr,PB(yr,n,1)) + S(xr,PB(yr,n,-1))
                                                        + S(PB(xr,n,1),yr) + S(PB(xr,n,-1),yr));
                                 if (RNG(generator) <= acceptE.find(dE)->second) {
-                                        counter += 1;
+                                        accepts += 1;
                                         S(xr,yr) *= -1.0; // flipping spin
                                         magMoment += (double) 2*S(xr,yr);
                                         energy += (double) dE;
@@ -123,27 +117,18 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
                         }
                 }
                 AddExpectValsToVec(ExpectVals, energy, magMoment);
-                EnergyMagSave(m-1,0) = energy;
-                EnergyMagSave(m-1,1) = magMoment;
+
+                // check if we are running 1 node. If we are, write values to file for plotting
+                if(numprocs == 1) WriteToFile(energy, magMoment, mcc, T);
 
         }  //mc end
-
         for(int i = 0; i < 5; i++) {
                 // Summing the expectvals
                 MPI_Reduce(&ExpectVals(i), &TotalExpectVals(i), 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
         }
 
-        if(my_rank == 0) {
-                // only 1 print to file
-                //EnergyMagSave = EnegyMagSave/mcc;
-                EnergyMagSave.save("data/test.txt", arma_ascii);
-                //  WriteToFile(EnergyMagSave, mcc, T);
-
-        }
-        if(my_rank == 0) {
-                outfile.close();
-                PrintExpectVals(TotalExpectVals, mcc, T);
-        }
+        if(numprocs == 1) outfile.close();
+        if(my_rank == 0) PrintExpectVals(TotalExpectVals, mcc, T);
 }
 
 map<double, double> energies(double T){
@@ -156,25 +141,21 @@ map<double, double> energies(double T){
         return acceptE;
 }
 
-void WriteToFile(mat EnergyMagSave, int mcc, double T){
-        double nfac = 1.0/mcc;
+void WriteToFile(double energy, double magMoment, int mcc, double T){
+        double E = energy;
+        double E2 = energy*energy;
+        double M = magMoment;
+        double M2 = magMoment*magMoment;
+        double Mabs = fabs(magMoment);
 
-        for(int i = 0; i < mcc; i++) {
-                double E = EnergyMagSave(i,0)*nfac;
-                double E2 = EnergyMagSave(i,0)*EnergyMagSave(i,0)*nfac;
-                double M = EnergyMagSave(i,1)*nfac;
-                double M2 = EnergyMagSave(i,1)*EnergyMagSave(i,1)*nfac;
-                double Mabs = fabs(EnergyMagSave(i,1))*nfac;
+        double C_V = (E2 - E)/pow(T,2);
+        double chi = (M2 - M)/T;
 
-                double C_V = (E2 - E)/pow(T,2);//*pow(n,2));
-                double chi = (M2 - M)/T;//*pow(n,2));
-
-                outfile << E << " ";
-                outfile << M << " ";
-                outfile << C_V << " ";
-                outfile << chi << " ";
-                outfile << Mabs << endl;
-        }
+        outfile << E << " ";
+        outfile << M << " ";
+        outfile << C_V << " ";
+        outfile << chi << " ";
+        outfile << Mabs << endl;
 }
 
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment){
