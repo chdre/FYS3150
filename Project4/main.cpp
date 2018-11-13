@@ -19,7 +19,7 @@ inline int PB(int index, int spins, int correction) {
 
 void Energy(int n, mat &S, double &energy);
 void initialize(double &energy, double &magMoment, int n, mat S, int GS);
-void Metropolis(int n, int mcs, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin);
+void Metropolis(int n, int mcs, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin, string filename);
 map<double, double> energies(double T);
 void WriteToFile(double energy, double magMoment, int mcc, double T);
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment);
@@ -28,10 +28,13 @@ void PrintExpectVals(vec TotalExpectVals, int mcc, double T);
 int main(int argc, char *argv[]){
         int n, mcc, numprocs, my_rank;
         double T;
+        string filename;
 
-        T = 1.0;    // temperature [kT/J]
+        T = atoi(argv[3]);    // temperature [kT/J]
         n = atoi(argv[1]);    // number of spins
         mcc = atoi(argv[2]);  // number of MC cycles
+        filename = argv[4];   // name of file
+
 
         //  MPI initializations
         MPI_Init (&argc, &argv);
@@ -47,7 +50,7 @@ int main(int argc, char *argv[]){
         double TimeStart, TimeEnd, TotalTime;
         TimeStart = MPI_Wtime();
 
-        Metropolis(n, mcc, T, energies(T), numprocs, my_rank, myloop_end, myloop_begin);
+        Metropolis(n, mcc, T, energies(T), numprocs, my_rank, myloop_end, myloop_begin, filename);
 
         TimeEnd = MPI_Wtime();
         TotalTime = TimeEnd - TimeStart;
@@ -79,7 +82,7 @@ void initialize(double &energy, double &magMoment, int n, mat &S, int GS, mt1993
         }
 }
 
-void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin){
+void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin, string filename){
         random_device rd;
         mt19937_64 generator(rd());
         uniform_real_distribution<float> RNG(0.0,1.0);
@@ -95,9 +98,9 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
 
 
         // initializing lattice
-        initialize(energy, magMoment, n, S, 1, generator);
+        initialize(energy, magMoment, n, S, 0, generator);
 
-        if(numprocs == 1) outfile.open("data/test.txt", fstream::app);
+        if(numprocs == 1) outfile.open(filename, fstream::app);
 
         int accepts = 0;
         for(int m = myloop_begin; m <= myloop_end; m++) {
