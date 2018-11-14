@@ -1,41 +1,58 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import glob
 
 accepts = False
 acceptOfT = False
-EM = True
+EM = False
+sort = False
+vary = True
 
-file = "data/L20-T1-mcc1e5.txt"
+file = "data/TempVary-L40.txt"
 
-# C_V = np.loadtxt(file, usecols=2, skiprows=2)
-# chi = np.loadtxt(file, usecols=3, skiprows=2)
-# Mabs = np.loadtxt(file, usecols=4, skiprows=2)
-# temp = np.loadtxt("data/test.txt", usecols=4)
 
 if EM == True:
-        E = np.loadtxt(file, usecols=0)
-        M = np.loadtxt(file, usecols=1)
-        mcs = np.linspace(0,len(M),len(M))
+    E = np.loadtxt(file, usecols=0)
+    M = np.loadtxt(file, usecols=1)
+    mcc = np.linspace(0,len(M),len(M))
 
-        plt.figure()
-        plt.plot(mcs,E)
-        plt.legend(["Energy"], prop={'size': 15})
-        plt.title("Energy with T = 1 for 20x20 lattice", size=15)
-        plt.xlabel("Monte Carlo cycles", size=15); plt.ylabel("E", size=15)
-        plt.show()
+    plt.figure()
+    plt.plot(mcc,E)
+    plt.legend(["Energy"], prop={'size': 15})
+    plt.title("Energy with T = 1 for 20x20 lattice", size=15)
+    plt.xlabel("Monte Carlo cycles", size=15); plt.ylabel("E", size=15)
+    plt.show()
 
-        plt.figure()
-        plt.plot(mcs,M)
-        plt.legend(["Magnetisation"], prop={'size': 15})
-        plt.title("Magnetisation with T = 1 for 20x20 lattice", size=15)
-        plt.xlabel("Monte Carlo cycles", size=15); plt.ylabel("M", size=15)
-        plt.show()
+    plt.figure()
+    plt.plot(mcc,M)
+    plt.legend(["Magnetisation"], prop={'size': 15})
+    plt.title("Magnetisation with T = 1 for 20x20 lattice", size=15)
+    plt.xlabel("Monte Carlo cycles", size=15); plt.ylabel("M", size=15)
+    plt.show()
+
+if sort == True:
+    E_sorted = np.sort(np.loadtxt(file, usecols=0))
+    mcc = np.linspace(0,len(E_sorted),len(E_sorted))
+
+    d = ({1,E_sorted[0]})
+    j = 0
+    for i in range(0,len(E_sorted)):
+            if E_sorted[i+1] == E_sorted[j]:
+                d.update({E_sorted[j], E_sorted[j]})
+                j += 1
+
+
+
+
+    plt.plot(E_sorted)
+    plt.show()
+
 
 if accepts == True:
     accepts = np.loadtxt(file, usecols=5)
-    mcs = np.linspace(0,len(accepts),len(accepts))
-    plt.plot(mcs,accepts)
+    mcc = np.linspace(0,len(accepts),len(accepts))
+    plt.plot(mcc,accepts)
     plt.legend(["Accepts"], prop={'size': 15})
     plt.title("Accepts in Monte Carlo cycle for T=2.4 and 20x20 lattice", size=15)
     plt.xlabel("Monte Carlo cycles", size=15); plt.ylabel("Accepts", size=15)
@@ -60,6 +77,30 @@ if acceptOfT == True:
     plt.title("Zoom of accepts in MC cycle for T=1", size=15)
     plt.xlabel("T [kT/J]", size=15); plt.ylabel("Accepts", size=15)
     plt.show()
+
+
+if vary == True:
+    #files = glob.glob("TempVary-L40-*.txt")
+    #for file in files:
+    E = np.loadtxt(file, usecols=0)
+    Mabs = np.loadtxt(file, usecols=1)
+    C_V = np.loadtxt(file, usecols=2)
+    chi = np.loadtxt(file, usecols=3)
+    T = np.loadtxt(file, usecols=4)
+
+    plt.plot(T,E)
+    plt.show()
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -24,6 +24,8 @@ map<double, double> energies(double T);
 void WriteToFile(double energy, double magMoment, int mcc, double T, int accepts);
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment);
 void PrintExpectVals(vec TotalExpectVals, int mcc, double T);
+void WriteExpectValsToFile(vec TotalExpectVals, int mcc, double T, int n);
+
 
 int main(int argc, char *argv[]){
         int n, mcc, numprocs, my_rank;
@@ -45,27 +47,22 @@ int main(int argc, char *argv[]){
         int myloop_begin = my_rank*no_intervals + 1;
         int myloop_end = (my_rank + 1)*no_intervals;
 
-        if((my_rank == numprocs - 1) && (myloop_end < mcc)) (myloop_end = mcc);
+        if((my_rank == numprocs - 1) && (myloop_end < mcc)) myloop_end = mcc;
 
-        double TimeStart, TimeEnd, TotalTime;
+        double TimeStart, TimeEnd;
         TimeStart = MPI_Wtime();
 
-        int run = 1;
-        for(double T = 1.0; T <= 1.0; T+=0.2) {
-                string run_str = to_string(run);
+        for(double T = 2.0; T <= 2.3; T+=0.02) {
+                string temp = to_string(T);
                 string temp_filename = filename;
-                //temp_filename.append(run_str);
+                //temp_filename.append(temp); // unlock to make one file pr T
                 temp_filename.append(".txt");
-                //string temp_filename = filename.append(T);
                 Metropolis(n, mcc, T, energies(T), numprocs, my_rank, myloop_end, myloop_begin, temp_filename);
-                run += 1;
         }
 
-
         TimeEnd = MPI_Wtime();
-        TotalTime = TimeEnd - TimeStart;
         if(my_rank == 0) {
-                cout << "Time = " << TotalTime << " on number of threads: " << numprocs << endl;
+                cout << "Time = " << TimeEnd - TimeStart << " on number of threads: " << numprocs << endl;
         }
         MPI_Finalize();
 }
@@ -109,7 +106,7 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
         // initializing lattice
         initialize(energy, magMoment, n, S, 0, generator);
 
-        if(numprocs == 1) outfile.open(filename, fstream::app);
+        if(my_rank == 0) outfile.open(filename, fstream::app);
 
         int accepts = 0;
 
@@ -132,7 +129,7 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
                 AddExpectValsToVec(ExpectVals, energy, magMoment);
 
                 // check if we are running 1 node. If we are, write values to file for plotting
-                if(numprocs == 1) WriteToFile(energy, magMoment, mcc, T, accepts);
+                //if(numprocs == 1 && m > mcc*0.05) WriteToFile(energy, magMoment, mcc, T, accepts);
 
         }  //mc end
         for(int i = 0; i < 5; i++) {
@@ -140,9 +137,14 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
                 MPI_Reduce(&ExpectVals(i), &TotalExpectVals(i), 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
         }
 
-        if(numprocs == 1) outfile.close();
-        if(my_rank == 0) PrintExpectVals(TotalExpectVals, mcc, T);
+        if(my_rank == 0) {
+                PrintExpectVals(TotalExpectVals, mcc, T);
+                WriteExpectValsToFile(TotalExpectVals, mcc, T, n);
+        }
+        if(my_rank == 0) outfile.close();
+
 }
+
 
 map<double, double> energies(double T){
         /* for comparing the accepted values of the energy with a random number
@@ -188,7 +190,14 @@ void PrintExpectVals(vec TotalExpectVals, int mcc, double T) {
         cout << "chi: " << (TotalExpectVals(3) - pow(TotalExpectVals(2),2))/T << endl;
 }
 
-
+void WriteExpectValsToFile(vec TotalExpectVals, int mcc, double T, int n){
+        TotalExpectVals = TotalExpectVals/(mcc*pow(n,2));
+        outfile << TotalExpectVals(0) << " ";
+        outfile << TotalExpectVals(4) << " ";
+        outfile << (TotalExpectVals(1) - pow(TotalExpectVals(0),2))/(pow(T,2)) << " ";
+        outfile << (TotalExpectVals(3) - pow(TotalExpectVals(2),2))/T << " ";
+        outfile << T << endl;
+}
 
 
 
