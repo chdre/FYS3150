@@ -21,19 +21,19 @@ void Energy(int n, mat &S, double &energy);
 void initialize(double &energy, double &magMoment, int n, mat S, int GS);
 void Metropolis(int n, int mcs, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin, string filename);
 map<double, double> energies(double T);
-void WriteToFile(double energy, double magMoment, int mcc, double T);
+void WriteToFile(double energy, double magMoment, int mcc, double T, int accepts);
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment);
 void PrintExpectVals(vec TotalExpectVals, int mcc, double T);
 
 int main(int argc, char *argv[]){
         int n, mcc, numprocs, my_rank;
-        double T;
+        //double T;
         string filename;
 
-        T = atoi(argv[3]);    // temperature [kT/J]
+        //T = atoi(argv[4]);    // temperature [kT/J]
         n = atoi(argv[1]);    // number of spins
         mcc = atoi(argv[2]);  // number of MC cycles
-        filename = argv[4];   // name of file
+        filename = argv[3];   // name of file
 
 
         //  MPI initializations
@@ -50,7 +50,17 @@ int main(int argc, char *argv[]){
         double TimeStart, TimeEnd, TotalTime;
         TimeStart = MPI_Wtime();
 
-        Metropolis(n, mcc, T, energies(T), numprocs, my_rank, myloop_end, myloop_begin, filename);
+        int run = 1;
+        for(double T = 1.0; T <= 1.0; T+=0.2) {
+                string run_str = to_string(run);
+                string temp_filename = filename;
+                //temp_filename.append(run_str);
+                temp_filename.append(".txt");
+                //string temp_filename = filename.append(T);
+                Metropolis(n, mcc, T, energies(T), numprocs, my_rank, myloop_end, myloop_begin, temp_filename);
+                run += 1;
+        }
+
 
         TimeEnd = MPI_Wtime();
         TotalTime = TimeEnd - TimeStart;
@@ -96,13 +106,13 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
         mat S = zeros<mat>(n,n);
         mat EnergyMagSave = zeros<mat>(mcc,2);     // for storing energy and magnetic moment values
 
-
         // initializing lattice
         initialize(energy, magMoment, n, S, 0, generator);
 
         if(numprocs == 1) outfile.open(filename, fstream::app);
 
         int accepts = 0;
+
         for(int m = myloop_begin; m <= myloop_end; m++) {
                 for (int x = 0; x < n; x++) {
                         for (int y = 0; y < n; y++) {
@@ -122,7 +132,7 @@ void Metropolis(int n, int mcc, double T, map<double, double> acceptE, int numpr
                 AddExpectValsToVec(ExpectVals, energy, magMoment);
 
                 // check if we are running 1 node. If we are, write values to file for plotting
-                if(numprocs == 1) WriteToFile(energy, magMoment, mcc, T);
+                if(numprocs == 1) WriteToFile(energy, magMoment, mcc, T, accepts);
 
         }  //mc end
         for(int i = 0; i < 5; i++) {
@@ -144,7 +154,7 @@ map<double, double> energies(double T){
         return acceptE;
 }
 
-void WriteToFile(double energy, double magMoment, int mcc, double T){
+void WriteToFile(double energy, double magMoment, int mcc, double T, int accepts){
         double E = energy;
         double E2 = energy*energy;
         double M = magMoment;
@@ -158,7 +168,8 @@ void WriteToFile(double energy, double magMoment, int mcc, double T){
         outfile << M << " ";
         outfile << C_V << " ";
         outfile << chi << " ";
-        outfile << Mabs << endl;
+        outfile << Mabs << " ";
+        outfile << accepts << endl;
 }
 
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment){
