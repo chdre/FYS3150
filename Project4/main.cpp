@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
         double TimeStart, TimeEnd;
         TimeStart = MPI_Wtime();
 
-        for(double T = 2.0; T <= 2.3; T+=0.02) {
+        for(double T = 2.0; T <= 2.3; T+=0.03) {
                 string temp = to_string(T);
                 string temp_filename = filename;
                 //temp_filename.append(temp); // unlock to make one file pr T

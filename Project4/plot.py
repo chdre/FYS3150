@@ -37,10 +37,7 @@ if sort == True:
 
     d = ({1,E_sorted[0]})
     j = 0
-    for i in range(0,len(E_sorted)):
-            if E_sorted[i+1] == E_sorted[j]:
-                d.update({E_sorted[j], E_sorted[j]})
-                j += 1
+    
 
 
 
