@@ -8,10 +8,10 @@ EM = False
 PE = False
 vary = True
 
-file = "data/L40-1e6.txt"
-file2 = "data/L60-1e6.txt"
-file3 = "data/L80-1e6.txt"
-file4 = "data/L100-1e6.txt"
+file = "data/old2/L40-1e6.txt"
+file2 = "data/old2/L60-1e6.txt"
+file3 = "data/old2/L80-1e6.txt"
+file4 = "data/old2/L100-1e6.txt"
 
 #file2 = "data/T2_4-L20-mcc1e6.txt"
 
@@ -97,7 +97,7 @@ if vary == True:
     E4, Mabs4, C_V4, chi4 = np.loadtxt(file4, usecols=(0,1,2,3), unpack=True)
 
     plt.figure()
-    plt.plot(T,E, T, E2, T, E3, T, E4)
+    plt.plot(T, E, T, E2, T, E3, T, E4)
     plt.legend(["L=40", "L=60", "L=80", "L=100"], prop={'size':15})
     plt.title('Mean energy for various lattice sizes', size=15)
     plt.xlabel('T [kT/J]', size=15); plt.ylabel('$\\langle E \\rangle/L^2$', size=15)

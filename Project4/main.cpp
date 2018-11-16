@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
         double TimeStart, TimeEnd;
         TimeStart = MPI_Wtime();
 
-        for(double T = 2.2; T <= 2.4; T+=0.01) {
+        for(double T = 2.0; T <= 2.3; T+=0.03) {
                 string temp = to_string(T);
                 string temp_filename = filename;
                 //temp_filename.append(temp); // unlock to make one file pr T
@@ -127,7 +127,7 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
                                 }
                         }
                 }
-                if(m > cutoff) AddExpectValsToVec(ExpectVals, energy, magMoment);
+                if(m > myloop_begin+cutoff) AddExpectValsToVec(ExpectVals, energy, magMoment);
 
                 // check if we are running 1 node. If we are, write values to file for plotting
                 if(numprocs == 1) WriteToFile(energy, magMoment, mcc*(1 - cutoff), T, accepts, L);
