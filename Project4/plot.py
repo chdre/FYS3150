@@ -4,9 +4,9 @@ import os
 
 accepts = False
 acceptOfT = False
-EM = True
+EM = False
 PE = False
-vary = False
+vary = True
 variance = False
 
 if EM == True:
@@ -86,10 +86,10 @@ if acceptOfT == True:
 
 
 if vary == True:
-    file = "data/T1-L20-1e6.txt"
-    file2 = "data/T2_4-L20-1e6.txt"
-    #file3 = "data/old2/L80-1e6.txt"
-    #file4 = "data/old2/L100-1e6.txt"
+    file = "data/test/L40-1e5.txt"
+    file2 = "data/test/L60-1e5.txt"
+    file3 = "data/test/L80-1e5.txt"
+    file4 = "data/test/L100-1e5.txt"
 
     E, Mabs, C_V, chi, T = np.loadtxt(file, usecols=(0,1,2,3,4), unpack=True)
     E2, Mabs2, C_V2, chi2 = np.loadtxt(file2, usecols=(0,1,2,3), unpack=True)
@@ -106,7 +106,7 @@ if vary == True:
     plt.figure()
     plt.plot(T, Mabs, T, Mabs2, T, Mabs3, T, Mabs4)
     plt.legend(["L=40", "L=60", "L=80", "L=100"], prop={'size':15})
-    plt.title('Mean absolute value of magnetic moment for various lattice sizes', size=15)
+    plt.title('Mean value of magnetic moment for various lattice sizes', size=15)
     plt.xlabel('T [kT/J]', size=15); plt.ylabel('$\\langle|M|\\rangle/L^2$', size=15)
     plt.show()
 

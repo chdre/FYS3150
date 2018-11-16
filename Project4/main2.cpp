@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
         double TimeStart, TimeEnd;
         TimeStart = MPI_Wtime();
 
-        for(double T = 2.0; T <= 2.3; T+=0.03) {
+        for(double T = 2.2; T <= 2.4; T+=0.01) {
                 Metropolis(L, mcc, T, energies(T), numprocs, my_rank, myloop_end, myloop_begin, filename);
         }
 
