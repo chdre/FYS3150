@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
         double TimeStart, TimeEnd;
         TimeStart = MPI_Wtime();
 
-        for(double T = 2.0; T <= 2.3; T+=0.03) {
+        for(double T = 1.0; T <= 1.0; T+=0.03) {
                 string temp = to_string(T);
                 string temp_filename = filename;
                 //temp_filename.append(temp); // unlock to make one file pr T
@@ -104,14 +104,14 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
         mat EnergyMagSave = zeros<mat>(mcc,2);     // for storing energy and magnetic moment values
 
         // initializing lattice
-        initialize(energy, magMoment, L, S, 0, generator);
+        initialize(energy, magMoment, L, S, 1, generator);
 
         if(my_rank == 0) outfile.open(filename, fstream::app);
 
         int accepts = 0;
-        int cutoff = 2000;
+        int cutoff = 0;//mcc*0.05/numprocs;
 
-        for(int m = myloop_begin; m <= myloop_end; m++) {
+        for(int m = 1; m <= mcc; m++) {
                 for (int x = 0; x < L; x++) {
                         for (int y = 0; y < L; y++) {
                                 int xr = RNGPos(generator); // indices for random element int) (RNG(generator)*(double) n); //
@@ -127,10 +127,10 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
                                 }
                         }
                 }
-                if(m > myloop_begin+cutoff) AddExpectValsToVec(ExpectVals, energy, magMoment);
+                if(m >= myloop_begin+cutoff) AddExpectValsToVec(ExpectVals, energy, magMoment);
 
                 // check if we are running 1 node. If we are, write values to file for plotting
-                if(numprocs == 1) WriteToFile(energy, magMoment, mcc*(1 - cutoff), T, accepts, L);
+                if(numprocs == 1) WriteToFile(energy, magMoment, mcc, T, accepts, L);
 
 
         }  //mc end
@@ -140,8 +140,9 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
         }
 
         if(my_rank == 0) {
-                PrintExpectVals(TotalExpectVals, mcc - cutoff, T);
-                WriteExpectValsToFile(TotalExpectVals, mcc - cutoff, T, L);
+                PrintExpectVals(TotalExpectVals, mcc - cutoff*numprocs, T);
+                //WriteExpectValsToFile(TotalExpectVals, mcc - cutoff*numprocs, T, L);
+                // skal vi fjerne cutoff*numprocs??? SJEKK MED 10 000 MCC AT DET BLIR NÆRE ANALYTISK
         }
         if(my_rank == 0) outfile.close();
 }
@@ -158,7 +159,8 @@ map<double, double> energies(double T){
 }
 
 void WriteToFile(double energy, double magMoment, int mcc, double T, int accepts, int L){
-        double norm = 1.0/(pow(L,2));
+        double norm = 1.0;///mcc;
+        double prSpin = 1.0/pow(L,2);
 
         double E = energy*norm;
         double E2 = energy*energy*norm;
@@ -166,15 +168,16 @@ void WriteToFile(double energy, double magMoment, int mcc, double T, int accepts
         double M2 = magMoment*magMoment*norm;
         double Mabs = fabs(magMoment)*norm;
 
-        double C_V = (E2 - E)/pow(T,2)*norm;
-        double chi = (M2 - M)/T*norm;
+        double C_V = (E2 - E)/pow(T,2);
+        double chi = (M2 - M)/T;
 
-        outfile << E << " ";
-        outfile << M << " ";
-        outfile << C_V << " ";
-        outfile << chi << " ";
-        outfile << Mabs << " ";
-        outfile << accepts << endl;
+        outfile << E*prSpin << " ";
+        outfile << M*prSpin << " ";
+        outfile << C_V*prSpin << " ";
+        outfile << chi*prSpin << " ";
+        outfile << Mabs*prSpin << " ";
+        outfile << accepts << " ";
+        outfile << pow(E2 - pow(E,2),2) << endl;
 }
 
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment){

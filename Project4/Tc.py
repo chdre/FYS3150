@@ -1,11 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import numpy.linalg
 
 
-file = "data/old2/L40-1e6.txt"
-file2 = "data/old2/L60-1e6.txt"
-file3 = "data/old2/L80-1e6.txt"
-file4 = "data/old2/L100-1e6.txt"
+file = "data/L40-1e6.txt"
+file2 = "data/L60-1e6.txt"
+file3 = "data/L80-1e6.txt"
+file4 = "data/L100-1e6.txt"
 
 
 chi, T = np.loadtxt(file, usecols=(3,4), unpack=True)
@@ -15,27 +16,19 @@ chi4 = np.loadtxt(file4, usecols=3)
 
 files = [file,file2,file3,file4]
 
-L = np.array([40,60,80,100])
-Lx = np.linspace(0,120,1)
+L = np.array([1.0/100, 1.0/80, 1.0/60, 1.0/40])
+T = np.array([T[np.argmax(chi4)] - L[3], T[np.argmax(chi3)]- L[2], T[np.argmax(chi2)]- L[1], T[np.argmax(chi)]- L[0]])
 
-def Tcinf(Tc,L):
-    return Tc - 1.0/L
+z = np.polyfit(L,T,1)
+zz = np.poly1d(z)
 
-ind = np.argmax(chi)
-Tc = T[ind]
+print(zz[0], zz[1])
 
-ind2 = np.argmax(chi2)
-Tc2 = T[ind2]
+plt.plot(L, T,'o')
+plt.plot(L, zz(L))
+plt.legend(['Data', 'Fitted'], prop={'size':15})
+plt.title('Linear regression of critical temperature as a function of L',size=15)
+plt.xlabel('1/L', size=15); plt.ylabel('$T_C$ [k/J]')
 
-ind3 = np.argmax(chi3)
-Tc3 = T[ind3]
-
-ind4 = np.argmax(chi4)
-Tc4 = T[ind4]
-
-plt.plot(Tcinf(Tc,L[0]),Lx, 'o')
-plt.plot(Tcinf(Tc2,L[1]),Lx, 'o')
-plt.plot(Tcinf(Tc3,L[2]),Lx, 'o')
-plt.plot(Tcinf(Tc4,L[3]),Lx, 'o')
 
 plt.show()
