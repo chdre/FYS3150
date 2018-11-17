@@ -4,19 +4,19 @@ import os
 
 accepts = False
 acceptOfT = False
-EM = False
+EM = True
 PE = False
-vary = True
+vary = False
 variance = False
 
 if EM == True:
     file = "data/L20-GS-T1-1e6.txt"
     file2 = "data/L20-GS-T2_4-1e6.txt"
 
-    E = 20*20*np.loadtxt(file, usecols=0)
-    M = 20*20*np.loadtxt(file, usecols=1)
-    E2 = 20*20*np.loadtxt(file2, usecols=0)
-    M2 = 20*20*np.loadtxt(file2, usecols=1)
+    E = np.loadtxt(file, usecols=0)
+    M = np.loadtxt(file, usecols=1)
+    E2 = np.loadtxt(file2, usecols=0)
+    M2 = np.loadtxt(file2, usecols=1)
     mcc = np.linspace(0,len(M),len(M))
 
     plt.figure()
@@ -125,8 +125,8 @@ if vary == True:
     plt.show()
 
 if variance == True:
-    file = "data/varianceE-L20-T1-1e6.txt"
-    file2 = "data/varianceE-L20-T2_4-1e6.txt"
+    file = "data/L20-T1-1e6.txt"
+    file2 = "data/L20-T2_4-1e6.txt"
 
     var = np.loadtxt(file, usecols=4)
     var2 = np.loadtxt(file2, usecols=4)

@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 import numpy.linalg
 
 
-file = "data/L40-1e6.txt"
-file2 = "data/L60-1e6.txt"
-file3 = "data/L80-1e6.txt"
-file4 = "data/L100-1e6.txt"
+file = "data/test/L40-1e6-vary.txt"
+file2 = "data/test/L60-1e6-vary.txt"
+file3 = "data/test/L80-1e6-vary.txt"
+file4 = "data/test/L100-1e6-vary.txt"
 
 
 chi, T = np.loadtxt(file, usecols=(3,4), unpack=True)
