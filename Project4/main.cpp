@@ -109,8 +109,8 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
         for(int m = myloop_begin; m <= myloop_end; m++) {
                 for (int x = 0; x < L; x++) {
                         for (int y = 0; y < L; y++) {
-                                int xr = RNGPos(generator); // indices for random element int) (RNG(generator)*(double) n); //
-                                int yr = RNGPos(generator); // (int) (RNG(generator)*(double) n); // RNGSpin(generator);//;
+                                int xr = RNGPos(generator); // indices for random element
+                                int yr = RNGPos(generator);
 
                                 int dE = 2.0*S(xr,yr)*(S(xr,PB(yr,L,1)) + S(xr,PB(yr,L,-1))
                                                        + S(PB(xr,L,1),yr) + S(PB(xr,L,-1),yr));

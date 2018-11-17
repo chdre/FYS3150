@@ -4,9 +4,9 @@ import os
 
 accepts = False
 acceptOfT = False
-EM = True
+EM = False
 PE = False
-vary = False
+vary = True
 variance = False
 
 if EM == True:
