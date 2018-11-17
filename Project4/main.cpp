@@ -96,7 +96,6 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
         vec ExpectVals = zeros<vec>(5);
         vec TotalExpectVals = zeros<vec>(5);
         mat S = zeros<mat>(L,L);
-        mat EnergyMagSave = zeros<mat>(mcc,2);     // for storing energy and magnetic moment values
 
         // initializing lattice
         initialize(energy, magMoment, L, S, 0, generator);
