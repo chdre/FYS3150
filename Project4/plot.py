@@ -86,39 +86,39 @@ if acceptOfT == True:
 
 
 if vary == True:
-    file = "data/test/L40-1e6.txt"
-    file2 = "data/test/L60-1e6.txt"
-    #file3 = "data/test/L80-1e5.txt"
-    #file4 = "data/test/L100-1e5.txt"
+    file = "data/test/L40-1e6-ext.txt"
+    file2 = "data/test/L60-1e6-ext.txt"
+    file3 = "data/test/L80-1e6-ext.txt"
+    file4 = "data/test/L100-1e6-ext.txt"
 
     E, Mabs, C_V, chi, T = np.loadtxt(file, usecols=(0,1,2,3,4), unpack=True)
     E2, Mabs2, C_V2, chi2 = np.loadtxt(file2, usecols=(0,1,2,3), unpack=True)
-    #E3, Mabs3, C_V3, chi3 = np.loadtxt(file3, usecols=(0,1,2,3), unpack=True)
-    #E4, Mabs4, C_V4, chi4 = np.loadtxt(file4, usecols=(0,1,2,3), unpack=True)
+    E3, Mabs3, C_V3, chi3 = np.loadtxt(file3, usecols=(0,1,2,3), unpack=True)
+    E4, Mabs4, C_V4, chi4 = np.loadtxt(file4, usecols=(0,1,2,3), unpack=True)
 
     plt.figure()
-    plt.plot(T, E, T, E2)#, T, E3, T, E4)
+    plt.plot(T, E, T, E2, T, E3, T, E4)
     plt.legend(["L=40", "L=60", "L=80", "L=100"], prop={'size':15})
     plt.title('Mean energy for various lattice sizes', size=15)
     plt.xlabel('T [kT/J]', size=15); plt.ylabel('$\\langle E \\rangle/L^2$', size=15)
     plt.show()
 
     plt.figure()
-    plt.plot(T, Mabs, T, Mabs2)#, T, Mabs3, T, Mabs4)
+    plt.plot(T, Mabs, T, Mabs2, T, Mabs3, T, Mabs4)
     plt.legend(["L=40", "L=60", "L=80", "L=100"], prop={'size':15})
     plt.title('Mean value of magnetic moment for various lattice sizes', size=15)
     plt.xlabel('T [kT/J]', size=15); plt.ylabel('$\\langle|M|\\rangle/L^2$', size=15)
     plt.show()
 
     plt.figure()
-    plt.plot(T, C_V, T, C_V2)#, T, C_V3, T, C_V4)
+    plt.plot(T, C_V, T, C_V2, T, C_V3, T, C_V4)
     plt.legend(["L=40", "L=60", "L=80", "L=100"], prop={'size':15})
     plt.title('Heat capacity for various lattice sizes', size=15)
     plt.xlabel('T [kT/J]', size=15); plt.ylabel('$C_V/L^2$', size=15)
     plt.show()
 
     plt.figure()
-    plt.plot(T, chi, T, chi2)#, T, chi3, T, chi4)
+    plt.plot(T, chi, T, chi2, T, chi3, T, chi4)
     plt.legend(["L=40", "L=60", "L=80", "L=100"], prop={'size':15})
     plt.title('Susceptibility for various lattice sizes', size=15)
     plt.xlabel('T [kT/J]', size=15); plt.ylabel('$\\chi/L^2$', size=15)
