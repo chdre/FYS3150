@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-accepts = False
-acceptOfT = True
+accepts = True
+acceptOfT = False
 EM = False
 PE = False
 vary = False
@@ -50,13 +50,15 @@ if PE == True:
 
 
 if accepts == True:
+    file = "data/L20-T1-1e5.txt"
+    file2 = "data/L20-T2_4-1e5.txt"
     accepts = np.loadtxt(file, usecols=5)
     accepts2 = np.loadtxt(file2, usecols=5)
 
     mcc = np.linspace(0,len(accepts),len(accepts))
     plt.loglog(mcc,accepts)
     plt.loglog(mcc,accepts2)
-    plt.legend(["T=1", "T=2"], prop={'size': 15})
+    plt.legend(["T=1", "T=2.4"], prop={'size': 15})
     plt.title("Accepts in Monte Carlo cycle for 20x20 lattice", size=15)
     plt.xlabel("log(Monte Carlo cycles)", size=15); plt.ylabel("log(Accepts)", size=15)
     plt.show()
