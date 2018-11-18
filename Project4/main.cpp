@@ -106,19 +106,17 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
         int cutoff = mcc*0.05/numprocs; // 5% cutoff on each thread
 
         for(int m = myloop_begin; m <= myloop_end; m++) {
-                for (int x = 0; x < L; x++) {
-                        for (int y = 0; y < L; y++) {
-                                int xr = RNGPos(generator); // indices for random element
-                                int yr = RNGPos(generator);
+                for (int x = 0; x < pow(L,2); x++) {
+                        int xr = RNGPos(generator);         // indices for random element
+                        int yr = RNGPos(generator);
 
-                                int dE = 2.0*S(xr,yr)*(S(xr,PB(yr,L,1)) + S(xr,PB(yr,L,-1))
-                                                       + S(PB(xr,L,1),yr) + S(PB(xr,L,-1),yr));
-                                if (RNG(generator) <= acceptE.find(dE)->second) {
-                                        accepts += 1;
-                                        S(xr,yr) *= -1.0; // flipping spin
-                                        magMoment += (double) 2*S(xr,yr);
-                                        energy += (double) dE;
-                                }
+                        int dE = 2.0*S(xr,yr)*(S(xr,PB(yr,L,1)) + S(xr,PB(yr,L,-1))
+                                               + S(PB(xr,L,1),yr) + S(PB(xr,L,-1),yr));
+                        if (RNG(generator) <= acceptE.find(dE)->second) {
+                                accepts += 1;
+                                S(xr,yr) *= -1.0;         // flipping spin
+                                magMoment += (double) 2*S(xr,yr);
+                                energy += (double) dE;
                         }
                 }
                 if(m >= myloop_begin+cutoff) AddExpectValsToVec(ExpectVals, energy, magMoment);

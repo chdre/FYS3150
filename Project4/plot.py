@@ -3,10 +3,10 @@ import numpy as np
 import os
 
 accepts = False
-acceptOfT = False
+acceptOfT = True
 EM = False
 PE = False
-vary = True
+vary = False
 variance = False
 
 if EM == True:
@@ -62,14 +62,14 @@ if accepts == True:
     plt.show()
 
 if acceptOfT == True:
-    acceptT1 = np.loadtxt("data/T1-L20-mcc1e3.txt", usecols=5)
-    acceptT2_4 = np.loadtxt("data/T2_4-L20-mcc1e3.txt", usecols=5)
-    acceptT12 = np.loadtxt("data/T1-L20-mcc1e4.txt", usecols=5)
-    acceptT2_42 = np.loadtxt("data/T2_4-L20-mcc1e4.txt", usecols=5)
-    acceptT13 = np.loadtxt("data/T1-L20-mcc1e5.txt", usecols=5)
-    acceptT2_43 = np.loadtxt("data/T2_4-L20-mcc1e5.txt", usecols=5)
-    acceptT14 = np.loadtxt("data/T1-L20-mcc1e6.txt", usecols=5)
-    acceptT2_44 = np.loadtxt("data/T2_4-L20-mcc1e6.txt", usecols=5)
+    acceptT1 = np.loadtxt("data/old/L20-T1-mcc1e3-accepts.txt", usecols=5)
+    acceptT2_4 = np.loadtxt("data/old/L20-T2_4-mcc1e3-accepts.txt", usecols=5)
+    acceptT12 = np.loadtxt("data/old/L20-T1-mcc1e4-accepts.txt", usecols=5)
+    acceptT2_42 = np.loadtxt("data/old/L20-T2_4-mcc1e4-accepts.txt", usecols=5)
+    acceptT13 = np.loadtxt("data/old/L20-T1-mcc1e5-accepts.txt", usecols=5)
+    acceptT2_43 = np.loadtxt("data/old/L20-T2_4-mcc1e5-accepts.txt", usecols=5)
+    acceptT14 = np.loadtxt("data/old/L20-T1-mcc1e6-accepts.txt", usecols=5)
+    acceptT2_44 = np.loadtxt("data/old/L20-T2_4-mcc1e6-accepts.txt", usecols=5)
 
     plt.loglog(1,acceptT1[-1], "ro")
     plt.loglog(1,acceptT12[-1], "bo")
@@ -79,7 +79,7 @@ if acceptOfT == True:
     plt.loglog(2.4, acceptT2_42[-1], "bo")
     plt.loglog(2.4, acceptT2_43[-1], "co")
     plt.loglog(2.4, acceptT2_44[-1], "C4o")
-    plt.legend(["cycles=1e3", "cycles=1e4", "cycles=1e5", "cycles=1e5"], prop={'size': 15})
+    plt.legend(["cycles=1e3", "cycles=1e4", "cycles=1e5", "cycles=1e6"], prop={'size': 15})
     plt.title("Accepts states for a 20x20 lattice", size=15)
     plt.xlabel("log(T)", size=15); plt.ylabel("log(Accepts)", size=15)
     plt.show()
