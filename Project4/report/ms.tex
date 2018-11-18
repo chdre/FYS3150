@@ -5,6 +5,10 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{epsfig,floatflt}
+\usepackage{url}
+\usepackage{subfig}
+\setcitestyle{square}
+
 
 
 
@@ -31,14 +35,38 @@
 \label{sec:introduction}
 To study the phase transitions of a magnetic system we consider the Ising model for a two-dimensional system with a finite lattice size. The particles (spins) that make up the crystal (lattice) can take two values representing spin up or down. The energy of the lattice can then, by the Ising model, be found by
 %
-\begin{gather*}
+\begin{gather}\label{eq:energyIsing}
     E = -J\sum_{< kl >}^N s_k s_l,
-\end{gather*}
+\end{gather}
 %
-when there is no external magnetic field applied to the system. The coupling constant J will be set to 1, which means we are studying a ferromagnetic interaction between the spins that make up the lattice. Since the coupling constant is dependent upon the material we study, setting this to 1 allows for a general model. For studying the phase transition we consider the  Metropolis algorithm, a Markov chain Monte Carlo method (MCMC). 
+when there is no external magnetic field applied to the system. The coupling constant J will be set to 1, which means we are studying a ferromagnetic interaction between the spins that make up the lattice. Since the coupling constant is dependent upon the material we study, setting this to 1 allows for a general model. For studying the phase transition we use a Markov chain Monte Carlo method (MCMC), and the probability of finding the system in a given state $i$ is
+%
+\begin{align*}
+    P(E_i) = \frac{e^{-\beta E_i}}{Z},
+\end{align*}
+%
+where Z is the partition function $Z = \sum_i e^{-\beta E_i}$, which is impossible to calculate unless we know all the states. To eliminate the partition function we will use the Metropolis algorithm, which eliminates the partition function. When applying the algorithm we will consider periodic boundary conditions of the lattice, which will allow us to simulate an infinitely large lattice, and we do not have to consider what happens on the boundary the lattice (the ends of the material). Increasing the size of the lattice will further improve the approximation of a large scale lattice. The goal of the MCMC simulation is to observe the energy and the magnetic moment as time (MC cycles) increase, we expect the system to stabilize in the most probable state.
+
 
 \section{Method}
+\subsection{Analytical expressions}
 \label{sec:method}
+\begin{deluxetable}{cccc}
+\tablewidth{0pt}
+\tablecaption{\label{tab:energies}}
+\tablecomments{States of the 2x2 lattice and corresponding values for energy and magnetic moment. Notice that the ground state (the lowest energy) has either all spins pointing up or down.}
+\tablecolumns{4}
+\tablehead{Spins up  & Degeneracy & Energy & Magnetic moment}
+\startdata
+4 & 1 & -8J & 4 \\
+3 & 4 & 0 & 2 \\
+2 & 4 & 0 & 0 \\
+2 & 2 & 8J & 0 \\
+1 & 4 & 0 & -2 \\
+0 & 1 & -8J & -4
+\enddata
+\end{deluxetable}
+
 The two-dimensional binary Ising model has analytical expectation values. The partition function
 %
 \begin{equation*}
@@ -145,76 +173,196 @@ after pulling out a factor 4 from the partition function. To summarize we have t
     \chi &= \frac{1}{kT^2}\frac{8\left(e^{8J\beta} + 1\right)}{3 + \cosh\left(8J\beta\right)}.
 \end{align*}
 
+\subsection{Ising model}
+When the energy of the Ising model we consider the equation given in the introduction, Eq. \eqref{eq:energyIsing}, where the subscript of the sum means we are taking the sum over the neighbouring spins, N is the total amount of spins and $s_k$, $s_l = \pm 1$, represents the spin of the particles. Consider a random spin at the lattice, in the two-dimensional case it has a total of four neighbours that it interacts with.  An example for a spin surrounded by four spin up.
+%
+\begin{equation*}
+    \begin{matrix}
+    & \uparrow & \\
+    \uparrow & \uparrow & \uparrow \\
+    & \uparrow & \\
+    \end{matrix},
+   % \quad
+    %\longrightarrow
+    %\quad
+    %\begin{matrix}
+    %& \uparrow & \\
+    %\uparrow & \uparrow & \uparrow \\
+    %& \uparrow & \\
+    %\end{matrix}
+\end{equation*}
+%
+with energy $E = -4J$. Changing one of the spins in the example above results in a new configuration with a new energy and magnetic moment. Following are five examples that show the different energies $E = 0, \pm 2J, \pm 4J$, and the resulting energy when flipping the spin we are located at:
 
-\begin{deluxetable}{cccc}
-\tablewidth{0pt}
-\tablecaption{\label{tab:energies}}
-\tablecomments{...}
-\tablecolumns{4}
-\tablehead{Spins up  & Degeneracy & Energy & Magnetic moment}
-\startdata
-4 & 1 & -8J & 4 \\
-3 & 4 & 0 & 2 \\
-2 & 4 & 0 & 0 \\
-2 & 2 & 8J & 0 \\
-1 & 4 & 0 & -2 \\
-0 & 1 & -8J & -4
-\enddata
-\end{deluxetable}
+\begin{align*}
+    E = -4J
+    \quad
+    \begin{matrix}
+    & \uparrow & \\
+    \uparrow & \uparrow & \uparrow \\
+    & \uparrow & \\
+    \end{matrix}
+    \quad
+    \Longrightarrow
+    \quad
+    E = 4J
+    \quad
+    \begin{matrix}
+    & \uparrow & \\
+    \uparrow & \downarrow & \uparrow \\
+    & \uparrow & \\
+    \end{matrix} \\
+\end{align*}
+where the change of energy $\Delta E = E_{after} - E_{before} = 8J$.
+\begin{align*}
+    E = -2J
+    \quad
+    \begin{matrix}
+    & \uparrow & \\
+    \downarrow & \uparrow & \uparrow \\
+    & \uparrow & \\
+    \end{matrix}
+    \quad
+    \Longrightarrow
+    \quad
+    E = 2J
+    \quad
+    \begin{matrix}
+    & \uparrow & \\
+    \downarrow & \downarrow & \uparrow \\
+    & \uparrow & \\
+    \end{matrix}
+\end{align*}
+with $\Delta E = 4J$.
+\begin{align*}
+    E = 0
+    \quad
+    \begin{matrix}
+    & \uparrow & \\
+    \downarrow & \uparrow & \uparrow \\
+    & \downarrow & \\
+    \end{matrix}
+    \quad
+    \Longrightarrow
+    \quad
+    E = 0
+    \quad
+    \begin{matrix}
+    & \uparrow & \\
+    \downarrow & \downarrow & \uparrow \\
+    & \downarrow & \\
+    \end{matrix}
+\end{align*}
+with $\Delta E = 0$.
+\begin{align*}
+    E = -2J
+    \quad
+    \begin{matrix}
+    & \uparrow & \\
+    \downarrow & \uparrow & \downarrow \\
+    & \downarrow & \\
+    \end{matrix}
+    \quad
+    \Longrightarrow
+    \quad
+    E = 2J
+    \quad
+    \begin{matrix}
+    & \uparrow & \\
+    \downarrow & \downarrow & \downarrow \\
+    & \downarrow & \\
+    \end{matrix}
+\end{align*}
+with $\Delta E = -4J$.
+\begin{align*}
+    E = 4J
+    \quad
+    \begin{matrix}
+    & \downarrow & \\
+    \downarrow & \uparrow & \downarrow \\
+    & \downarrow & \\
+    \end{matrix}
+    \quad
+    \Longrightarrow
+    \quad
+    E = -4J
+    \quad
+    \begin{matrix}
+    & \downarrow & \\
+    \downarrow & \downarrow & \downarrow \\
+    & \downarrow & \\
+    \end{matrix}
+\end{align*}
+with $\Delta E = -8J$. We now see that for a random spin of the lattice we have known values for the change of energy $\Delta E$. 
 
+\subsection{Algorithm}
+For a MC cycle we initialize the lattice by setting all the spins in either a random or an ordered state, and then calculating the energy and the magnetic moment. We then iterate over the lattice at random positions (i.e. we check $L^2$ random spins), for each of these positions we calculate the change in energy $\Delta E$. Consider the ratio of the probability of the new energy $P\left(E_{new}\right)$ and the previous energy $P\left(E_{prev}\right)$:
+%
+\begin{align*}
+    \frac{P\left(E_{new}\right)}{P\left(E_{prev}\right)} = \frac{e^{-\beta E_{new}}/Z}{e^{-\beta E_{prev}}/Z} = e^{-\beta\left(E_{new} - E_{prev}\right)} = e^{-\beta\Delta E},
+\end{align*}
+%
+where Z is the the partition function. We now perform the Metropolis test for a given $\Delta E$;
+%
+\begin{equation*}
+    r \leq e^{-\beta \Delta E}, \qquad r \in [0,1]
+\end{equation*}
+%
+i.e. if the ratio is larger than or equal to a random number $r \in [0,1]$ we accept a new configuration, and flip the spin.  We are looking at the change in energy if we were to flip a random spin; if the change of energy is large, the likelihood of this spin being flipped is small, so we reject this solution, on the other hand, if the probability is large, we accept the configuration. Since we expect the system to move to more likely state, we are looking for states that does not increase the systems energy. A large change in energy means we are looking at a spin that has half or more of its surrounding spins in the same configuration, and the system seems to locally move towards a steady state, therefore the local system is not changed. For each such Metropolis test that succeeds we add the flip of spin as a contribution to the systems energy and magnetic moment. When the calculations over the lattice is complete we conclude a single MC cycle and store the final value for the energy and magnetic moment.
+
+PBC
 
 \section{Results}
 \label{sec:results}
 
-\begin{figure}[H]
-{{\includegraphics[scale=0.53]{EofMCC-GS-T1-L20-1e5.pdf}}
-\subfloat{(a) hva skjer}
-}\qquad
-{{\includegraphics[scale=0.53]{MofMCC-GS-T1-L20-1e5.pdf}}
-\subfloat{(b) }
-}\qquad
-\caption{text}
-\label{fig:GS}
+\begin{figure}[t]
+\subfloat[Energy pr. spin.]{
+  \includegraphics[width=9cm]{EofMCC-GS-T1-L20-1e5.pdf}
+  \label{fig:L20-GS-E-T1}}\\
+\subfloat[Absolute value of the magnetic moment pr. spin.]{
+  \includegraphics[width=9cm]{MofMCC-GS-T1-L20-1e5.pdf}
+  \label{fig:evaluation:L20-GS-M-T1}}
+\caption{Time evolution (MC cycles) of energy and magnetic moment of an ordered initial state with temperature 1 kT/J. $10^5$ Monte Carlo cycles.}
 \end{figure}
 
-\begin{figure}[H]
-{{\includegraphics[scale=0.53]{EofMCC-GS-T2_4-L20-1e5.pdf}}
-\subfloat{(a) }
-}\qquad
-{{\includegraphics[scale=0.53]{MofMCC-GS-T2_4-L20-1e5.pdf}}
-\subfloat{(b) }
-}\qquad
-\caption{text}
-\label{fig:GS}
+
+
+\begin{figure}[t]
+\subfloat[Energy pr. spin.]{%
+  \includegraphics[width=8.65cm]{EofMCC-GS-T2_4-L20-1e5.pdf}
+  \label{fig:L20-GS-E-T2.4}}\\
+\subfloat[Absolute value of the magnetic moment pr. spin.]{
+  \includegraphics[width=8.65cm]{MofMCC-GS-T2_4-L20-1e5.pdf}
+  \label{fig:L20-GS-M-T2.4}}
+\caption{Time evolution of energy and magnetic moment of an ordered initial state with temperature 2.4 kT/J. $10^5$ Monte Carlo cycles.}
 \end{figure}
 
-\begin{figure}[H]
-{{\includegraphics[scale=0.53]{EofMCC-T1-L20-1e6.pdf}}
-\subfloat{(a) }
-}\qquad
-{{\includegraphics[scale=0.53]{MofMCC-T1-L20-1e6.pdf.pdf}}
-\subfloat{(b) }
-}\qquad
-\caption{text}
-\label{fig:GS}
+\begin{figure}[t]
+\subfloat[Energy pr. spin.]{%
+  \includegraphics[width=8.65cm]{EofMCC-T1-L20-1e6.pdf}%
+  \label{fig:L20-E-T1}%
+}\\
+\subfloat[Absolute value of the magnetic moment pr. spin.]{%
+  \includegraphics[width=8.65cm]{MofMCC-T1-L20-1e6.pdf}%
+  \label{fig:L20-M-T1}%
+}
+\caption{Time evolution of energy and magnetic moment of an random initial state with temperature 1 kT/J. $10^6$ Monte Carlo cycles.}
 \end{figure}
 
-\begin{figure}[H]
-{{\includegraphics[scale=0.53]{EofMCC-T2_4-L20-1e6.pdf}}
-\subfloat{(b) }
-}\qquad
-{{\includegraphics[scale=0.53]{MofMCC-T2_4-L20-1e6.pdf}}
-\subfloat{(c) }
-}\qquad
-\caption{text}
-\label{fig:GS}
+\begin{figure}[t]
+\subfloat[Energy pr. spin.]{
+  \includegraphics[width=8.65cm]{EofMCC-T2_4-L20-1e6.pdf}
+  \label{fig:evaluation:revenue}}\\
+\subfloat[Absolute value of the magnetic moment pr. spin.]{
+  \includegraphics[width=8.65cm]{MofMCC-T2_4-L20-1e6.pdf}
+  \label{fig:evaluation:avgPrice}}
+\caption{Time evolution (MC cycles) of energy and magnetic moment of an random initial state with temperature 2.4 kT/J. $10^6$ Monte Carlo cycles.}
 \end{figure}
 
 \begin{figure}[t]
 \mbox{\epsfig{figure=accepts_of_T-T1T2_4-L20.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
+\caption{Logarithm of the accepted states as a function of the temperature for different }
+\label{fig:logAccepts}
 \end{figure}
 
 \begin{figure}[t]
