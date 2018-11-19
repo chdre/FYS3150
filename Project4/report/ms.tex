@@ -120,7 +120,7 @@ where we recognize the partial derivative in the parenthesis as the negative mea
 by inserting for the mean energy and using the product rule. Further simplifications gives the mean heat capacity
 %
 \begin{gather*}
-    C_V = \frac{1}{kT^2}\frac{64\cosh\left(8J\beta\right)}{ 3 + \cosh\left(8J\beta\right)}.
+    C_V = \frac{64J^2}{k_B T^2} \left(\frac{\cosh(8\beta J)(3+\cosh(8 \beta J)) - \sinh^2(8\beta J)}{\left(3 + \cosh(8\beta J)\right)^2}\right)
 \end{gather*}
 The susceptibility is given as
 %
@@ -167,10 +167,10 @@ Further we find the mean of the absolute value of the magnetic moment by
 after pulling out a factor 4 from the partition function. To summarize we have the following analytical expression for the system
 %
 \begin{align*}
-    \langle E \rangle &= -\frac{4}{Z}\left(8J\sinh\left(8J\beta\right)\right), \\
-    \langle |M| \rangle &= \frac{2e^{8J\beta} + 4}{3 + \cosh\left(8J\beta\right)}, \\
-    C_V &= \frac{1}{kT^2}\frac{64\cosh\left(8J\beta\right)}{ 3 + \cosh\left(8J\beta\right)}, \\
-    \chi &= \frac{1}{kT^2}\frac{8\left(e^{8J\beta} + 1\right)}{3 + \cosh\left(8J\beta\right)}.
+    &\langle E \rangle = -\frac{4}{Z}\left(8J\sinh\left(8J\beta\right)\right), \\
+    &\langle |M| \rangle = \frac{2e^{8J\beta} + 4}{3 + \cosh\left(8J\beta\right)}, \\
+    &C_V = \frac{64J^2}{k T^2} \left(\frac{\cosh(8\beta J)(3+\cosh(8 \beta J)) - \sinh^2(8\beta J)}{\left(3 + \cosh(8\beta J)\right)^2}\right), \\
+    &\chi = \frac{1}{kT^2}\frac{8\left(e^{8J\beta} + 1\right)}{3 + \cosh\left(8J\beta\right)}.
 \end{align*}
 
 \subsection{Ising model}
@@ -315,7 +315,36 @@ PBC
 \section{Results}
 \label{sec:results}
 
-\begin{figure}[t]
+\begin{deluxetable}{lccccc}
+\tablewidth{0pt}
+\tablecaption{\label{tab:analytical}}
+\tablecomments{Comparison of analytical and numerical results for various values.}
+\tablecolumns{4}
+\tablehead{ $\langle E \rangle$ & $\langle |M| \rangle$ & $C_V$ & $\chi$}
+\startdata
+-7.983 & 3.994 & 0.128 & 15.973 
+\enddata
+\end{deluxetable}
+
+\begin{deluxetable}{lccccc}
+\tablewidth{0pt}
+\tablecaption{\label{tab:results}}
+\tablecomments{Comparison of analytical and numerical results for various MC cycles. Lattice size is 2x2, temperature 1 kT/J and initial spin randomly set.}
+\tablecolumns{5}
+\tablehead{MC cycles & $\langle E \rangle$ & $\langle |M| \rangle$ & $C_V$ & $\chi$}
+\startdata
+1e3 & -7.976 & 3.992 & 0.191 & 0.023 \\
+5e3 & -7.984 & 3.994 & 0.127 & 0.027 \\
+1e4 & -7.968 & 3.989 & 0.254 & 15.928 \\
+1e5 & -7.984 & 3.994 & 0.122 & 15.403 \\
+1e6 & -7.984 & 3.994 & 0.127 & 15.973 \\
+Analytical & -7.983 & 3.994 & 0.128 & 15.973 
+\enddata
+\end{deluxetable}
+
+
+
+\begin{figure}[h]
 \subfloat[Energy pr. spin.]{
   \includegraphics[width=9cm]{EofMCC-GS-T1-L20-1e5.pdf}
   \label{fig:L20-GS-E-T1}}\\
@@ -327,7 +356,7 @@ PBC
 
 
 
-\begin{figure}[t]
+\begin{figure}[h]
 \subfloat[Energy pr. spin.]{%
   \includegraphics[width=8.65cm]{EofMCC-GS-T2_4-L20-1e5.pdf}
   \label{fig:L20-GS-E-T2.4}}\\
@@ -337,7 +366,7 @@ PBC
 \caption{Time evolution of energy and magnetic moment of an ordered initial state with temperature 2.4 kT/J. $10^5$ Monte Carlo cycles.}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[h]
 \subfloat[Energy pr. spin.]{%
   \includegraphics[width=8.65cm]{EofMCC-T1-L20-1e6.pdf}%
   \label{fig:L20-E-T1}%
@@ -349,7 +378,7 @@ PBC
 \caption{Time evolution of energy and magnetic moment of an random initial state with temperature 1 kT/J. $10^6$ Monte Carlo cycles.}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[h]
 \subfloat[Energy pr. spin.]{
   \includegraphics[width=8.65cm]{EofMCC-T2_4-L20-1e6.pdf}
   \label{fig:evaluation:revenue}}\\
@@ -359,103 +388,115 @@ PBC
 \caption{Time evolution (MC cycles) of energy and magnetic moment of an random initial state with temperature 2.4 kT/J. $10^6$ Monte Carlo cycles.}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[h]
 \mbox{\epsfig{figure=accepts_of_T-T1T2_4-L20.pdf,width=\linewidth,clip=}}
 \caption{Logarithm of the accepted states as a function of the temperature for different number of Monte Carlo cycles. The left four dots corresponds to $T=1$ kT/J, and the right four dots corresponds to $T=2.4$ kT/J. The initial spins are randomly organized.}
 \label{fig:logAccepts(t)}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[h]
 \mbox{\epsfig{figure=accepts-T1T2_4-L20-1e5.pdf,width=\linewidth,clip=}}
-\caption{Logarithmic plot of accepted states as a function of }
+\caption{Logarithmic plot of accepted states as a function of Monte Carlo cycles. The initial spins are randomly organized.}
 \label{fig:logAccepts}
 \end{figure}
 
-\begin{figure}[t]
-\mbox{\epsfig{figure=CV-T2-23.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
-\end{figure}
 
-\begin{figure}[t]
-\mbox{\epsfig{figure=CV-T2-23.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
-\end{figure}
-
-\begin{figure}[t]
-\mbox{\epsfig{figure=CV-T22-24.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
-\end{figure}
-
-\begin{figure}[t]
+\begin{figure}[h]
 \mbox{\epsfig{figure=E-T2-23.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
+\caption{Mean energy pr. spin for various amounts of MC cycles. Initial spin state is random. Temperature varies with a step size of 0.03, making it ten steps.}
+\label{fig:E-T2-23}
 \end{figure}
 
-\begin{figure}[t]
-\mbox{\epsfig{figure=E-T22-24.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
-\end{figure}
-
-\begin{figure}[t]
-\mbox{\epsfig{figure=FittedTc.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
-\end{figure}
-
-\begin{figure}[t]
+\begin{figure}[h]
 \mbox{\epsfig{figure=M-T2-23.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
+\caption{Mean absolute value of magnetic moment pr. spin for various amounts of MC cycles. Initial spin state is random. Temperature varies with a step size of 0.03, making it ten steps.}
+\label{fig:M-T2-23}
 \end{figure}
 
-\begin{figure}[t]
-\mbox{\epsfig{figure=M-T22-24.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
+\begin{figure}[h]
+\mbox{\epsfig{figure=CV-T2-23.pdf,width=\linewidth,clip=}}
+\caption{Heat capacity pr. spin for various amounts of MC cycles. Initial spin state is random. Temperature varies with a step size of 0.03, making it ten steps.}
+\label{fig:CV-T2-23}
 \end{figure}
 
-\begin{figure}[t]
-\mbox{\epsfig{figure=PE-T1-L20-1e6.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
-\end{figure}
-
-
-\begin{figure}[t]
-\mbox{\epsfig{figure=PE-T2_4-L20-1e6.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
-\label{fig:figure_label}
-\end{figure}
-
-
-\begin{figure}[t]
+\begin{figure}[h]
 \mbox{\epsfig{figure=X-T2-23.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
+\caption{Susceptibility pr. spin for various amounts of MC cycles. Initial spin state is random. Temperature varies with a step size of 0.03, making it ten steps.}
+\label{fig:chi-T2-23}
+\end{figure}
+
+\begin{figure}[h]
+\mbox{\epsfig{figure=E-T22-24.pdf,width=\linewidth,clip=}}
+\caption{Mean energy pr. spin for various amounts of MC cycles. Initial spin state is random. Temperature varies with a step size of 0.01, making it twenty steps.}
+\label{fig:E-T22-23}
+\end{figure}
+
+\begin{figure}[h]
+\mbox{\epsfig{figure=M-T22-24.pdf,width=\linewidth,clip=}}
+\caption{Mean abslute value of the magnetic moment pr. spin for various amounts of MC cycles. Initial spin state is random. Temperature varies with a step size of 0.01, making it twenty steps.}
+\label{fig:M-T22-23}
+\end{figure}
+
+\begin{figure}[h]
+\mbox{\epsfig{figure=CV-T22-24.pdf,width=\linewidth,clip=}}
+\caption{Heat capacity pr. spin for various amounts of MC cycles. Initial spin state is random. Temperature varies with a step size of 0.01, making it twenty steps.}
+\label{fig:CV-T22-24}
+\end{figure}
+
+\begin{figure}[h]
+\mbox{\epsfig{figure=X-T22-24.pdf,width=\linewidth,clip=}}
+\caption{Susceptibility pr. spin for various amounts of MC cycles. Initial spin state is random. Temperature varies with a step size of 0.01, making it twenty steps.}
+\label{fig:chi-T22-23}
+\end{figure}
+
+\begin{figure}[h]
+\mbox{\epsfig{figure=FittedTc.pdf,width=\linewidth,clip=}}
+\caption{Linear regression used on the critical temperatures at points of 1/L for $L = 40$, $60$, $80$ and $100$ gives the function $y(x) = 3.45x + 2.22$.}
 \label{fig:figure_label}
 \end{figure}
 
-\begin{figure}[t]
-\mbox{\epsfig{figure=X-T22-24.pdf,width=\linewidth,clip=}}
-\caption{Description of figure -- explain all elements, but do not
-draw conclusions here.}
+
+\begin{figure}[h]
+\mbox{\epsfig{figure=PE-T1-L20-1e6.pdf,width=\linewidth,clip=}}
+\caption{Histogram of the probability as a function of energy. Temperature is 1 kT/J. Initial spin states are random.}
 \label{fig:figure_label}
 \end{figure}
+
+
+\begin{figure}[h]
+\mbox{\epsfig{figure=PE-T2_4-L20-1e6.pdf,width=\linewidth,clip=}}
+\caption{Histogram of the probability as a function of energy. Temperature is 2.4 kT/J. Initial spin states are random.}
+\label{fig:figure_label}
+\end{figure}
+
+\begin{deluxetable}{cccc}
+\tablewidth{0pt}
+\tablecaption{\label{tab:runtimes40}}
+\tablecomments{Run times for a 40x40 lattice for $10^5$ Monte Carlo cycles. Temperature set to 1 kT/J and the initial state for the spins are random.}
+\tablecolumns{4}
+\tablehead{Run & 1 core & 4 core & Difference}
+\startdata
+1 & 13.910 & 4.448 & 9.461 \\
+2 & 14.348 & 4.530 & 9.817 \\
+3 & 14.407 & 4.636 & 9.770 \\
+Average & 14.221 & 4.538 & 9.683
+\enddata
+\end{deluxetable}
+
+\begin{deluxetable}{cccc}
+\tablewidth{0pt}
+\tablecaption{\label{tab:runtimes100}}
+\tablecomments{Run times for a 100x100 lattice for $10^5$ Monte Carlo cycles. Temperature set to 1 kT/J and the initial state for the spins are random.}
+\tablecolumns{5}
+\tablehead{Run & 1 core & 4 core & Difference}
+\startdata
+1 & 91.137 & 34.434 & 62.702 \\
+2 & 83.662 & 30.455 & 53.207 \\
+3 & 86.905 & 28.534 & 58.371 \\
+Average & 87.235 & 31.141 & 58.093
+\enddata
+\end{deluxetable}
+
 
 
 
@@ -473,7 +514,7 @@ draw conclusions here.}
 
 
 
-%\begin{figure}[t]
+%\begin{figure}[h]
 %
 %\mbox{\epsfig{figure=filename.eps,width=\linewidth,clip=}}
 %
