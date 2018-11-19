@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
         double TimeStart, TimeEnd;
         TimeStart = MPI_Wtime();
 
-        for(double T = 2.0; T <= 2.3; T+=0.03) {
+        for(double T = 1.0; T <= 1.0; T+=0.01) {
                 Metropolis(L, mcc, T, energies(T), numprocs, my_rank, myloop_end, myloop_begin, filename);
         }
 
@@ -103,7 +103,7 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
         if(my_rank == 0) outfile.open(filename, fstream::app);
 
         int accepts = 0;
-        int cutoff = mcc*0.05/numprocs; // 5% cutoff on each thread
+        int cutoff = 0;//mcc*0.05/numprocs; // 5% cutoff on each thread
 
         for(int m = myloop_begin; m <= myloop_end; m++) {
                 for (int x = 0; x < pow(L,2); x++) {

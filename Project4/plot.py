@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-accepts = True
+accepts = False
 acceptOfT = False
 EM = False
 PE = False
