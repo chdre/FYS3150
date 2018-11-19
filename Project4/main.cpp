@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
         double TimeStart, TimeEnd;
         TimeStart = MPI_Wtime();
 
-        for(double T = 1.0; T <= 1.0; T+=0.01) {
+        for(double T = 2.4; T <= 2.4; T+=0.01) {
                 Metropolis(L, mcc, T, energies(T), numprocs, my_rank, myloop_end, myloop_begin, filename);
         }
 
@@ -103,7 +103,7 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
         if(my_rank == 0) outfile.open(filename, fstream::app);
 
         int accepts = 0;
-        int cutoff = 0;//mcc*0.05/numprocs; // 5% cutoff on each thread
+        int cutoff = mcc*0.05/numprocs; // 5% cutoff on each thread
 
         for(int m = myloop_begin; m <= myloop_end; m++) {
                 for (int x = 0; x < pow(L,2); x++) {
@@ -132,7 +132,7 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
 
         if(my_rank == 0) {
                 PrintExpectVals(TotalExpectVals, mcc - cutoff*numprocs, T);
-                WriteExpectValsToFile(TotalExpectVals, mcc - cutoff*numprocs, T, L);
+                //WriteExpectValsToFile(TotalExpectVals, mcc - cutoff*numprocs, T, L);
         }
         if(my_rank == 0) outfile.close();
 }
@@ -166,7 +166,7 @@ void WriteToFile(double energy, double magMoment, int mcc, double T, int accepts
         outfile << chi/pow(L,2) << " ";
         outfile << Mabs/pow(L,2) << " ";
         outfile << accepts << " ";
-        outfile << pow(E2 - pow(E,2),2) << endl;
+        outfile << E2/(double) mcc - pow(E/(double) mcc,2) << endl;
 }
 
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment){
@@ -182,7 +182,8 @@ void PrintExpectVals(vec TotalExpectVals, int mcc, double T) {
         cout << "E: " << TotalExpectVals(0) << " ";
         cout << "Mabs: " << TotalExpectVals(4) << " ";
         cout << "C_V: " << (TotalExpectVals(1) - pow(TotalExpectVals(0),2))/(pow(T,2)) << " ";
-        cout << "chi: " << (TotalExpectVals(3) - pow(TotalExpectVals(2),2))/T << endl;
+        cout << "chi: " << (TotalExpectVals(3) - pow(TotalExpectVals(2),2))/T << " ";
+        cout << "Variance: " << TotalExpectVals(1) - pow(TotalExpectVals(0),2) << endl;
 }
 
 void WriteExpectValsToFile(vec TotalExpectVals, int mcc, double T, int L){

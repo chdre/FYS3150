@@ -5,10 +5,10 @@ import os
 accepts = False
 acceptOfT = False
 EM = False
-PE = False
+PE = True
 vary = False
 variance = False
-sigma = True
+sigma = False
 
 if EM == True:
     file = "data/L20-GS-T1-1e6.txt"
@@ -37,22 +37,22 @@ if EM == True:
     plt.show()
 
 if PE == True:
-    file = "data/L20-T1-1e6.txt"
+    file = "data/test/L20-T2_4-1e6.txt"
     E_sorted = np.sort(np.loadtxt(file, usecols=0))
     mcc = np.linspace(0,len(E_sorted),len(E_sorted))
     bins = 0
     for i in range(0,len(E_sorted)-1):
             if E_sorted[i+1] != E_sorted[i]:
                 bins += 1
-    plt.hist(E_sorted,bins+10)
+    plt.hist(E_sorted,bins+7)
     plt.legend(["T=1"], prop={'size':15})
-    plt.xlabel("Energy", size=15); plt.ylabel("Probability",size=15)
-    plt.title("Probability distribution of energy for 20x20 lattice", size=15)
+    plt.xlabel("Energy", size=15); plt.ylabel("Occurences",size=15)
+    plt.title("Histogram of energy for 20x20 lattice", size=15)
     plt.show()
 if sigma == True:
-    file = "data/L20-T2_4-1e6.txt"
+    file = "data/test/L20-T2_4-1e5.txt"
 
-    sigma2 = np.loadtxt(file, usecols=5)
+    sigma2 = np.loadtxt(file, usecols=6)
     plt.plot(sigma2)
     plt.legend(["T=1"], prop={'size':15})
     plt.xlabel("MC cycles", size=15); plt.ylabel("$\\sigma_E^2$",size=15)
