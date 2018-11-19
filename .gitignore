@@ -1,8 +1,6 @@
 
 # Created by https://www.gitignore.io/api/c++,latex,python,qtcreator
 
-*.txt
-
 ### C++ ###
 # Prerequisites
 *.d
