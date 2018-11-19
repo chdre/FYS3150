@@ -17,7 +17,7 @@ chi4 = np.loadtxt(file4, usecols=3)
 files = [file,file2,file3,file4]
 
 L = np.array([1.0/100, 1.0/80, 1.0/60, 1.0/40])
-T = np.array([T[np.argmax(chi4)] - L[3], T[np.argmax(chi3)]- L[2], T[np.argmax(chi2)]- L[1], T[np.argmax(chi)]- L[0]])
+T = np.array([T[np.argmax(chi4)] - L[0], T[np.argmax(chi3)]- L[1], T[np.argmax(chi2)]- L[2], T[np.argmax(chi)]- L[3]])
 
 z = np.polyfit(L,T,1)
 zz = np.poly1d(z)

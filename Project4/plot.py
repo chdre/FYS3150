@@ -8,6 +8,7 @@ EM = False
 PE = False
 vary = False
 variance = False
+sigma = True
 
 if EM == True:
     file = "data/L20-GS-T1-1e6.txt"
@@ -36,7 +37,8 @@ if EM == True:
     plt.show()
 
 if PE == True:
-    E_sorted = np.sort(np.loadtxt(dfile, usecols=0))
+    file = "data/L20-T1-1e6.txt"
+    E_sorted = np.sort(np.loadtxt(file, usecols=0))
     mcc = np.linspace(0,len(E_sorted),len(E_sorted))
     bins = 0
     for i in range(0,len(E_sorted)-1):
@@ -46,6 +48,15 @@ if PE == True:
     plt.legend(["T=1"], prop={'size':15})
     plt.xlabel("Energy", size=15); plt.ylabel("Probability",size=15)
     plt.title("Probability distribution of energy for 20x20 lattice", size=15)
+    plt.show()
+if sigma == True:
+    file = "data/L20-T2_4-1e6.txt"
+
+    sigma2 = np.loadtxt(file, usecols=5)
+    plt.plot(sigma2)
+    plt.legend(["T=1"], prop={'size':15})
+    plt.xlabel("MC cycles", size=15); plt.ylabel("$\\sigma_E^2$",size=15)
+    plt.title("Variance of the energy for 20x20 lattice", size=15)
     plt.show()
 
 
