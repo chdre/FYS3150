@@ -2,17 +2,21 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+"""
+For plotting various data.
+"""
+
 accepts = False
-acceptOfT = False
+acceptOfT = True
 EM = False
-PE = True
+PE = False
 vary = False
 variance = False
 sigma = False
 
 if EM == True:
-    file = "data/L20-GS-T1-1e6.txt"
-    file2 = "data/L20-GS-T2_4-1e6.txt"
+    file = "data/L20-T1-1e6.txt"
+    file2 = "data/L20-T2_4-1e6.txt"
 
     E = np.loadtxt(file, usecols=0)
     M = np.loadtxt(file, usecols=1)
@@ -21,23 +25,23 @@ if EM == True:
     mcc = np.linspace(0,len(M),len(M))
 
     plt.figure()
-    #plt.plot(mcc,E)
-    plt.plot(mcc,E2)
+    plt.plot(mcc,E)
+    #plt.plot(mcc,E2)
     plt.legend(["T=1"], prop={'size': 15})
-    plt.title("Energy for a 20x20 lattice (ground state)", size=15)
+    plt.title("Energy of a 20x20 lattice", size=15)
     plt.xlabel("Monte Carlo cycles", size=15); plt.ylabel("$ E /L^2$", size=15)
     plt.show()
 
     plt.figure()
-    #plt.plot(mcc,M)
-    plt.plot(mcc,M2)
+    plt.plot(mcc,M)
+    #plt.plot(mcc,M2)
     plt.legend(["T=1"], prop={'size': 15})
-    plt.title("Magnetisation for a 20x20 lattice (ground state)", size=15)
+    plt.title("Magnetisation of a 20x20 lattice", size=15)
     plt.xlabel("Monte Carlo cycles", size=15); plt.ylabel("$|M|/L^2$", size=15)
     plt.show()
 
 if PE == True:
-    file = "data/test/L20-T2_4-1e6.txt"
+    file = "data/L20-T2_4-1e6.txt"
     E_sorted = np.sort(np.loadtxt(file, usecols=0))
     mcc = np.linspace(0,len(E_sorted),len(E_sorted))
     bins = 0
@@ -50,7 +54,7 @@ if PE == True:
     plt.title("Histogram of energy for 20x20 lattice", size=15)
     plt.show()
 if sigma == True:
-    file = "data/test/L20-T2_4-1e5.txt"
+    file = "data/L20-T1-1e6.txt"
 
     sigma2 = np.loadtxt(file, usecols=6)
     plt.plot(sigma2)
@@ -75,34 +79,34 @@ if accepts == True:
     plt.show()
 
 if acceptOfT == True:
-    acceptT1 = np.loadtxt("data/old/L20-T1-mcc1e3-accepts.txt", usecols=5)
-    acceptT2_4 = np.loadtxt("data/old/L20-T2_4-mcc1e3-accepts.txt", usecols=5)
-    acceptT12 = np.loadtxt("data/old/L20-T1-mcc1e4-accepts.txt", usecols=5)
-    acceptT2_42 = np.loadtxt("data/old/L20-T2_4-mcc1e4-accepts.txt", usecols=5)
-    acceptT13 = np.loadtxt("data/old/L20-T1-mcc1e5-accepts.txt", usecols=5)
-    acceptT2_43 = np.loadtxt("data/old/L20-T2_4-mcc1e5-accepts.txt", usecols=5)
-    acceptT14 = np.loadtxt("data/old/L20-T1-mcc1e6-accepts.txt", usecols=5)
-    acceptT2_44 = np.loadtxt("data/old/L20-T2_4-mcc1e6-accepts.txt", usecols=5)
+    acceptT1 = np.loadtxt("data/L20-T1-1e3.txt", usecols=5)
+    acceptT2_4 = np.loadtxt("data/L20-T2_4-1e3.txt", usecols=5)
+    acceptT12 = np.loadtxt("data/L20-T1-1e4.txt", usecols=5)
+    acceptT2_42 = np.loadtxt("data/L20-T2_4-1e4.txt", usecols=5)
+    acceptT13 = np.loadtxt("data/L20-T1-1e5.txt", usecols=5)
+    acceptT2_43 = np.loadtxt("data/test/L20-T2_4-1e5.txt", usecols=5)
+    acceptT14 = np.loadtxt("data/test/L20-T1-1e6.txt", usecols=5)
+    acceptT2_44 = np.loadtxt("data/test/L20-T2_4-1e6.txt", usecols=5)
 
-    plt.loglog(1,acceptT1[-1], "ro")
-    plt.loglog(1,acceptT12[-1], "bo")
-    plt.loglog(1,acceptT13[-1], "co")
-    plt.loglog(1,acceptT14[-1], "C4o")
-    plt.loglog(2.4, acceptT2_4[-1], "ro")
-    plt.loglog(2.4, acceptT2_42[-1], "bo")
-    plt.loglog(2.4, acceptT2_43[-1], "co")
-    plt.loglog(2.4, acceptT2_44[-1], "C4o")
+    plt.semilogy(1,acceptT1[-1], "ro")
+    plt.semilogy(1,acceptT12[-1], "bo")
+    plt.semilogy(1,acceptT13[-1], "co")
+    plt.semilogy(1,acceptT14[-1], "C4o")
+    plt.semilogy(2.4, acceptT2_4[-1], "ro")
+    plt.semilogy(2.4, acceptT2_42[-1], "bo")
+    plt.semilogy(2.4, acceptT2_43[-1], "co")
+    plt.semilogy(2.4, acceptT2_44[-1], "C4o")
     plt.legend(["cycles=1e3", "cycles=1e4", "cycles=1e5", "cycles=1e6"], prop={'size': 15})
     plt.title("Accepts states for a 20x20 lattice", size=15)
-    plt.xlabel("log(T)", size=15); plt.ylabel("log(Accepts)", size=15)
+    plt.xlabel("T [kT/J]", size=15); plt.ylabel("log(Accepts)", size=15)
     plt.show()
 
 
 if vary == True:
-    file = "data/test/L40-1e6-ext.txt"
-    file2 = "data/test/L60-1e6-ext.txt"
-    file3 = "data/test/L80-1e6-ext.txt"
-    file4 = "data/test/L100-1e6-ext.txt"
+    file = "data/L40-1e6-ext.txt"
+    file2 = "data/L60-1e6-ext.txt"
+    file3 = "data/L80-1e6-ext.txt"
+    file4 = "data/L100-1e6-ext.txt"
 
     E, Mabs, C_V, chi, T = np.loadtxt(file, usecols=(0,1,2,3,4), unpack=True)
     E2, Mabs2, C_V2, chi2 = np.loadtxt(file2, usecols=(0,1,2,3), unpack=True)

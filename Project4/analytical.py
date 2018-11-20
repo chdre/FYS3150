@@ -1,5 +1,9 @@
 import numpy as np
 
+"""
+Returns the analytical values of the Ising model.
+"""
+
 n = 2
 T = 1.0
 

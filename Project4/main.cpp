@@ -13,11 +13,10 @@ using namespace arma;
 ofstream outfile;
 
 inline int PB(int index, int spins, int correction) {
-        // returns the index of the element
+        // Periodic boundary conidition, returns the index "periodic index"
         return (index + spins + correction)%(spins);
 }
 
-void Energy(int L, mat &S, double &energy);
 void initialize(double &energy, double &magMoment, int L, mat S, int GS);
 void Metropolis(int L, int mcs, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin, string filename);
 map<double, double> energies(double T);
@@ -63,6 +62,9 @@ int main(int argc, char *argv[]){
 }
 
 void initialize(double &energy, double &magMoment, int L, mat &S, int GS, mt19937_64 generator){
+        /* Initializes the spin matrix. If GS=1 we are initiating ground state
+           with all spin up. If GS=0 we set a random initial condition. Also
+           calculates energy and magnetic moment of initial state. */
         if (GS==1) {
                 S.fill(1.0); // ground state
                 magMoment += pow(double(L),2); // initial all spin up
@@ -75,7 +77,6 @@ void initialize(double &energy, double &magMoment, int L, mat &S, int GS, mt1993
                         }
                 }
         }
-
         for(int x = 0; x < L; x++) {
                 for(int y = 0; y < L; y++) {
                         energy -= (double) S(x,y)*(S(x,PB(y,L,-1)) + S(PB(x,L,-1),y));
@@ -85,13 +86,14 @@ void initialize(double &energy, double &magMoment, int L, mat &S, int GS, mt1993
 }
 
 void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numprocs, int my_rank, int myloop_end, int myloop_begin, string filename){
+        /* Metropolis algorithm. */
         random_device rd;
         mt19937_64 generator(rd());
-        uniform_real_distribution<float> RNG(0.0,1.0);
-        uniform_int_distribution<int> RNGPos(0,L-1);
+        uniform_real_distribution<float> RNG(0.0,1.0);  // Random number
+        uniform_int_distribution<int> RNGPos(0,L-1);    // random spin position of lattice
 
-        double energy = 0.0;  // energy
-        double magMoment = 0.0; // magnetic moment (initial value, of ground state = n²)
+        double energy = 0.0;
+        double magMoment = 0.0;
 
         vec ExpectVals = zeros<vec>(5);
         vec TotalExpectVals = zeros<vec>(5);
@@ -100,19 +102,20 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
         // initializing lattice
         initialize(energy, magMoment, L, S, 0, generator);
 
-        if(my_rank == 0) outfile.open(filename, fstream::app);
+        if(my_rank == 0) outfile.open(filename, fstream::app); // open file if main rank
 
-        int accepts = 0;
-        int cutoff = mcc*0.05/numprocs; // 5% cutoff on each thread
+        int accepts = 0;                // counter for accepted Metropolis tests
+        int cutoff = mcc*0.05/numprocs; // 5% cutoff for each thread (core)
 
         for(int m = myloop_begin; m <= myloop_end; m++) {
                 for (int x = 0; x < pow(L,2); x++) {
-                        int xr = RNGPos(generator);         // indices for random element
+                        // Checking random spin of the lattice
+                        int xr = RNGPos(generator);
                         int yr = RNGPos(generator);
-
                         int dE = 2.0*S(xr,yr)*(S(xr,PB(yr,L,1)) + S(xr,PB(yr,L,-1))
                                                + S(PB(xr,L,1),yr) + S(PB(xr,L,-1),yr));
-                        if (RNG(generator) <= acceptE.find(dE)->second) {
+
+                        if (RNG(generator) <= acceptE.find(dE)->second) { // Metropolis test
                                 accepts += 1;
                                 S(xr,yr) *= -1.0;         // flipping spin
                                 magMoment += (double) 2*S(xr,yr);
@@ -121,25 +124,26 @@ void Metropolis(int L, int mcc, double T, map<double, double> acceptE, int numpr
                 }
                 if(m >= myloop_begin+cutoff) AddExpectValsToVec(ExpectVals, energy, magMoment);
 
-                // check if we are running 1 node. If we are, write values to file for plotting
+                // check if we are running 1 thread. If we are, write values to file for plotting
                 if(numprocs == 1) WriteToFile(energy, magMoment, mcc, T, accepts, L);
 
-        }  //mc end
+        }  // Metropolis end
         for(int i = 0; i < 5; i++) {
-                // Summing the expectvals
+                // Summing the expectvals across threads
                 MPI_Reduce(&ExpectVals(i), &TotalExpectVals(i), 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
         }
 
         if(my_rank == 0) {
                 PrintExpectVals(TotalExpectVals, mcc - cutoff*numprocs, T);
-                //WriteExpectValsToFile(TotalExpectVals, mcc - cutoff*numprocs, T, L);
+                // only print to print expectvalues to file if running more than 1 thread
+                if(numprocs > 1) WriteExpectValsToFile(TotalExpectVals, mcc - cutoff*numprocs, T, L);
         }
         if(my_rank == 0) outfile.close();
 }
 
 
 map<double, double> energies(double T){
-        /* for comparing the accepted values of the energy with a random number
+        /* Dictionary-like function for comparing the accepted values of the energy with a random number
            in the Metropolis algorithm. Compare key dE to value of energy. */
         map<double, double> acceptE;
         for (int dE = -8; dE <= 8; dE+=4) {
@@ -149,8 +153,7 @@ map<double, double> energies(double T){
 }
 
 void WriteToFile(double energy, double magMoment, int mcc, double T, int accepts, int L){
-        double prSpin = 1.0/pow(L,2);
-
+        // Printing values to file for each MC cycle
         double E = energy;
         double E2 = energy*energy;
         double M = magMoment;
@@ -170,6 +173,7 @@ void WriteToFile(double energy, double magMoment, int mcc, double T, int accepts
 }
 
 void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment){
+        // adds expectation values to array for storing for all MC cycles
         ExpectVals(0) += energy;
         ExpectVals(1) += energy*energy;
         ExpectVals(2) += magMoment;
@@ -178,6 +182,7 @@ void AddExpectValsToVec(vec &ExpectVals, double energy, double magMoment){
 }
 
 void PrintExpectVals(vec TotalExpectVals, int mcc, double T) {
+        // for printing expectation values
         TotalExpectVals = TotalExpectVals/mcc;
         cout << "E: " << TotalExpectVals(0) << " ";
         cout << "Mabs: " << TotalExpectVals(4) << " ";
@@ -187,7 +192,7 @@ void PrintExpectVals(vec TotalExpectVals, int mcc, double T) {
 }
 
 void WriteExpectValsToFile(vec TotalExpectVals, int mcc, double T, int L){
-        // not using M, only |M|
+        // writing expectation values to file. Not using M, only |M| as pr. problem
         TotalExpectVals *= 1.0/mcc;
         outfile << TotalExpectVals(0)/pow(L,2) << " ";
         outfile << TotalExpectVals(4)/pow(L,2) << " ";
