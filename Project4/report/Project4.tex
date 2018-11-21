@@ -28,7 +28,7 @@
 %\date{Received - / Accepted -}
 
 \begin{abstract}
-In this study of phase transformations of a magnetic system we will estimate the critical temperature using the Ising model. To study the system of time we will use the Metropolis algorithm, which is a Markov chain-Monte Carlo method. Since we do not know all the possible states of the system beforehand, the Metropolis algorithm is beneficial to use, since it eliminates the partition function. The study will show that for a cold system of temperature 1 kT/J the system rarely has states of higher energies, when increasing the temperature to 2.4 kT/J the total energy of the system is increased, and we see that the probability for the system to be in a higher energy state is increased. When we look at how the system evolves as a function of temperature we clearly see that there is a phase transformation at a temperature close to the critical temperature. When estimating the critical temperature we find this to be $T_C = 2.256$ kT/J, which is fairly close to the analytical value found by Lars Onsager \cite{bib:onsager}.
+In this study of phase transformations of a magnetic system we will estimate the critical temperature using the Ising model. To study the system of time we will use the Metropolis algorithm, which is a Markov chain-Monte Carlo method. Since we do not know all the possible states of the system beforehand, the Metropolis algorithm is beneficial to use, since it eliminates the partition function. The study will show that for a cold system of temperature 1 kT/J the system rarely has states of higher energies, when increasing the temperature to 2.4 kT/J the total energy of the system is increased, and we see that the probability for the system to be in a higher energy state is increased. When we look at how the system evolve as a function of temperature we clearly see that there is a phase transformation at a temperature close to the critical temperature. When estimating the critical temperature we find this to be $T_C = 2.256$ kT/J, which is fairly close to the analytical value found by Lars Onsager \cite{bib:onsager}.
 
 \end{abstract}
 \keywords{computational science: Ising model  --- methods: Metropolis algorithm, Markov chain-Monte Carlo}
@@ -41,7 +41,7 @@ To study the phase transitions of a magnetic system we consider the Ising model 
     E = -J\sum_{< kl >}^N s_k s_l,
 \end{gather}
 %
-when there is no external magnetic field applied to the system. The coupling constant J will be set to 1, which means we are studying a ferromagnetic interaction between the spins that make up the lattice. Since the coupling constant is dependent upon the material we study, setting this to 1 allows for a general model. For studying the phase transition we use a Markov chain Monte Carlo method (MCMC), and the probability of finding the system in a given state $i$ is
+when there is no external magnetic field applied to the system.  The coupling constant J will be set to 1, which means we are studying a ferromagnetic interaction between the spins that make up the lattice. Since the coupling constant is dependent upon the material we study, setting this to 1 allows for a general model. For studying the phase transition we use a Markov chain Monte Carlo method (MCMC), and the probability of finding the system in a given state $i$ is
 %
 \begin{align}\label{eq:P_i}
     P_i = P(E_i) = \frac{e^{-\beta E_i}}{Z},
@@ -309,7 +309,7 @@ where Z is the the partition function. We now perform the Metropolis test for a 
     r \leq e^{-\beta \Delta E}, \qquad r \in [0,1]
 \end{equation*}
 %
-i.e. if the ratio is larger than or equal to a random number $r \in [0,1]$ we accept a new configuration, and flip the spin.  We are looking at the change in energy if we were to flip a random spin; if the change of energy is large, the likelihood of this spin being flipped is small, so we reject this solution, on the other hand, if the probability is large, we accept the configuration. Since we expect the system to move to more likely state, we are looking for states that does not increase the systems energy. A large change in energy means we are looking at a spin that has half or more of its surrounding spins in the same configuration, and the system seems to locally move towards a steady state, therefore the local system is not changed. For each such Metropolis test that succeeds we add the flip of spin as a contribution to the systems energy and magnetic moment. When the calculations over the lattice is complete we conclude a single MC cycle and store the final value for the energy and magnetic moment.
+i.e. if the ratio is larger than or equal to a random number $r \in [0,1]$ we accept a new configuration, and flip the spin.  We are looking at the change in energy if we were to flip a random spin; if the change of energy is large, the likelihood of this spin being flipped is small, so we reject this solution, on the other hand, if the probability is large, we accept the configuration. Since we expect the system to move to more likely state, we are looking for states that does not increase the systems energy. A large change in energy means we are looking at a spin that has half or more of its surrounding spins in the same configuration, and the system seems to locally move towards a steady state, therefore the local system is not changed. For each such Metropolis test that succeeds we add the flip of spin as a contribution to the systems energy and magnetic moment. When the calculations over the lattice is complete we conclude a single MC cycle and store the final value for the energy and magnetic moment. When we are calculating the final mean values of the energy and magnetic moment, we ignore the first 5\% of the data, so we are not including the values before the system is in equilibrium.
 
 \subsection{Critical temperature}
 As the temperature of the system moves towards the critical temperature, the susceptibility $\chi$ and the heat capacity $C_V$ moves towards an infinite value. We can see this by
@@ -565,11 +565,12 @@ When parallelising our software we gain a significant speed up, as shown in Tabl
 The Ising model for a finite lattice proves to give a good estimate of the analytical value of the critical temperature, which is the temperature of which a magnetic system undergoes a phase transformation. Increasing the lattice size gives a better approximations and a more realistic model, increasing it further than what has been done in this study will allow for a better approximation of the critical temperature. The figures provided for the mean energy and magnetisation, the heat capacity and the susceptibility shows a consistent behavior of a phase transition for a temperature $\sim T_C$. 
 
 \begin{thebibliography}{}
-\bibitem{bib:onsager} Onsager, Lars,
+\bibitem{bib:onsager} 
+Onsager, Lars,
  \textit{Crystal Statistics. I. A Two-Dimensional Model with an Order-Disorder Transition}
 \url{https://link.aps.org/doi/10.1103/PhysRev.65.117}
-\end{thebibliography}
 
+\end{thebibliography}
 
 
 
