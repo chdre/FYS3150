@@ -1,5 +1,4 @@
-#include "CrankNic.h"
-#include "tridiag.h"
+#include "CrankNic.hpp"
 
 void CNSolver(int n, double alpha, int tmax){
         vec u = zeros<vec>(n);  // Au = r

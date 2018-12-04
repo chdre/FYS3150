@@ -1,5 +1,5 @@
 #include "tridiag.h"
-//
+
 //   Taking the adresse of vector u, and the setting up a Toeplitz matrix with
 //   diagonal of value d, and off diagonal values e (the same for upper and lower).
 //   Solving the equation Au = rhs by row reduction.
