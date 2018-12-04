@@ -1,8 +1,8 @@
 #include "BackEuler.hpp"
 
 void BESolver(int n, double alpha, int tmax){
-        vec u = zeros<vec>(n);  // Au = r
-        vec r = zeros<vec>(n);  // vector for current time step of Crank-Nicolson
+        vec u = zeros<vec>(n+1);  // Au = r
+        vec r = zeros<vec>(n+1);  // vector for current time step of Crank-Nicolson
 
         // Boundary conditions (u(0) set by zeros)
         u(n) = 1.0;
@@ -21,9 +21,10 @@ void BESolver(int n, double alpha, int tmax){
                 r = u;  // Setting right hand side of equation to u, for all i
 
                 // writing to file
+                ofstream outfile;
                 outfile.open("FWEuler.txt");
                 for(int i = 0; i < n+1; i++) {
-                        outfile << u[i] << endl;
+                        outfile << u(i) << endl;
                 }
                 outfile.close();
 
