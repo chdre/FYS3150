@@ -1,29 +1,38 @@
 #include "ForwEuler.hpp"
 
 void FESolver(int n, double alpha, int tmax){
-        vec u = zeros<vec>(n+2);
+        mat u = zeros<mat>(n+2,n+2);
 
         // Boundary condition (u(0) set by zeros)
-        u(n) = 1.0;
+        for(int i = 0; i < n+2; i++) {
+                u(n+1,i) = 1.0;
+        }
 
         ofstream outfile;
         outfile.open("FWEuler.txt");
 
-        for(int j = 1; j < tmax; j++) {
+        for(int l = 1; l < tmax; l++) {
                 for(int i = 1; i < n+1; i++) {
-                        u(i) = (1.0 - 2.0*alpha)*u(i) + alpha*u(i+1) + alpha*u(i-1);    // RHS of equation
+                        for(int j = 1; j < n+1; j++) {
+                                double delta = u(i+1,j) + u(i-1,j) + u(i,j+1) + u(i,j-1);
+                                u(i,j) = (1.0 - 4.0*alpha)*u(i,j) + alpha*delta;
+                        }
                 }
 
                 // Preserving boundary conditions
-                u(0) = 0;
-                u(n+1) = 1.0;
+                for(int i = 0; i < n+2; i++) {
+                        u(0,i) = 0;
+                        u(n+1,i) = 1.0;
+                }
 
                 // writing to file
-                outfile << j << " ";
                 for(int i = 0; i < n+2; i++) {
-                        outfile << u(i) << " ";
+                        for(int j = 0; j < n+2; j++) {
+                                outfile << u(i,j) << " ";
+                        }
+                        outfile << endl;
                 }
-                outfile << endl;
+
         }
         outfile.close();
 }

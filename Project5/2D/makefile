@@ -12,3 +12,6 @@ back: main.o BackEuler.o tridiag.o
 
 cn: main.o CrankNic.o tridiag.o
 			${CPPflags} main.cpp CrankNic.cpp tridiag.cpp -o test.x  ${LIB}
+
+all: main.o ForwEuler.o BackEuler.o CrankNic.o tridiag.o
+			${CPPflags} main.cpp ForwEuler.cpp BackEuler.cpp CrankNic.cpp tridiag.cpp -o test.x  ${LIB}

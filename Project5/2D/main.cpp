@@ -21,6 +21,6 @@ int main() {
         cout << "Alpha = " << alpha << endl;
 
         FESolver(n, alpha, tmax);
-        BESolver(n, alpha, tmax);
-        CNSolver(n, alpha, tmax);
+        //BESolver(n, alpha, tmax);
+        //CNSolver(n, alpha, tmax);
 }
