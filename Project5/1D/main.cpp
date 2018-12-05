@@ -9,9 +9,6 @@
 using namespace std;
 using namespace arma;
 
-void FWSolver(int n, double alpha, int tmax);
-
-
 int main() {
         int n = 10;
         double dx = 1.0/10;
@@ -23,7 +20,7 @@ int main() {
         double alpha = dt/pow(dx,2);
         cout << "Alpha = " << alpha << endl;
 
-        //FESolver(n, alpha, tmax);
-        //BESolver(n, alpha, tmax);
+        FESolver(n, alpha, tmax);
+        BESolver(n, alpha, tmax);
         CNSolver(n, alpha, tmax);
 }
