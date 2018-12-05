@@ -12,15 +12,18 @@ using namespace arma;
 void FWSolver(int n, double alpha, int tmax);
 
 
-int main(int argc, char *argv[]) {
-        int n = 1000;
-        double dx = atof(argv[0]);
-        double dt = 2.0*dx;
+int main() {
+        int n = 10;
+        double dx = 1.0/10;
+        double dt = pow(dx,2)/2.0;
 
-        int tmax = (int) dt*n;
+        int tmax = 1/dt;
+        cout << tmax << endl;
 
-        double alpha = pow(dx/dt,2);
+        double alpha = dt/pow(dx,2);
+        cout << "Alpha = " << alpha << endl;
 
-        FWSolver(n, alpha, tmax);
-        cout << "end of main" << endl;
+        //FESolver(n, alpha, tmax);
+        //BESolver(n, alpha, tmax);
+        CNSolver(n, alpha, tmax);
 }
