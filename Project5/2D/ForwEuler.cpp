@@ -9,7 +9,7 @@ void FESolver(int n, double alpha, int tmax){
         }
 
         ofstream outfile;
-        outfile.open("FWEuler.txt");
+        outfile.open("FWEuler2D.txt");
 
         for(int l = 1; l < tmax; l++) {
                 for(int i = 1; i < n+1; i++) {

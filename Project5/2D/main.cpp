@@ -12,7 +12,7 @@ using namespace arma;
 int main() {
         int n = 10;
         double dx = 1.0/10;
-        double dt = pow(dx,2)/2.0;
+        double dt = pow(dx,2)/4.0;
 
         int tmax = 1/dt;
         cout << tmax << endl;

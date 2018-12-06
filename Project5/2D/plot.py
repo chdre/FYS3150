@@ -1,28 +1,37 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 Euler = True
-Back = True
-CN = True
 
-j = 103
+j = 10
 j2 = 30
 
 if Euler == True:
-    u = np.loadtxt("FWEuler.txt")
+    u = np.loadtxt("FWEuler2D.txt")
     n = len(u[0,:])
-    y_length = len(u[:,0]) # length of y
-    timesteps = y_length/n
 
-    vals = np.zeros(timesteps)
+    vals = []
 
-    max = n
-    for i in range(n):
-        vals = u[:max,:max]
-        max += n
+    t_steps = int(len(u[:,0])/n)
+
+    index = 0 # dummy index to add matrices to vals array
+
+    for t in range(t_steps):
+        start = n*t
+        end = start+n
+        #print(start, end, t, t_steps)
+        #print(u[start:end])
+
+        vals.append(u[start:end])
+
+        index += 1
+
+    vals = np.array(vals)
+
+    print(vals[-1][0], vals[-1][2])
 
     x = np.linspace(0,1,n)
 
-    plt.plot(x,u[j,:])
-    plt.plot(x,u[j2,:])
+    plt.plot(vals[-1])
     plt.show()
