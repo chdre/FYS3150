@@ -13,5 +13,11 @@ back: main.o BackEuler.o tridiag.o
 cn: main.o CrankNic.o tridiag.o
 			${CPPflags} main.cpp CrankNic.cpp tridiag.cpp -o test.x  ${LIB}
 
-all: main.o ForwEuler.o BackEuler.o CrankNic.o tridiag.o
-			${CPPflags} main.cpp ForwEuler.cpp BackEuler.cpp CrankNic.cpp tridiag.cpp -o test.x  ${LIB}
+an2d: main.o analytical.o
+			${CPPflags} main.cpp analytical.cpp -o test.x  ${LIB}
+
+#all: main.o ForwEuler.o BackEuler.o CrankNic.o tridiag.o analytical.o
+#			${CPPflags} main.cpp ForwEuler.cpp BackEuler.cpp CrankNic.cpp tridiag.cpp analytical.cpp -o test.x  ${LIB}
+
+all: main.o ForwEuler.o analytical.o
+			${CPPflags} main.cpp ForwEuler.cpp analytical.cpp -o test.x  ${LIB}

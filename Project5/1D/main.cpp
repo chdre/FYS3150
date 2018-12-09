@@ -5,6 +5,7 @@
 #include "BackEuler.hpp"
 #include "CrankNic.hpp"
 #include "tridiag.hpp"
+#include "analytical.hpp"
 
 using namespace std;
 using namespace arma;
@@ -15,12 +16,13 @@ int main() {
         double dt = pow(dx,2)/2.0;
 
         int tmax = 1/dt;
-        cout << tmax << endl;
 
         double alpha = dt/pow(dx,2);
-        cout << "Alpha = " << alpha << endl;
 
         FESolver(n, alpha, tmax);
-        BESolver(n, alpha, tmax);
-        CNSolver(n, alpha, tmax);
+        //BESolver(n, alpha, tmax);
+        //CNSolver(n, alpha, tmax);
+
+        analytical1D(n, 1./(n+1), tmax);
+
 }

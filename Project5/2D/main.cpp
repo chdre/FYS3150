@@ -2,9 +2,10 @@
 #include <cmath>
 #include <iostream>
 #include "ForwEuler.hpp"
-#include "BackEuler.hpp"
-#include "CrankNic.hpp"
-#include "tridiag.hpp"
+//#include "BackEuler.hpp"
+//#include "CrankNic.hpp"
+//#include "tridiag.hpp"
+#include "analytical.hpp"
 
 using namespace std;
 using namespace arma;
@@ -23,4 +24,6 @@ int main() {
         FESolver(n, alpha, tmax);
         //BESolver(n, alpha, tmax);
         //CNSolver(n, alpha, tmax);
+
+        analytical2D(n, dx, 1);
 }

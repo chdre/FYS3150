@@ -14,6 +14,10 @@ void BESolver(int n, double alpha, int tmax){
         ofstream outfile;
         outfile.open("BWEuler.txt");
 
+        // writing initial state to file
+        for(int i = 0; i < n+2; i++) outfile << u(i) << " ";
+        outfile << endl;
+
         for(int j = 1; j < tmax; j++) {
                 tridiagonal(d, e, u, r, n);
 
@@ -33,5 +37,4 @@ void BESolver(int n, double alpha, int tmax){
                 outfile << endl;
         }
         outfile.close();
-
 }

@@ -1,4 +1,4 @@
-CPPflags = g++ -Wall -std=c++11
+CPPflags = g++ -Wall -std=c++11 -O3
 
 
 LIB = -DARMA_DONT_USE_WRAPPER -lblas -llapack
@@ -12,3 +12,9 @@ back: main.o BackEuler.o tridiag.o
 
 cn: main.o CrankNic.o tridiag.o
 			${CPPflags} main.cpp CrankNic.cpp tridiag.cpp -o test.x  ${LIB}
+
+an1d: main.o analytical.o
+			${CPPflags} main.cpp analytical.cpp -o test.x  ${LIB}
+
+all: main.o ForwEuler.o BackEuler.o CrankNic.o tridiag.o analytical.o
+			${CPPflags} main.cpp ForwEuler.cpp BackEuler.cpp  analytical.cpp CrankNic.cpp tridiag.cpp -o test.x  ${LIB}

@@ -6,7 +6,6 @@
 
 void tridiagonal(double d, double e, vec &u, vec rhs, int n){
         // for solving Au = rhs. (remember: Au = f, A: b(diag) and e(offdiag))
-
         vec dt = zeros<vec>(n+2); // \tilde{d}
         vec rhst = zeros<vec>(n+2);
 

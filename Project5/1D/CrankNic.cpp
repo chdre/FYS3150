@@ -15,6 +15,10 @@ void CNSolver(int n, double alpha, int tmax){
         ofstream outfile;
         outfile.open("CrankNic.txt");
 
+        // writing initial state to file
+        for(int i = 0; i < n+2; i++) outfile << u(i) << " ";
+        outfile << endl;
+
         for(int j = 1; j < tmax; j++) {
                 for(int i = 1; i < n+1; i++) {
                         r(i) = alpha*u(i-1) + (2.0 - 2.0*alpha)*u(i) + alpha*u(i+1);
