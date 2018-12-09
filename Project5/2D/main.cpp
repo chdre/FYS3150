@@ -2,10 +2,11 @@
 #include <cmath>
 #include <iostream>
 #include "ForwEuler.hpp"
-//#include "BackEuler.hpp"
+#include "BackEuler.hpp"
 //#include "CrankNic.hpp"
 //#include "tridiag.hpp"
 #include "analytical.hpp"
+#include "Jacobi.hpp"
 
 using namespace std;
 using namespace arma;
@@ -20,10 +21,10 @@ int main() {
 
         double alpha = dt/pow(dx,2);
         cout << "Alpha = " << alpha << endl;
+        double tol = 1e-5;
 
-        FESolver(n, alpha, tmax);
-        //BESolver(n, alpha, tmax);
-        //CNSolver(n, alpha, tmax);
+        //FESolver(n, alpha, tmax);
+        BESolver(n, alpha, tmax, dx, dt, tol);
 
         analytical2D(n, dx, 1);
 }

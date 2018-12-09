@@ -1,6 +1,7 @@
 #include "BackEuler.hpp"
+#include "Jacobi.hpp"
 
-void BESolver(int n, double alpha, int tmax){
+void BESolver(int n, double alpha, int tmax, double dx, double dt, double tol){
         mat u = zeros<mat>(n+2,n+2);  // Au = r
         mat r = zeros<mat>(n+2,n+2);  // vector for current time step of Crank-Nicolson
 
@@ -25,7 +26,8 @@ void BESolver(int n, double alpha, int tmax){
         }
 
         for(int j = 1; j < tmax; j++) {
-                tridiagonal(d, e, u, r, n);
+                JSolver(u, r, dx, dt, tol, n, alpha);
+
 
                 // Preserving boundary conditions
                 for(int i = 0; i < n+2; i++) {
