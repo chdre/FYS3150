@@ -11,9 +11,9 @@ using namespace std;
 using namespace arma;
 
 int main() {
-        int n = 10;
         double dx = 1.0/10;
         double dt = pow(dx,2)/2.0;
+        int n = (int) 1/dx;
 
         int tmax = 1/dt;
 

@@ -11,7 +11,7 @@ void analytical1D(int n, double dx, double tmax){
                 for(double i = 1; i < n+1; i++) {
                         x = i*dx;
                         u = 0;
-                        for(int m = 1; m < 10; m++) {
+                        for(int m = 1; m < 1000; m++) {
                                 u += 2*cos(M_PI*m)/(M_PI*m)*sin(m*M_PI*x)*exp(-pow(m*M_PI,2)*t);
                         }
                         outfile << u + x << " ";

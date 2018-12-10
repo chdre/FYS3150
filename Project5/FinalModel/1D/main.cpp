@@ -14,7 +14,7 @@ int main() {
         double L = 1;
         int n = 120;
         double dx = L/n;
-        double dt = 0.01;//pow(dx,2)/2.0;
+        double dt = 0.001;//pow(dx,2)/2.0;
 
         cout << dx << " " << dt << endl;
 
@@ -26,6 +26,6 @@ int main() {
         BESolver(n, alpha, tmax);
         //CNSolver(n, alpha, tmax);
 
-        analytical1D(n, L/(n+1), tmax, L);
+        analytical1D(n, L/(n+1), tmax, dt, L);
 
 }

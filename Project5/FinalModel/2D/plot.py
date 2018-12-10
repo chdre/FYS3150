@@ -12,7 +12,7 @@ j2 = 30
 if anim == True:
 
 
-    u = np.loadtxt("BWEuler2D.txt")
+    u = np.loadtxt("FWEuler2D.txt")
 
     n = len(u[0,:])
     x = np.linspace(0, 1, n)

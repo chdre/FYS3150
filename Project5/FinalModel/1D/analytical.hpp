@@ -7,4 +7,4 @@ using namespace  std;
 using namespace  arma;
 
 
-void analytical1D(int n, double dx, double t, double L);
+void analytical1D(int n, double dx, double tmax, double dt, double L);

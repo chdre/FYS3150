@@ -1,9 +1,9 @@
 #include <iostream>
 #include <cmath>
 #include <armadillo>
-#include "tridiag.hpp"
+#include <math.h>
 
 using namespace  std;
 using namespace  arma;
 
-void BESolver(int n, double alpha, int tmax, double dx, double dt);
+void analytical2D(int n, double dx, double tmax, double dt);

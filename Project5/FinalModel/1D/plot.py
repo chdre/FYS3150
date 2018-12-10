@@ -32,7 +32,7 @@ if anim1D == True:
         line.set_ydata(u[i,:]) # Update the y values
         line2.set_ydata(uAnaly[i,:])
         plt.draw() # Update the plot
-        plt.pause(0.1)
+        plt.pause(0.01)
 
     # Turn off interactive mode
     plt.ioff()

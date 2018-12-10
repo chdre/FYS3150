@@ -1,6 +1,6 @@
 #include "analytical.hpp"
 
-void analytical1D(int n, double dx, double tmax, double L){
+void analytical1D(int n, double dx, double tmax, double dt, double L){
         double u, x, t, piL, mpiL, mpi;
 
         piL = M_PI/L;
@@ -8,7 +8,7 @@ void analytical1D(int n, double dx, double tmax, double L){
         ofstream outfile;
         outfile.open("Analytical1D.txt");
         for(double l = 0; l < tmax; l++) {
-                t = l/tmax;
+                t = l*dt;
                 outfile << 0 << " ";  // BC
                 for(int i = 1; i < n+1; i++) {
                         x = i*dx;
