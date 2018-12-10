@@ -30,8 +30,10 @@ void BESolver(int n, double alpha, int tmax, double dx, double dt){
                 outfile << endl;
         }
 
+        int counter = 1;
+
         for(int j = 1; j < tmax; j++) {
-                JSolver(e, d, n, alpha, u);
+                JSolver(e, d, n, alpha, u, u);
 
                 // Preserving boundary conditions
                 for(int i = 0; i < n+2; i++) {
@@ -44,11 +46,14 @@ void BESolver(int n, double alpha, int tmax, double dx, double dt){
                 r = u;  // Setting right hand side of equation to u, for all i
 
                 // writing to file
-                for(int i = 0; i < n+2; i++) {
-                        for(int j = 0; j < n+2; j++) {
-                                outfile << u(i,j) << " ";
+                if(j == counter || j == n-1) {
+                        for(int i = 0; i < n+2; i++) {
+                                for(int j = 0; j < n+2; j++) {
+                                        outfile << u(i,j) << " ";
+                                }
+                                outfile << endl;
                         }
-                        outfile << endl;
+                        counter += 100;
                 }
         }
         outfile.close();

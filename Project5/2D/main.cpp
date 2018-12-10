@@ -12,8 +12,8 @@ using namespace std;
 using namespace arma;
 
 int main() {
-        int n = 20;
-        double dx = 1.0/100;
+        int n = 100;
+        double dx = 1.0/120;
         double dt = pow(dx,2)/4.0;
 
         int tmax = 1/dt;

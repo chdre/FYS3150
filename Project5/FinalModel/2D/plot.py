@@ -54,7 +54,7 @@ if anim == True:
         im.set_array(mat[i])
         return im,
 
-    ani = animation.FuncAnimation(fig, updatefig, interval=100, blit=True)
+    ani = animation.FuncAnimation(fig, updatefig, interval=1000, blit=True)
     plt.show()
 
 if Euler == True:
