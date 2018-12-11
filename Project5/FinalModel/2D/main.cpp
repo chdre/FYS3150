@@ -11,15 +11,13 @@ using namespace std;
 using namespace arma;
 
 int main() {
-        int n = 120;
-        double dx = 1.0/10;
-        double dt = pow(dx,2)/4.0;
+        int n = 118;
+        double dx = 1.0/(n+2);
+        double dt = 0.0001;//pow(dx,2)/4.0;
 
         int tmax = 1/dt;
-        cout << tmax << endl;
 
         double alpha = dt/pow(dx,2);
-        cout << "Alpha = " << alpha << endl;
 
         //FESolver(n, alpha, tmax);
         BESolver(n, alpha, tmax);

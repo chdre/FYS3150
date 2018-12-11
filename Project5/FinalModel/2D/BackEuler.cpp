@@ -2,12 +2,22 @@
 #include "Jacobi.hpp"
 
 void BESolver(int n, double alpha, int tmax){
-        mat u = ones<mat>(n+2,n+2);  // Au = r
-        //mat r = zeros<mat>(n+2,n+2);  // vector for current time step of Crank-Nicolson
-        u *= 8.0/1300;  // temperature 8/1300
+        mat u = zeros<mat>(n+2,n+2);  // Au = r
+
+        // Initial condition, setting the temperature from 8->1300 C
+        double dT = (1.0 - 8.0/1300)/(n+1); // Temperature step
+        for(int i = 0; i < n+2; i++) {
+                for(int j = 0; j < n+2; j++) {
+                        u(i,j) = (i+1)*dT;
+                }
+        }
+
         // Boundary conditions (u(0) set by zeros)
         for(int i = 0; i < n+2; i++) {
-                u(n+1,i) = 1.0;
+                u(n+1,i) = 1.0;       // bottom
+                u(0,i) = 8.0/1300;    // top
+                u(i,0) = (i+1)*dT;    // left side
+                u(i,n+1) = (i+1)*dT;  // right side
         }
 
         // Matrix elements of tridiagonal matrix
@@ -25,7 +35,7 @@ void BESolver(int n, double alpha, int tmax){
                 outfile << endl;
         }
 
-        int counter = 1;
+        int counter = 1;  // counter for writing to file
 
         for(int j = 1; j < tmax; j++) {
                 JSolver(d, n, alpha, u, u);
@@ -33,22 +43,18 @@ void BESolver(int n, double alpha, int tmax){
                 // Preserving boundary conditions
                 for(int i = 0; i < n+2; i++) {
                         u(n+1,i) = 1.0;
-                        //r(0,i) = 8.0/1300;
-                        //r(n+1,i) = 1.0;
                 }
-
-                //r = u;  // Setting right hand side of equation to u, for all i
 
                 // writing to file
-                if(j == counter || j == n-1) {
-                        for(int i = 0; i < n+2; i++) {
-                                for(int j = 0; j < n+2; j++) {
-                                        outfile << u(i,j) << " ";
-                                }
-                                outfile << endl;
+                //if(j == counter || j == n-1) {
+                for(int i = 0; i < n+2; i++) {
+                        for(int j = 0; j < n+2; j++) {
+                                outfile << u(i,j) << " ";
                         }
-                        counter += 1000;
+                        outfile << endl;
                 }
+                counter += 100;
+                //  }
         }
         outfile.close();
 

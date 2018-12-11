@@ -10,10 +10,7 @@ j = 10
 j2 = 30
 
 if anim == True:
-
-
-    u = np.loadtxt("FWEuler2D.txt")
-
+    u = np.loadtxt("BWEuler2D.txt")
     n = len(u[0,:])
     x = np.linspace(0, 1, n)
 
@@ -24,38 +21,41 @@ if anim == True:
         start = n*t
         end = start+n
         mat[t] = u[start:end]
-        """
-        cmap = mpl.colors.ListedColormap(['blue','black','red'])
-        bounds=[-6, 2.2, 6]
-        norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
-        # tell imshow about color map so that only set colors are used
-        img = pyplot.imshow(mat[t],interpolation='nearest',
-                            cmap = cmap,norm=norm)
-        # make a color bar
-        pyplot.colorbar(img,cmap=cmap,
-                        norm=norm,boundaries=bounds,ticks=[0,0.5,1])
-        pyplot.show()
-        """
-        #plt.imshow(mat[t], cmap= cm.coolwarm)
-        #plt.show()
 
     fig = plt.figure(figsize=(8,8))
     im = plt.imshow(mat[0], cmap=cm.coolwarm, animated=True)
     #plt.axis('equal')
-    plt.colorbar()
+
+    #legend
+    cbar = plt.colorbar()
+    cbar.ax.get_yaxis().labelpad = 15
+    cbar.ax.set_ylabel('$T(x, y)$', rotation=270, size=15)
+    plt.xlabel('$x$', size=15); plt.ylabel('$y$', size=15)
+    plt.title('Temperature distribution in a %s x %s grid' % (n,n), size=17)
 
     i = 0
     def updatefig(*args):
         global i
-        if (i < t_steps/2):
+        print (i)
+        if (i < t_steps):
             i += 1
         else:
             i=0         # reset animation
-        im.set_array(mat[i])
+        im.set_array(mat[int(i)-1])
         return im,
 
-    ani = animation.FuncAnimation(fig, updatefig, interval=1000, blit=True)
-    plt.show()
+
+    save = True
+    ani = animation.FuncAnimation(fig, updatefig, interval=1, blit=True, frames=int(t_steps))
+
+    if save == True:
+        # Set up formatting for the movie files
+        Writer = animation.writers['ffmpeg']      # requires ffmpeg to be installed
+        writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+        ani.save('2D_anim.mp4', writer=writer)
+    else:
+        plt.show()
+
 
 if Euler == True:
     u = np.loadtxt("FWEuler2D.txt")
