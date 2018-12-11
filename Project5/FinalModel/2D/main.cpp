@@ -25,4 +25,11 @@ int main() {
 
         //analytical2D(n, dx, 1, dt);
 
+        mat A = zeros<mat>(10,10);
+        for(int i = 0; i < 10; i++) {
+                A(9,i) = 1;
+        }
+
+        cout << A << endl;
+
 }
