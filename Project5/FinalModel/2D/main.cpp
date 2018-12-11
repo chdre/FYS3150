@@ -13,9 +13,9 @@ using namespace arma;
 int main() {
         int n = 118;
         double dx = 1.0/(n+2);
-        double dt = 0.0001;//pow(dx,2)/4.0;
+        double dt = pow(dx,2)/4.0;
 
-        int tmax = 1/dt;
+        int tmax = 100000;
 
         double alpha = dt/pow(dx,2);
 
@@ -24,12 +24,4 @@ int main() {
         //CNSolver(n, alpha, tmax);
 
         //analytical2D(n, dx, 1, dt);
-
-        mat A = zeros<mat>(10,10);
-        for(int i = 0; i < 10; i++) {
-                A(9,i) = 1;
-        }
-
-        cout << A << endl;
-
 }

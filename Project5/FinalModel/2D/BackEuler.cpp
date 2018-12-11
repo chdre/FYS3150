@@ -4,19 +4,12 @@
 void BESolver(int n, double alpha, int tmax){
         mat u = zeros<mat>(n+2,n+2);  // Au = r
 
-        // Initial condition, setting the temperature from 8->1300 C
+        // Initial condition, setting the temperature from 8->1300 C from top -> bottom
         double dT = (1.0 - 8.0/1300)/(n+1); // Temperature step
         for(int i = 0; i < n+2; i++) {
                 for(int j = 0; j < n+2; j++) {
                         u(i,j) = (i+1)*dT;
                 }
-        }
-
-        for(int i = 0; i < n+2; i++) {
-                u(n+1,i) = 1.0;       // bottom
-                u(0,i) = 8.0/1300;    // top
-                u(i,0) = (i+1)*dT;    // left side
-                u(i,n+1) = (i+1)*dT;  // right side
         }
 
         // Matrix elements of tridiagonal matrix
@@ -54,9 +47,8 @@ void BESolver(int n, double alpha, int tmax){
                                 }
                                 outfile << endl;
                         }
-                        counter += 30;
+                        counter += 10000;
                 }
         }
         outfile.close();
-
 }
