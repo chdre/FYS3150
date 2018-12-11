@@ -25,5 +25,4 @@ int main() {
 
         //analytical2D(n, dx, 1, dt);
 
-        mat A =
 }
