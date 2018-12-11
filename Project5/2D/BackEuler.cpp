@@ -3,7 +3,6 @@
 
 void BESolver(int n, double alpha, int tmax, double dx, double dt){
         mat u = zeros<mat>(n+2,n+2);  // Au = r
-        mat r = zeros<mat>(n+2,n+2);  // vector for current time step of Crank-Nicolson
 
         // Boundary conditions (u(0) set by zeros)
         for(int i = 0; i < n+2; i++) {
@@ -39,8 +38,6 @@ void BESolver(int n, double alpha, int tmax, double dx, double dt){
                 for(int i = 0; i < n+2; i++) {
                         u(0,i) = 0;
                         u(n+1,i) = 1.0;
-                        r(0,i) = 0.0;
-                        r(n+1,i) = 1.0;
                 }
 
                 r = u;  // Setting right hand side of equation to u, for all i

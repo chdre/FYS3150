@@ -12,7 +12,6 @@ void BESolver(int n, double alpha, int tmax){
                 }
         }
 
-        // Boundary conditions (u(0) set by zeros)
         for(int i = 0; i < n+2; i++) {
                 u(n+1,i) = 1.0;       // bottom
                 u(0,i) = 8.0/1300;    // top
@@ -42,19 +41,21 @@ void BESolver(int n, double alpha, int tmax){
 
                 // Preserving boundary conditions
                 for(int i = 0; i < n+2; i++) {
-                        u(n+1,i) = 1.0;
+                        u(n+1,i) = 1.0;       // bottom
+                        u(0,i) = 8.0/1300;    // top
+                        //u(i,0) = (i+1)*dT;    // left side
+                        //u(i,n+1) = (i+1)*dT;  // right side
                 }
-
                 // writing to file
-                //if(j == counter || j == n-1) {
-                for(int i = 0; i < n+2; i++) {
-                        for(int j = 0; j < n+2; j++) {
-                                outfile << u(i,j) << " ";
+                if(j == counter || j == n-1) {
+                        for(int i = 0; i < n+2; i++) {
+                                for(int j = 0; j < n+2; j++) {
+                                        outfile << u(i,j) << " ";
+                                }
+                                outfile << endl;
                         }
-                        outfile << endl;
+                        counter += 30;
                 }
-                counter += 100;
-                //  }
         }
         outfile.close();
 

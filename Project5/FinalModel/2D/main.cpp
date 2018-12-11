@@ -24,4 +24,6 @@ int main() {
         //CNSolver(n, alpha, tmax);
 
         //analytical2D(n, dx, 1, dt);
+
+        mat A =
 }
