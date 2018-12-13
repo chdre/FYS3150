@@ -1,10 +1,13 @@
 #include "BackEuler.hpp"
 #include "Jacobi.hpp"
 
+// Backward Euler scheme using the Jacobi method.
+
 void BESolver(int n, double alpha, int tmax){
         mat u = zeros<mat>(n+2,n+2);  // Au = r
 
-        // Initial condition, setting the temperature from 8->1300 C from top -> bottom
+        // Initial condition, setting the relative temperature from 8/1300->1 C
+        // from top -> bottom
         double dT = (1.0 - 8.0/1300)/(n+1); // Temperature step
         for(int i = 0; i < n+2; i++) {
                 for(int j = 0; j < n+2; j++) {
@@ -12,8 +15,7 @@ void BESolver(int n, double alpha, int tmax){
                 }
         }
 
-        // Matrix elements of tridiagonal matrix
-        double e = -alpha;
+        // Values of the diagonal matrix to be used in Jacobi's iterative method
         double d = 1.0 + 4.0*alpha;
 
         ofstream outfile;
@@ -47,7 +49,7 @@ void BESolver(int n, double alpha, int tmax){
                                 }
                                 outfile << endl;
                         }
-                        counter += 10000;
+                        counter += 100;   // stepsize of time when printing
                 }
         }
         outfile.close();

@@ -1,9 +1,9 @@
 #include "analytical.hpp"
 
-void analytical1D(int n, double dx, double tmax, double dt, double L){
-        double u, x, t, piL, mpiL, mpi;
+// analytical solution of 1D. We have set L = 1.
 
-        piL = M_PI/L;
+void analytical1D(int n, double dx, double tmax, double dt){
+        double u, x, t, mpi;
 
         ofstream outfile;
         outfile.open("Analytical1D.txt");
@@ -14,9 +14,8 @@ void analytical1D(int n, double dx, double tmax, double dt, double L){
                         x = i*dx;
                         u = 0;
                         for(int m = 1; m < 1000; m++) {
-                                mpiL = m*piL;
                                 mpi = m*M_PI;
-                                u += 2*L*cos(mpi)/(mpi)*sin(mpiL*x)*exp(-pow(mpi/L,2)*t);
+                                u += 2*L*cos(mpi)/(mpi)*sin(mpi*x)*exp(-pow(mpi,2)*t);
                         }
                         outfile << u + x << " ";
                 }

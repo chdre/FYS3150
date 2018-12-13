@@ -18,4 +18,3 @@ an1d: main.o analytical.o
 
 all: main.o ForwEuler.o BackEuler.o CrankNic.o tridiag.o analytical.o
 			${CPPflags} main.cpp ForwEuler.cpp BackEuler.cpp  analytical.cpp CrankNic.cpp tridiag.cpp -o test.x  ${LIB}
-

@@ -3,8 +3,8 @@
 #include <iostream>
 #include "ForwEuler.hpp"
 #include "BackEuler.hpp"
-//#include "CrankNic.hpp"
-//#include "tridiag.hpp"
+#include "CrankNic.hpp"
+#include "tridiag.hpp"
 #include "analytical.hpp"
 
 using namespace std;
@@ -15,7 +15,7 @@ int main() {
         double dx = 1.0/(n+2);
         double dt = pow(dx,2)/4.0;
 
-        int tmax = 100000;
+        int tmax = 1/dt;
 
         double alpha = dt/pow(dx,2);
 
