@@ -42,7 +42,7 @@ void BESolver(int n, double alpha, int tmax){
                         //u(i,n+1) = (i+1)*dT;  // right side
                 }
                 // writing to file
-                if(j == counter || j == n-1) {
+                if(j == counter || j == tmax-1) {
                         for(int i = 0; i < n+2; i++) {
                                 for(int j = 0; j < n+2; j++) {
                                         outfile << u(i,j) << " ";
