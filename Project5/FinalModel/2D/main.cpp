@@ -20,7 +20,7 @@ int main() {
         double alpha = dt/pow(dx,2);
 
         //FESolver(n, alpha, tmax);
-        BESolver(n, alpha, tmax);
+        BESolver(n, alpha, tmax, dt);
         //CNSolver(n, alpha, tmax);
 
         //analytical2D(n, dx, 1, dt);

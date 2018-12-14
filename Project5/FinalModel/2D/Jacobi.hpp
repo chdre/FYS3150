@@ -5,4 +5,4 @@
 using namespace  std;
 using namespace  arma;
 
-void JSolver(double d, int n, double alpha, mat &u, mat rhs);
+void JSolver(int n, double dt, double alpha, mat &u, mat rhs);

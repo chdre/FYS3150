@@ -3,7 +3,7 @@
 
 // Backward Euler scheme using the Jacobi method.
 
-void BESolver(int n, double alpha, int tmax){
+void BESolver(int n, double alpha, int tmax, double dt){
         mat u = zeros<mat>(n+2,n+2);  // Au = r
 
         // Initial condition, setting the relative temperature from 8/1300->1 C
@@ -14,9 +14,6 @@ void BESolver(int n, double alpha, int tmax){
                         u(i,j) = (i+1)*dT;
                 }
         }
-
-        // Values of the diagonal matrix to be used in Jacobi's iterative method
-        double d = 1.0 + 4.0*alpha;
 
         ofstream outfile;
         outfile.open("BWEuler2D.txt");
@@ -32,14 +29,13 @@ void BESolver(int n, double alpha, int tmax){
         int counter = 1;  // counter for writing to file
 
         for(int j = 1; j < tmax; j++) {
-                JSolver(d, n, alpha, u, u);
+                JSolver(n, dt, alpha, u, u);
 
                 // Preserving boundary conditions
                 for(int i = 0; i < n+2; i++) {
                         u(n+1,i) = 1.0;       // bottom
                         u(0,i) = 8.0/1300;    // top
-                        //u(i,0) = (i+1)*dT;    // left side
-                        //u(i,n+1) = (i+1)*dT;  // right side
+
                 }
                 // writing to file
                 if(j == counter || j == tmax-1) {
